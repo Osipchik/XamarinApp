@@ -1,0 +1,120 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="CreateTestButton" xml:space="preserve">
+    <value>テストの作成</value>
+  </data>
+  <data name="HomeButton" xml:space="preserve">
+    <value>ホーム</value>
+  </data>
+  <data name="SettingsButton" xml:space="preserve">
+    <value>設定</value>
+  </data>
+  <data name="SearchDate" xml:space="preserve">
+    <value>日付</value>
+  </data>
+  <data name="SearchName" xml:space="preserve">
+    <value>名前</value>
+  </data>
+  <data name="TestSettingsButton" xml:space="preserve">
+    <value>設定のテスト</value>
+  </data>
+  <data name="TestSettingsName" xml:space="preserve">
+    <value>名前</value>
+  </data>
+  <data name="TestSettingsTime" xml:space="preserve">
+    <value>時間</value>
+  </data>
+  <data name="TestSettingsNPlaceh" xml:space="preserve">
+    <value>テスト名</value>
+  </data>
+  <data name="TestSettingsSPlaceh" xml:space="preserve">
+    <value>サブジェクト名</value>
+  </data>
+  <data name="Clear" xml:space="preserve">
+    <value>クリア</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>削除</value>
+  </data>
+  <data name="Price" xml:space="preserve">
+    <value>料金:</value>
+  </data>
+  <data name="Question" xml:space="preserve">
+    <value>質問</value>
+  </data>
+  <data name="Save" xml:space="preserve">
+    <value>保存</value>
+  </data>
+  <data name="TypeCheckEditorPlaceh" xml:space="preserve">
+    <value>テキスト入力</value>
+  </data>
+  <data name="Answer" xml:space="preserve">
+    <value>応答(&amp;A)</value>
+  </data>
+  <data name="Text" xml:space="preserve">
+    <value>テキスト</value>
+  </data>
+  <data name="Change" xml:space="preserve">
+    <value>変更</value>
+  </data>
+  <data name="Start" xml:space="preserve">
+    <value>開始</value>
+  </data>
+  <data name="TypeStackTitle" xml:space="preserve">
+    <value>一致します</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>キャンセル</value>
+  </data>
+  <data name="No" xml:space="preserve">
+    <value>いいえ</value>
+  </data>
+  <data name="Warning" xml:space="preserve">
+    <value>警告</value>
+  </data>
+  <data name="WarningTextEmpty" xml:space="preserve">
+    <value>テキスト フィールドが空です</value>
+  </data>
+  <data name="Yes" xml:space="preserve">
+    <value>はい</value>
+  </data>
+  <data name="Labguage" xml:space="preserve">
+    <value>言語</value>
+  </data>
+  <data name="Theme" xml:space="preserve">
+    <value>テーマ</value>
+  </data>
+  <data name="Version" xml:space="preserve">
+    <value>版</value>
+  </data>
+  <data name="Mark" xml:space="preserve">
+    <value>マーク</value>
+  </data>
+  <data name="Result" xml:space="preserve">
+    <value>結果</value>
+  </data>
+  <data name="Check" xml:space="preserve">
+    <value>確認</value>
+  </data>
+  <data name="Subject" xml:space="preserve">
+    <value>サブジェクト:</value>
+  </data>
+  <data name="SearchSubject" xml:space="preserve">
+    <value>件名</value>
+  </data>
+  <data name="Back" xml:space="preserve">
+    <value>戻る</value>
+  </data>
+</root>

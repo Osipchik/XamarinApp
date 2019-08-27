@@ -1,0 +1,117 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="CreateTestButton" xml:space="preserve">
+    <value>建立測試</value>
+  </data>
+  <data name="HomeButton" xml:space="preserve">
+    <value>常用</value>
+  </data>
+  <data name="SettingsButton" xml:space="preserve">
+    <value>設定</value>
+  </data>
+  <data name="SearchDate" xml:space="preserve">
+    <value>日期</value>
+  </data>
+  <data name="SearchName" xml:space="preserve">
+    <value>名稱</value>
+  </data>
+  <data name="TestSettingsButton" xml:space="preserve">
+    <value>測試設定</value>
+  </data>
+  <data name="TestSettingsName" xml:space="preserve">
+    <value>名稱</value>
+  </data>
+  <data name="TestSettingsTime" xml:space="preserve">
+    <value>時間</value>
+  </data>
+  <data name="TestSettingsNPlaceh" xml:space="preserve">
+    <value>測試名稱</value>
+  </data>
+  <data name="TestSettingsSPlaceh" xml:space="preserve">
+    <value>主體名稱</value>
+  </data>
+  <data name="Clear" xml:space="preserve">
+    <value>清除</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>刪除</value>
+  </data>
+  <data name="Price" xml:space="preserve">
+    <value>價格 :</value>
+  </data>
+  <data name="Question" xml:space="preserve">
+    <value>詢問問題</value>
+  </data>
+  <data name="Save" xml:space="preserve">
+    <value>儲存</value>
+  </data>
+  <data name="TypeCheckEditorPlaceh" xml:space="preserve">
+    <value>請輸入文字</value>
+  </data>
+  <data name="Answer" xml:space="preserve">
+    <value>接聽</value>
+  </data>
+  <data name="Text" xml:space="preserve">
+    <value>文字</value>
+  </data>
+  <data name="Change" xml:space="preserve">
+    <value>變更(A)</value>
+  </data>
+  <data name="Start" xml:space="preserve">
+    <value>開始</value>
+  </data>
+  <data name="TypeStackTitle" xml:space="preserve">
+    <value>正在比對</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>取消</value>
+  </data>
+  <data name="No" xml:space="preserve">
+    <value>否</value>
+  </data>
+  <data name="Warning" xml:space="preserve">
+    <value>警告</value>
+  </data>
+  <data name="WarningTextEmpty" xml:space="preserve">
+    <value>文字欄位是空的</value>
+  </data>
+  <data name="Yes" xml:space="preserve">
+    <value>是</value>
+  </data>
+  <data name="Labguage" xml:space="preserve">
+    <value>語言</value>
+  </data>
+  <data name="Theme" xml:space="preserve">
+    <value>佈景主題</value>
+  </data>
+  <data name="Version" xml:space="preserve">
+    <value>版本:</value>
+  </data>
+  <data name="Mark" xml:space="preserve">
+    <value>標記</value>
+  </data>
+  <data name="Result" xml:space="preserve">
+    <value>結果</value>
+  </data>
+  <data name="Check" xml:space="preserve">
+    <value>檢查</value>
+  </data>
+  <data name="SearchSubject" xml:space="preserve">
+    <value>主題式</value>
+  </data>
+  <data name="Back" xml:space="preserve">
+    <value>上一步</value>
+  </data>
+</root>

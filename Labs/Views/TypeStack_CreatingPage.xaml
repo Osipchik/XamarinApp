@@ -1,0 +1,63 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:helpers="clr-namespace:Labs.Helpers;assembly=Labs"
+             mc:Ignorable="d"
+             x:Class="Labs.Views.TypeStackCreatingPage"
+             Title="{helpers:Translate TypeStackTitle}">
+
+    <ContentPage.ToolbarItems>
+        <ToolbarItem x:Name="ItemSave"
+                     Text="{helpers:Translate Save}"
+                     Order="Secondary"
+                     Clicked="SaveButton_OnClicked"/>
+    </ContentPage.ToolbarItems>
+
+    <ContentPage.Content>
+        <ScrollView x:Name="ContentScroll"
+                    VerticalOptions="StartAndExpand">
+            <StackLayout VerticalOptions="Start">
+                <ContentView Padding="0,0,0,5">
+                    <Frame Padding="5"
+                           BorderColor="#B0BEC5"
+                           CornerRadius="0">
+                        <StackLayout>
+                            <Editor x:Name="Question"
+                                    AutoSize="TextChanges"
+                                    HorizontalOptions="Center"
+                                    Placeholder="{helpers:Translate Question}"/>
+                        </StackLayout>
+                    </Frame>
+                </ContentView>
+                <StackLayout x:Name="StackLayoutContent"
+                             Margin="12,0,0,0"/>
+                
+                <StackLayout Orientation="Horizontal"
+                             VerticalOptions="Start"
+                             HorizontalOptions="Fill">
+                    <Label Text="{helpers:Translate Price}"
+                           FontSize="16"
+                           VerticalOptions="Center"
+                           />
+                    <Entry x:Name="Coast"
+                           Text="0"
+                           WidthRequest="30"
+                           VerticalOptions="Center"
+                           Keyboard="Numeric"
+                           TextChanged="Coast_OnTextChanged"/>
+                </StackLayout>
+                <ImageButton Source="Plus.png"
+                             Aspect="AspectFit"
+                             WidthRequest="36"
+                             HeightRequest="36"
+                             Opacity="0.3"
+                             HorizontalOptions="FillAndExpand"
+                             VerticalOptions="Center"
+                             BackgroundColor="Transparent"
+                             Clicked="AddLine_Button_OnClicked"/>
+            </StackLayout>
+        </ScrollView>
+    </ContentPage.Content>
+</ContentPage>

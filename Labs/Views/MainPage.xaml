@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<MasterDetailPage xmlns="http://xamarin.com/schemas/2014/forms"
+                  xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                  xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+                  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                  xmlns:labs="clr-namespace:Labs;assembly=Labs"
+                  xmlns:helpers="clr-namespace:Labs.Helpers;assembly=Labs"
+                  mc:Ignorable="d"
+                  x:Class="Labs.Views.MainPage"
+                  Title="asd">
+
+    <MasterDetailPage.Master>
+        <ContentPage Title="Master">
+            <ContentPage.Content>
+                <StackLayout Spacing="0">
+                    <ListView x:Name="ListViewDetail"
+                              ItemTapped="ListViewDetail_OnItemTapped"
+                              ItemSelected="ListViewDetail_OnItemSelected">
+                       <ListView.ItemTemplate>
+                           <DataTemplate>
+                               <ViewCell>
+                                   <StackLayout Orientation="Horizontal"
+                                                Margin="24,0,12,0">
+                                       <Image Source="{Binding Image}"
+                                              Aspect="AspectFit"
+                                              WidthRequest="24"
+                                              HeightRequest="24"
+                                              Margin="0,0,24,0"/>
+                                       <Label Text="{Binding Text}"
+                                              VerticalOptions="Center"
+                                              HorizontalOptions="FillAndExpand"
+                                              FontSize="Medium"
+                                              TextColor="Black"/>
+                                   </StackLayout>
+                               </ViewCell>
+                           </DataTemplate>
+                       </ListView.ItemTemplate>
+                    </ListView>
+                </StackLayout>
+            </ContentPage.Content>
+        </ContentPage>
+    </MasterDetailPage.Master>
+
+</MasterDetailPage>

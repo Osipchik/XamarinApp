@@ -1,0 +1,171 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="CreateTestButton" xml:space="preserve">
+    <value>Создать тест</value>
+  </data>
+  <data name="HomeButton" xml:space="preserve">
+    <value>Главная</value>
+  </data>
+  <data name="SearchBarPlaceHolder" xml:space="preserve">
+    <value>Найти тест</value>
+  </data>
+  <data name="SettingsButton" xml:space="preserve">
+    <value>Параметры</value>
+  </data>
+  <data name="SearchDate" xml:space="preserve">
+    <value>Дата</value>
+  </data>
+  <data name="SearchName" xml:space="preserve">
+    <value>Название</value>
+  </data>
+  <data name="TestSettingsButton" xml:space="preserve">
+    <value>Параметры теста</value>
+  </data>
+  <data name="TestSettingsName" xml:space="preserve">
+    <value>Название:</value>
+  </data>
+  <data name="TestSettingsTime" xml:space="preserve">
+    <value>Время:</value>
+  </data>
+  <data name="TestSettingsTimeForTest" xml:space="preserve">
+    <value>Время на тест</value>
+  </data>
+  <data name="TestSettingsNPlaceh" xml:space="preserve">
+    <value>Название теста</value>
+  </data>
+  <data name="TestSettingsSPlaceh" xml:space="preserve">
+    <value>Название предмета</value>
+  </data>
+  <data name="TestSettingsInfo" xml:space="preserve">
+    <value>Информация</value>
+  </data>
+  <data name="TestSettingsTimeForQuestion" xml:space="preserve">
+    <value>Время на вопрос</value>
+  </data>
+  <data name="CreatorTitle" xml:space="preserve">
+    <value>Создание теста</value>
+  </data>
+  <data name="Clear" xml:space="preserve">
+    <value>Очистить</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Удалить</value>
+  </data>
+  <data name="Price" xml:space="preserve">
+    <value>Цена:</value>
+  </data>
+  <data name="Question" xml:space="preserve">
+    <value>Вопрос</value>
+  </data>
+  <data name="Save" xml:space="preserve">
+    <value>Сохранить</value>
+  </data>
+  <data name="TypeCheckEditorPlaceh" xml:space="preserve">
+    <value>Введите текст</value>
+  </data>
+  <data name="TypeCheckTitle" xml:space="preserve">
+    <value>Выбор ответа</value>
+  </data>
+  <data name="Answer" xml:space="preserve">
+    <value>Ответ</value>
+  </data>
+  <data name="Text" xml:space="preserve">
+    <value>Текст</value>
+  </data>
+  <data name="Change" xml:space="preserve">
+    <value>Изменить</value>
+  </data>
+  <data name="MaxMarck" xml:space="preserve">
+    <value>Максимальный балл</value>
+  </data>
+  <data name="Start" xml:space="preserve">
+    <value>Начать</value>
+  </data>
+  <data name="TypeEntryTitle" xml:space="preserve">
+    <value>Ввод ответа</value>
+  </data>
+  <data name="TypeStackTitle" xml:space="preserve">
+    <value>Соответствие</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Скрыть</value>
+  </data>
+  <data name="No" xml:space="preserve">
+    <value>Нет</value>
+  </data>
+  <data name="Warning" xml:space="preserve">
+    <value>Внимание</value>
+  </data>
+  <data name="WarningAnswer" xml:space="preserve">
+    <value>Добавьте ответ</value>
+  </data>
+  <data name="WarningPrice" xml:space="preserve">
+    <value>Недопустимое значение балла</value>
+  </data>
+  <data name="WarningQuestion" xml:space="preserve">
+    <value>Добавьте вопрос</value>
+  </data>
+  <data name="WarningTextEmpty" xml:space="preserve">
+    <value>Добавьте текст</value>
+  </data>
+  <data name="Yes" xml:space="preserve">
+    <value>Да</value>
+  </data>
+  <data name="AboutApp" xml:space="preserve">
+    <value>О приложении</value>
+  </data>
+  <data name="Labguage" xml:space="preserve">
+    <value>Язык:</value>
+  </data>
+  <data name="Theme" xml:space="preserve">
+    <value>Тема</value>
+  </data>
+  <data name="Version" xml:space="preserve">
+    <value>Версия</value>
+  </data>
+  <data name="CreatorQuestions" xml:space="preserve">
+    <value>В этом тесте нету вопросов</value>
+  </data>
+  <data name="FillSettings" xml:space="preserve">
+    <value>Заполниете параметры теста</value>
+  </data>
+  <data name="Mark" xml:space="preserve">
+    <value>Баллов:</value>
+  </data>
+  <data name="Result" xml:space="preserve">
+    <value>Результат</value>
+  </data>
+  <data name="Rights" xml:space="preserve">
+    <value>Правильных ответов:</value>
+  </data>
+  <data name="Escape" xml:space="preserve">
+    <value>Вы точно хотите покинуть эту страницу?</value>
+  </data>
+  <data name="Check" xml:space="preserve">
+    <value>Проверить</value>
+  </data>
+  <data name="Subject" xml:space="preserve">
+    <value>Тема:</value>
+  </data>
+  <data name="SearchSubject" xml:space="preserve">
+    <value>Субъект</value>
+  </data>
+  <data name="Back" xml:space="preserve">
+    <value>Назад</value>
+  </data>
+  <data name="DeleteAnswer" xml:space="preserve">
+    <value>Вы точно хотите удалить этот тест?</value>
+  </data>
+</root>

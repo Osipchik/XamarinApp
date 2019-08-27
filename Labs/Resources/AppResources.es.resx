@@ -1,0 +1,120 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="CreateTestButton" xml:space="preserve">
+    <value>Crear prueba</value>
+  </data>
+  <data name="HomeButton" xml:space="preserve">
+    <value>Inicio</value>
+  </data>
+  <data name="SettingsButton" xml:space="preserve">
+    <value>Configuración</value>
+  </data>
+  <data name="SearchDate" xml:space="preserve">
+    <value>Fecha</value>
+  </data>
+  <data name="SearchName" xml:space="preserve">
+    <value>Nombre</value>
+  </data>
+  <data name="TestSettingsButton" xml:space="preserve">
+    <value>Configuración de pruebas</value>
+  </data>
+  <data name="TestSettingsName" xml:space="preserve">
+    <value>Nombre</value>
+  </data>
+  <data name="TestSettingsTime" xml:space="preserve">
+    <value>Hora</value>
+  </data>
+  <data name="TestSettingsNPlaceh" xml:space="preserve">
+    <value>Nombre de la prueba</value>
+  </data>
+  <data name="TestSettingsSPlaceh" xml:space="preserve">
+    <value>Nombre de sujeto</value>
+  </data>
+  <data name="Clear" xml:space="preserve">
+    <value>Borrar</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Eliminar</value>
+  </data>
+  <data name="Price" xml:space="preserve">
+    <value>(Precio)</value>
+  </data>
+  <data name="Question" xml:space="preserve">
+    <value>Pregunta</value>
+  </data>
+  <data name="Save" xml:space="preserve">
+    <value>Guardar</value>
+  </data>
+  <data name="TypeCheckEditorPlaceh" xml:space="preserve">
+    <value>Escribir texto</value>
+  </data>
+  <data name="Answer" xml:space="preserve">
+    <value>Respuesta</value>
+  </data>
+  <data name="Text" xml:space="preserve">
+    <value>Texto</value>
+  </data>
+  <data name="Change" xml:space="preserve">
+    <value>Cambiar</value>
+  </data>
+  <data name="Start" xml:space="preserve">
+    <value>Inicio</value>
+  </data>
+  <data name="TypeStackTitle" xml:space="preserve">
+    <value>Coincidente</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Cancelar</value>
+  </data>
+  <data name="No" xml:space="preserve">
+    <value>Nº</value>
+  </data>
+  <data name="Warning" xml:space="preserve">
+    <value>Advertencia</value>
+  </data>
+  <data name="WarningTextEmpty" xml:space="preserve">
+    <value>El campo de texto está vacío</value>
+  </data>
+  <data name="Yes" xml:space="preserve">
+    <value>SI</value>
+  </data>
+  <data name="Labguage" xml:space="preserve">
+    <value>Idioma</value>
+  </data>
+  <data name="Theme" xml:space="preserve">
+    <value>Tema</value>
+  </data>
+  <data name="Version" xml:space="preserve">
+    <value>Versión</value>
+  </data>
+  <data name="Mark" xml:space="preserve">
+    <value>Marcar</value>
+  </data>
+  <data name="Result" xml:space="preserve">
+    <value>Resultado</value>
+  </data>
+  <data name="Check" xml:space="preserve">
+    <value>Activar</value>
+  </data>
+  <data name="Subject" xml:space="preserve">
+    <value>Asunto</value>
+  </data>
+  <data name="SearchSubject" xml:space="preserve">
+    <value>Asunto</value>
+  </data>
+  <data name="Back" xml:space="preserve">
+    <value>Atrás</value>
+  </data>
+</root>

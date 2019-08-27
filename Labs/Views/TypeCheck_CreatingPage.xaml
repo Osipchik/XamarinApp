@@ -1,0 +1,55 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:helpers="clr-namespace:Labs.Helpers;assembly=Labs"
+             mc:Ignorable="d"
+             x:Class="Labs.Views.TypeCheckCreatingPage"
+             Title="{helpers:Translate TypeCheckTitle}">
+
+    <ContentPage.ToolbarItems>
+        <ToolbarItem x:Name="ItemSave"
+                     Text="{helpers:Translate Save}"
+                     Order="Secondary"
+                     Clicked="SaveButton_OnClicked"/>
+        <ToolbarItem x:Name="ItemClear"
+                     Text="{helpers:Translate Clear}"
+                     Order="Secondary"
+                     Clicked="ItemClear_OnClicked"/>
+    </ContentPage.ToolbarItems>
+
+    <ContentPage.Content>
+        <ScrollView x:Name="ContentScroll"
+                    VerticalOptions="StartAndExpand">
+            <StackLayout VerticalOptions="Start">
+                <StackLayout Orientation="Horizontal"
+                             HorizontalOptions="Center">
+                    <Label Text="{helpers:Translate Price}"
+                           FontSize="16"
+                           VerticalOptions="Center"/>
+                    <Entry x:Name="Coast"
+                           Text="0"
+                           WidthRequest="30"
+                           Keyboard="Numeric"
+                           TextChanged="Coast_OnTextChanged"/>
+                </StackLayout>
+                <Editor x:Name="Question"
+                        AutoSize="TextChanges"
+                        HorizontalOptions="Center"
+                        Placeholder="{helpers:Translate Question}"/>
+                <StackLayout x:Name="StackLayoutContent"
+                             Padding="5"/>
+                <ImageButton Source="Plus.png"
+                             Aspect="AspectFit"
+                             WidthRequest="36"
+                             HeightRequest="36"
+                             Opacity="0.3"
+                             HorizontalOptions="Center"
+                             VerticalOptions="Start"
+                             BackgroundColor="Transparent"
+                             Clicked="TextArea_Button_OnClicked"/>
+            </StackLayout>
+        </ScrollView>
+    </ContentPage.Content>
+</ContentPage>

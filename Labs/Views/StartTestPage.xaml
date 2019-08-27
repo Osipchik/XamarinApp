@@ -1,0 +1,51 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:helpers="clr-namespace:Labs.Helpers;assembly=Labs"
+             mc:Ignorable="d"
+             x:Class="Labs.MainPages.StartTestPage">
+
+    <ContentPage.Content>
+        <StackLayout>
+            <ScrollView>
+                <StackLayout Margin="12">
+                    <Label x:Name="LabelName"
+                           FontSize="Medium"/>
+                    <Label x:Name="LabelSubject"/>
+                    <Label x:Name="LabelTime"/>
+                    <Label x:Name="LabelCoast"/>
+                    
+                    <BoxView HeightRequest="1"
+                             Margin="6"
+                             Color="#90A4AE"
+                             CornerRadius="90"/>
+                    <Button Text="{helpers:Translate Change}"
+                            TextColor="#039BE5"
+                            HorizontalOptions="FillAndExpand"
+                            VerticalOptions="Center"
+                            BorderColor="#039BE5"
+                            BackgroundColor="White"
+                            Padding="12"
+                            BorderWidth="1"
+                            CornerRadius="60"
+                            Margin="6,0,6,0"
+                            Clicked="ChangeButton_OnClicked"/>
+                    <Button x:Name="ButtonStart"
+                            Text="{helpers:Translate Start}"
+                            TextColor="#039BE5"
+                            HorizontalOptions="FillAndExpand"
+                            VerticalOptions="Center"
+                            BorderColor="#039BE5"
+                            BackgroundColor="White"
+                            Padding="12"
+                            BorderWidth="1"
+                            CornerRadius="60"
+                            Margin="6,0,6,0"
+                            Clicked="StartButton_OnClicked"/>
+                </StackLayout>
+            </ScrollView>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

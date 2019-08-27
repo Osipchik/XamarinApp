@@ -1,0 +1,220 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 xliff-core-1.2-transitional.xsd">
+  <file datatype="xml" source-language="en-US" target-language="ru" original="LABS/RESOURCES/APPRESOURCES.RESX" tool-id="MultilingualAppToolkit" product-name="n/a" product-version="n/a" build-num="n/a">
+    <header>
+      <tool tool-id="MultilingualAppToolkit" tool-name="Multilingual App Toolkit" tool-version="4.0.6914.0" tool-company="Microsoft" />
+    </header>
+    <body>
+      <group id="LABS/RESOURCES/APPRESOURCES.RESX" datatype="resx">
+        <trans-unit id="CreateTestButton" translate="yes" xml:space="preserve">
+          <source>Create test</source>
+          <target state="translated" state-qualifier="tm-suggestion">Создать тест</target>
+        </trans-unit>
+        <trans-unit id="HomeButton" translate="yes" xml:space="preserve">
+          <source>Home</source>
+          <target state="translated">Главная</target>
+        </trans-unit>
+        <trans-unit id="SearchBarPlaceHolder" translate="yes" xml:space="preserve">
+          <source>Find test</source>
+          <target state="translated">Найти тест</target>
+        </trans-unit>
+        <trans-unit id="SettingsButton" translate="yes" xml:space="preserve">
+          <source>Settings</source>
+          <target state="translated">Параметры</target>
+        </trans-unit>
+        <trans-unit id="SearchDate" translate="yes" xml:space="preserve">
+          <source>Date</source>
+          <target state="translated">Дата</target>
+        </trans-unit>
+        <trans-unit id="SearchName" translate="yes" xml:space="preserve">
+          <source>Name</source>
+          <target state="translated" state-qualifier="tm-suggestion">Название</target>
+        </trans-unit>
+        <trans-unit id="TestSettingsButton" translate="yes" xml:space="preserve">
+          <source>Test settings</source>
+          <target state="translated">Параметры теста</target>
+        </trans-unit>
+        <trans-unit id="TestSettingsName" translate="yes" xml:space="preserve">
+          <source>Name:</source>
+          <target state="translated">Название:</target>
+        </trans-unit>
+        <trans-unit id="TestSettingsTime" translate="yes" xml:space="preserve">
+          <source>Time:</source>
+          <target state="translated">Время:</target>
+        </trans-unit>
+        <trans-unit id="TestSettingsTimeForTest" translate="yes" xml:space="preserve">
+          <source>Time for the test</source>
+          <target state="translated">Время на тест</target>
+        </trans-unit>
+        <trans-unit id="TestSettingsNPlaceh" translate="yes" xml:space="preserve">
+          <source>Test Name:</source>
+          <target state="translated">Название теста</target>
+        </trans-unit>
+        <trans-unit id="TestSettingsSPlaceh" translate="yes" xml:space="preserve">
+          <source>Subject Name:</source>
+          <target state="translated">Название предмета</target>
+        </trans-unit>
+        <trans-unit id="TestSettingsInfo" translate="yes" xml:space="preserve">
+          <source>Test info</source>
+          <target state="translated">Информация</target>
+        </trans-unit>
+        <trans-unit id="TestSettingsTimeForQuestion" translate="yes" xml:space="preserve">
+          <source>Time for the question</source>
+          <target state="translated">Время на вопрос</target>
+        </trans-unit>
+        <trans-unit id="CreatorTitle" translate="yes" xml:space="preserve">
+          <source>Test creation</source>
+          <target state="translated">Создание теста</target>
+        </trans-unit>
+        <trans-unit id="Clear" translate="yes" xml:space="preserve">
+          <source>Clear</source>
+          <target state="needs-review-translation" state-qualifier="tm-suggestion">Очистить</target>
+        </trans-unit>
+        <trans-unit id="Delete" translate="yes" xml:space="preserve">
+          <source>Delete</source>
+          <target state="translated">Удалить</target>
+        </trans-unit>
+        <trans-unit id="Price" translate="yes" xml:space="preserve">
+          <source>Price:</source>
+          <target state="translated">Цена:</target>
+        </trans-unit>
+        <trans-unit id="Question" translate="yes" xml:space="preserve">
+          <source>Question</source>
+          <target state="translated">Вопрос</target>
+        </trans-unit>
+        <trans-unit id="Save" translate="yes" xml:space="preserve">
+          <source>Save</source>
+          <target state="translated">Сохранить</target>
+        </trans-unit>
+        <trans-unit id="TypeCheckEditorPlaceh" translate="yes" xml:space="preserve">
+          <source>Enter text</source>
+          <target state="translated">Введите текст</target>
+        </trans-unit>
+        <trans-unit id="TypeCheckTitle" translate="yes" xml:space="preserve">
+          <source>Choice of answer</source>
+          <target state="translated">Выбор ответа</target>
+        </trans-unit>
+        <trans-unit id="Answer" translate="yes" xml:space="preserve">
+          <source>Answer</source>
+          <target state="translated">Ответ</target>
+        </trans-unit>
+        <trans-unit id="Text" translate="yes" xml:space="preserve">
+          <source>Text</source>
+          <target state="needs-review-translation" state-qualifier="tm-suggestion">Текст</target>
+        </trans-unit>
+        <trans-unit id="Change" translate="yes" xml:space="preserve">
+          <source>Change</source>
+          <target state="translated">Изменить</target>
+        </trans-unit>
+        <trans-unit id="MaxMarck" translate="yes" xml:space="preserve">
+          <source>Max marck</source>
+          <target state="translated">Максимальный балл</target>
+        </trans-unit>
+        <trans-unit id="Start" translate="yes" xml:space="preserve">
+          <source>Start</source>
+          <target state="translated">Начать</target>
+        </trans-unit>
+        <trans-unit id="TypeEntryTitle" translate="yes" xml:space="preserve">
+          <source>Input response</source>
+          <target state="translated">Ввод ответа</target>
+        </trans-unit>
+        <trans-unit id="TypeStackTitle" translate="yes" xml:space="preserve">
+          <source>Matching</source>
+          <target state="needs-review-translation" state-qualifier="tm-suggestion">Соответствие</target>
+        </trans-unit>
+        <trans-unit id="Cancel" translate="yes" xml:space="preserve">
+          <source>Cancel</source>
+          <target state="translated">Скрыть</target>
+        </trans-unit>
+        <trans-unit id="No" translate="yes" xml:space="preserve">
+          <source>No</source>
+          <target state="translated">Нет</target>
+        </trans-unit>
+        <trans-unit id="Warning" translate="yes" xml:space="preserve">
+          <source>Warning</source>
+          <target state="translated">Внимание</target>
+        </trans-unit>
+        <trans-unit id="WarningAnswer" translate="yes" xml:space="preserve">
+          <source>Answer is empty</source>
+          <target state="translated">Добавьте ответ</target>
+        </trans-unit>
+        <trans-unit id="WarningPrice" translate="yes" xml:space="preserve">
+          <source>Invalid price value</source>
+          <target state="translated">Недопустимое значение балла</target>
+        </trans-unit>
+        <trans-unit id="WarningQuestion" translate="yes" xml:space="preserve">
+          <source>Question is empty</source>
+          <target state="translated">Добавьте вопрос</target>
+        </trans-unit>
+        <trans-unit id="WarningTextEmpty" translate="yes" xml:space="preserve">
+          <source>Text field is empty</source>
+          <target state="translated">Добавьте текст</target>
+        </trans-unit>
+        <trans-unit id="Yes" translate="yes" xml:space="preserve">
+          <source>Yes</source>
+          <target state="translated">Да</target>
+        </trans-unit>
+        <trans-unit id="AboutApp" translate="yes" xml:space="preserve">
+          <source>About app</source>
+          <target state="translated">О приложении</target>
+        </trans-unit>
+        <trans-unit id="Labguage" translate="yes" xml:space="preserve">
+          <source>Language:</source>
+          <target state="translated">Язык:</target>
+        </trans-unit>
+        <trans-unit id="Theme" translate="yes" xml:space="preserve">
+          <source>Theme</source>
+          <target state="needs-review-translation" state-qualifier="tm-suggestion">Тема</target>
+        </trans-unit>
+        <trans-unit id="Version" translate="yes" xml:space="preserve">
+          <source>Version</source>
+          <target state="translated">Версия</target>
+        </trans-unit>
+        <trans-unit id="CreatorQuestions" translate="yes" xml:space="preserve">
+          <source>This test does not have any question</source>
+          <target state="translated">В этом тесте нету вопросов</target>
+        </trans-unit>
+        <trans-unit id="FillSettings" translate="yes" xml:space="preserve">
+          <source>Fill settings</source>
+          <target state="translated">Заполниете параметры теста</target>
+        </trans-unit>
+        <trans-unit id="Mark" translate="yes" xml:space="preserve">
+          <source>Mark</source>
+          <target state="translated">Баллов:</target>
+        </trans-unit>
+        <trans-unit id="Result" translate="yes" xml:space="preserve">
+          <source>Result</source>
+          <target state="needs-review-translation" state-qualifier="tm-suggestion">Результат</target>
+        </trans-unit>
+        <trans-unit id="Rights" translate="yes" xml:space="preserve">
+          <source>Right answers:</source>
+          <target state="translated">Правильных ответов:</target>
+        </trans-unit>
+        <trans-unit id="Escape" translate="yes" xml:space="preserve">
+          <source>Do you really want to escape this page?</source>
+          <target state="translated">Вы точно хотите покинуть эту страницу?</target>
+        </trans-unit>
+        <trans-unit id="Check" translate="yes" xml:space="preserve">
+          <source>Check</source>
+          <target state="translated">Проверить</target>
+        </trans-unit>
+        <trans-unit id="Subject" translate="yes" xml:space="preserve">
+          <source>Subject:</source>
+          <target state="needs-review-translation" state-qualifier="tm-suggestion">Тема:</target>
+        </trans-unit>
+        <trans-unit id="SearchSubject" translate="yes" xml:space="preserve">
+          <source>Subject</source>
+          <target state="needs-review-translation" state-qualifier="tm-suggestion">Субъект</target>
+        </trans-unit>
+        <trans-unit id="Back" translate="yes" xml:space="preserve">
+          <source>Back</source>
+          <target state="needs-review-translation" state-qualifier="tm-suggestion">Назад</target>
+        </trans-unit>
+        <trans-unit id="DeleteAnswer" translate="yes" xml:space="preserve">
+          <source>Do you rely want to delete this Test?</source>
+          <target state="translated">Вы точно хотите удалить этот тест?</target>
+        </trans-unit>
+      </group>
+    </body>
+  </file>
+</xliff>

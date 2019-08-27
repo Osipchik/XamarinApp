@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:helpers="clr-namespace:Labs.Helpers;assembly=Labs"
+             mc:Ignorable="d"
+             x:Class="Labs.MainPages.SettingsPage">
+
+    <ContentPage.Content>
+        <TableView Margin="12">
+            <TableView.Root>
+                <TableSection>
+                    <ViewCell>
+                        <StackLayout Orientation="Horizontal"
+                                     Margin="24,0,24,0">
+                            <Label x:Name="LabelLanguage"
+                                   FontSize="Medium"
+                                   HorizontalOptions="FillAndExpand"
+                                   VerticalOptions="Center"/>
+                            <Picker x:Name="PickerLanguages"
+                                    ItemsSource="{Binding Languages}"
+                                    ItemDisplayBinding="{Binding DisplayName}"/>
+                        </StackLayout>
+                    </ViewCell>
+                </TableSection>
+                <TableSection>
+                    <ViewCell>
+                        <StackLayout Orientation="Horizontal"
+                                     Margin="24,0,24,0">
+                            <Label x:Name="LabelTheme"
+                                   FontSize="Medium"
+                                   VerticalOptions="Center"
+                                   HorizontalOptions="FillAndExpand"/>
+                            <Label Text="Light"
+                                   FontSize="Medium"
+                                   VerticalOptions="Center"/>
+                        </StackLayout>
+                    </ViewCell>
+                </TableSection>
+            </TableView.Root>
+        </TableView>
+    </ContentPage.Content>
+</ContentPage>
