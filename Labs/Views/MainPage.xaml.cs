@@ -2,6 +2,7 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
+using Labs.Helpers;
 using Labs.MainPages;
 using Labs.Models;
 using Labs.Resources;
@@ -12,48 +13,53 @@ namespace Labs.Views
     [DesignTimeVisible(false)]
     public partial class MainPage
     {
-        private static readonly string FolderPath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
-        private readonly DirectoryInfo _dirInfoTests = new DirectoryInfo(Path.Combine(FolderPath, "Tests"));
-
-        private ObservableCollection<MasterDetail> _detailItems;
-
         [Obsolete]
         public MainPage()
         {
             InitializeComponent();
-
             IsPresented = false;
-            if (!_dirInfoTests.Exists) _dirInfoTests.Create();
-            Detail = new NavigationPage(new HomePage());
+            
+            ShowHomePage();
 
-            _detailItems = new ObservableCollection<MasterDetail>
-            {
-                new MasterDetail{Image = "Home.png", Text = AppResources.HomeButton, LineIsVisible = false},
-                new MasterDetail{Image = "file.png", Text = AppResources.CreateTestButton, LineIsVisible = false},
-                new MasterDetail{Image = "Settings.png", Text = AppResources.SettingsButton, LineIsVisible = true}
-            };
             BindingContext = this;
-            ListViewDetail.ItemsSource = _detailItems;
+            ListViewDetail.ItemsSource = MasterDetail.GetDetailItems();
 
             Subscribe();
         }
 
         private void Subscribe()
         {
-            MessagingCenter.Subscribe<Page>(
-                this,
-                "UploadTitles",
-                (sender) => UploadTitles());
+            MessagingCenter.Subscribe<Page>(this, Constants.UploadTitles, (sender) => UploadTitles());
         }
 
         private void UploadTitles()
         {
-            _detailItems[0].Text = AppResources.HomeButton;
-            _detailItems[1].Text = AppResources.CreateTestButton;
-            _detailItems[2].Text = AppResources.SettingsButton;
-
             ListViewDetail.ItemsSource = null;
-            ListViewDetail.ItemsSource = _detailItems;
+            ListViewDetail.ItemsSource = MasterDetail.GetDetailItems();
+        }
+
+        private string[] GetPaths()
+        {
+            var appPath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+            string[] paths = {
+                Path.Combine(appPath, Constants.TestFolder),
+                Path.Combine(appPath, Constants.TempFolder)
+            };
+
+            return paths;
+        }
+
+        private void CheckFolders(params string[] paths)
+        {
+            if (!Directory.Exists(paths[0])) Directory.CreateDirectory(paths[0]);
+            if (!Directory.Exists(paths[1])) Directory.CreateDirectory(paths[1]);
+        }
+
+        [Obsolete]
+        private void ShowHomePage()
+        {
+            CheckFolders(GetPaths());
+            Detail = new NavigationPage(new HomePage());
         }
 
         [Obsolete]
@@ -66,7 +72,8 @@ namespace Labs.Views
                     IsPresented = false;
                     break;
                 case 1:
-                    Detail = new NavigationPage(new CreatorPage("Temp"));
+                    var path = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+                    Detail = new NavigationPage(new CreatorPage(Path.Combine(path, Constants.TempFolder)));
                     IsPresented = false;
                     break;
                 case 2:

@@ -11,7 +11,8 @@
     <ContentPage.ToolbarItems>
         <ToolbarItem x:Name="ItemSave"
                      Text="{helpers:Translate Save}"
-                     Order="Secondary"/>
+                     Order="Secondary"
+                     Clicked="ItemSave_OnClicked"/>
         <ToolbarItem x:Name="ItemClear"
                      Text="{helpers:Translate Clear}"
                      Order="Secondary"/>
@@ -39,7 +40,7 @@
                                         Margin="12,10,12,0"/>
                                 <TableView x:Name="SettingsTableView"
                                            Intent="Settings"
-                                           HeightRequest="400">
+                                           HeightRequest="220">
                                     <TableRoot>
                                         <TableSection Title="{helpers:Translate TestSettingsInfo}">
                                             <EntryCell x:Name="CellName"
@@ -49,45 +50,39 @@
                                                        Label="{helpers:Translate Subject}"
                                                        Placeholder="{helpers:Translate TestSettingsSPlaceh}"/>
                                         </TableSection>
-                                        <TableSection Title="Timer">
-                                            <SwitchCell x:Name="SwitchCellWhole"
-                                                        Text="{helpers:Translate TestSettingsTimeForTest}"
-                                                        On="True"
-                                                        OnChanged="SwitchCellWhole_OnChanged"/>
-                                            <SwitchCell x:Name="SwitchCellQuestion"
-                                                        Text="{helpers:Translate TestSettingsTimeForQuestion}"
-                                                        On="False"
-                                                        OnChanged="SwitchCellQuestion_OnChanged"/>
+                                        <TableSection>
                                             <ViewCell>
-                                                <StackLayout Orientation="Horizontal"
-                                                             Margin="12,0,12,0">
-                                                    <Label Text="Time measurement:"
-                                                           VerticalOptions="Center"/>
-                                                    <Picker x:Name="picker"
-                                                            Title="select"
-                                                            VerticalOptions="Center"
-                                                            WidthRequest="80"
-                                                            ItemsSource="{Binding Measurements}"
-                                                            ItemDisplayBinding="{Binding Value}"
-                                                            SelectedIndexChanged="Picker_OnSelectedIndexChanged"/>
-                                                </StackLayout>
-                                            </ViewCell>
-                                            <ViewCell>
-                                                <StackLayout Orientation="Horizontal">
+                                                <Grid ColumnSpacing="0">
+                                                    <Grid.RowDefinitions>
+                                                        <RowDefinition Height="Auto"/>
+                                                    </Grid.RowDefinitions>
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="Auto"/>
+                                                        <ColumnDefinition Width="Auto"/>
+                                                        <ColumnDefinition Width="Auto"/>
+                                                        <ColumnDefinition Width="Auto"/>
+                                                    </Grid.ColumnDefinitions>
                                                     <Label Text="{helpers:Translate TestSettingsTime}"
                                                            VerticalOptions="Center"
-                                                           Margin="12,0,0,0"/>
-                                                    <Label x:Name="LabelTime"
-                                                           BindingContext="{x:Reference stepper}"
-                                                           Text="{Binding Value}"
-                                                           VerticalOptions="Center"/>
-                                                    <Stepper x:Name="stepper"
-                                                             Minimum="0" 
-                                                             Maximum="60" 
-                                                             Value="0" 
-                                                             Increment="1"
-                                                             HorizontalOptions="End"/>
-                                                </StackLayout>
+                                                           Margin="12,0,0,0"
+                                                           Grid.Column="0" Grid.Row="0"/>
+                                                    <TimePicker x:Name="_timePicker"
+                                                                Format="hh:mm"
+                                                                Margin="0"
+                                                                Grid.Column="1" Grid.Row="0"/>
+                                                    <Label Text=":"
+                                                           FontSize="Medium"
+                                                           TextColor="Black"
+                                                           VerticalOptions="Center"
+                                                           Margin="0"
+                                                           Grid.Column="2" Grid.Row="0"/>
+                                                    <Entry x:Name="_entrySeconds"
+                                                           Text="00"
+                                                           Margin="0"
+                                                           Keyboard="Numeric"
+                                                           TextChanged="_entrySeconds_OnTextChanged"
+                                                           Grid.Column="3" Grid.Row="0"/>
+                                                </Grid>
                                             </ViewCell>
                                         </TableSection>
                                     </TableRoot>

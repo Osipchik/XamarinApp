@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
+using Labs.Helpers;
 using Labs.Resources;
 using Xamarin.Forms;
 using Xamarin.Forms.Internals;
@@ -14,15 +15,13 @@ namespace Labs.Views
     {
         private readonly string _path;
         private readonly string _fileName;
-   
-        // если вызван только этот конструктор, значит все сохраняется в папку "Temp"
+        
         public TypeCheckCreatingPage(string path)
         {
             InitializeComponent();
             _path = path;
         }
 
-        // если вызван только этот конструктор, значит все сохраняется в уже существующую папку
         public TypeCheckCreatingPage(string path, string fileName) : this(path)
         {
             _fileName = fileName;
@@ -150,7 +149,7 @@ namespace Labs.Views
                 // ignored
             }
 
-            MessagingCenter.Send<Page>(this, "CreatorListUpLoad");
+            MessagingCenter.Send<Page>(this, Constants.CreatorListUpLoad);
             //MessagingCenter.Send<Page>(this, "StartInfoUpLoad");
             await Navigation.PopAsync(true);
         }
@@ -160,7 +159,7 @@ namespace Labs.Views
             if (_fileName != null)
             {
                 await Task.Run(() => File.Delete(Path.Combine(_path, _fileName)));
-                MessagingCenter.Send<Page>(this, "CreatorListUpLoad");
+                MessagingCenter.Send<Page>(this, Constants.CreatorListUpLoad);
                 await Navigation.PopAsync(true);
             }
             else

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Labs.Helpers;
 using Labs.MainPages;
 using Labs.Models;
 using Labs.ViewModels;
@@ -15,26 +16,30 @@ namespace Labs.Views
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class HomePage
     {
-        private static readonly string FolderPath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
-        private readonly DirectoryInfo _dirInfoTests = new DirectoryInfo(Path.Combine(FolderPath, "Tests"));
-        private InfoCollectionViewModel _directoryInfoCollection;
+        // TODO: fix this
+        private readonly string _folderPath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+
+        private readonly DirectoryInfo _dirInfoTests;
+        private readonly InfoCollectionViewModel _directoryInfoCollection;
 
         [Obsolete]
         public HomePage()
         {
             InitializeComponent();
 
-            var anim = new AnimationView
-            {
-                Animation = "CheckLoad.json",
-                Loop = false,
-                HeightRequest = 100,
-                WidthRequest = 100,
-                AutoPlay = true
-            };
-            anim.OnClick += AnimView_OnOnClick;
+            //var anim = new AnimationView
+            //{
+            //    Animation = "CheckLoad.json",
+            //    Loop = false,
+            //    HeightRequest = 100,
+            //    WidthRequest = 100,
+            //    AutoPlay = true
+            //};
+            //anim.OnClick += AnimView_OnOnClick;
 
-            stackLayout.Children.Add(anim);
+            //stackLayout.Children.Add(anim);
+            _dirInfoTests = new DirectoryInfo(Path.Combine(_folderPath, Constants.TestFolder));
+            _directoryInfoCollection = new InfoCollectionViewModel();
 
             ListUploadAsync();
             Subscribe();
@@ -44,37 +49,31 @@ namespace Labs.Views
             LabelDateTapFunc();
         }
 
-        private async void ListUploadAsync()
-        {
-            _directoryInfoCollection = null;
-            _directoryInfoCollection = new InfoCollectionViewModel();
-
-            listView.ItemsSource = _directoryInfoCollection.InfosCollection = await Task.Run(()=>
-                InfoCollection.GetDirectoryInfo(new DirectoryInfo(_dirInfoTests.FullName)));
-        }
+        private void ListUploadAsync() =>
+            listView.ItemsSource = _directoryInfoCollection.GetDirectoryInfo(new DirectoryInfo(_dirInfoTests.FullName));
+        
 
         private void Subscribe()
         {
             MessagingCenter.Subscribe<Page>(
-                this,
-                "HomeListUpload",
-                (sender) => { ListUploadAsync(); });
+                this, Constants.HomeListUpload, (sender) => { ListUploadAsync(); });
         }
 
 
         // TODO: с этим надо что-то сделать
-        private void AnimView_OnOnClick(object sender, EventArgs e)
-        {
-            var anim = (AnimationView)sender;
-            anim.Progress = 0.0f;
-            anim.IsPlaying = true;
-            anim.Progress = 0.0f;
-        }
+        //private void AnimView_OnOnClick(object sender, EventArgs e)
+        //{
+        //    var anim = (AnimationView)sender;
+        //    anim.Progress = 0.0f;
+        //    anim.IsPlaying = true;
+        //    anim.Progress = 0.0f;
+        //}
 
 
         private async void ListView_OnItemTapped(object sender, ItemTappedEventArgs e)
         {
-            await Navigation.PushAsync(new StartTestPage(_dirInfoTests.FullName, _directoryInfoCollection.InfosCollection[e.ItemIndex].Name));
+            await Navigation.PushAsync(
+                new StartTestPage(Path.Combine(_dirInfoTests.FullName, _directoryInfoCollection.InfosCollection[e.ItemIndex].Name)));
         }
 
         private void ListView_OnItemSelected(object sender, SelectedItemChangedEventArgs e)
@@ -117,7 +116,7 @@ namespace Labs.Views
 
         private async void SearchNameAsync(string keyword)
         {
-            IEnumerable<InfoCollection> searchResult = from title
+            IEnumerable<InfoModel> searchResult = from title
                                                        in _directoryInfoCollection.InfosCollection
                                                        where title.Title.ToLower().Contains(keyword.ToLower())
                                                        select title;
@@ -125,9 +124,9 @@ namespace Labs.Views
             listView.ItemsSource = await Task.Run(()=>ColorName(searchResult));
         }
 
-        private IEnumerable<InfoCollection> ColorName(IEnumerable<InfoCollection> nameCollectionViews)
+        private IEnumerable<InfoModel> ColorName(IEnumerable<InfoModel> nameCollectionViews)
         {
-            var collectionViews = nameCollectionViews as InfoCollection[] ?? nameCollectionViews.ToArray();
+            var collectionViews = nameCollectionViews as InfoModel[] ?? nameCollectionViews.ToArray();
             foreach (var collectionView in collectionViews)
             {
                 collectionView.TitleColor = Color.FromHex("#03A9F4");
@@ -142,7 +141,7 @@ namespace Labs.Views
 
         private async void SearchSubjectAsync(string keyword)
         {
-            IEnumerable<InfoCollection> searchResult = from detail
+            IEnumerable<InfoModel> searchResult = from detail
                                                             in _directoryInfoCollection.InfosCollection
                                                             where detail.Detail.ToLower().Contains(keyword.ToLower())
                                                             select detail;
@@ -150,9 +149,9 @@ namespace Labs.Views
             listView.ItemsSource = await Task.Run(()=>ColorSubject(searchResult));
         }
 
-        private IEnumerable<InfoCollection> ColorSubject(IEnumerable<InfoCollection> subjectCollectionViews)
+        private IEnumerable<InfoModel> ColorSubject(IEnumerable<InfoModel> subjectCollectionViews)
         {
-            var collectionViews = subjectCollectionViews as InfoCollection[] ?? subjectCollectionViews.ToArray();
+            var collectionViews = subjectCollectionViews as InfoModel[] ?? subjectCollectionViews.ToArray();
             foreach (var collectionView in collectionViews)
             {
                 collectionView.DetailColor = Color.FromHex("#03A9F4");
@@ -167,7 +166,7 @@ namespace Labs.Views
 
         private async void SearchDateAsync(string keyword)
         {
-            IEnumerable<InfoCollection> searchResult = from date
+            IEnumerable<InfoModel> searchResult = from date
                                                             in _directoryInfoCollection.InfosCollection
                                                             where date.Date.ToLower().Contains(keyword.ToLower())
                                                             select date;
@@ -175,9 +174,9 @@ namespace Labs.Views
             listView.ItemsSource = await Task.Run(()=> ColorDate(searchResult));
         }
 
-        private IEnumerable<InfoCollection> ColorDate(IEnumerable<InfoCollection> dateCollectionViews)
+        private IEnumerable<InfoModel> ColorDate(IEnumerable<InfoModel> dateCollectionViews)
         {
-            var collectionViews = dateCollectionViews as InfoCollection[] ?? dateCollectionViews.ToArray();
+            var collectionViews = dateCollectionViews as InfoModel[] ?? dateCollectionViews.ToArray();
             foreach (var collectionView in collectionViews)
             {
                 collectionView.DateColor = Color.FromHex("#03A9F4");

@@ -20,7 +20,6 @@ namespace Labs
         private int _testTime = 0, _rightCount = 0, _price = 0;
         private bool _isChecked = true;
 
-        // TODO: добавить кнопки Next и Back
         public TestPage(string path)
         {
             InitializeComponent();
@@ -56,22 +55,19 @@ namespace Labs
         private int Move(int newValue)
         {
             var index = newValue;
-            if (newValue > _oldValue)
-            {
+            if (newValue > _oldValue){
                 index = MoveRight(newValue);
                 if (index == -1)
                     index = MoveLeft(newValue);
             }
 
-            if (newValue < _oldValue)
-            {
+            if (newValue < _oldValue){
                 index = MoveLeft(newValue);
                 if (index == -1)
                     index = MoveRight(newValue);
             }
 
-            if (index == -1)
-            {
+            if (index == -1){
                 ButtonCheck_OnClicked(this, EventArgs.Empty);
                 return 0;
             }

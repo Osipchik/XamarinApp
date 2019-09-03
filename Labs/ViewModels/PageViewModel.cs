@@ -14,7 +14,6 @@ namespace Labs.ViewModels
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
-        // эти списки хронят ответы и индексы страниц
         private List<CheckTypePageView> _checkTypePages;
         private List<EntryTypePageView> _entryTypePages;
         private List<StackTypePageView> _stackTypePages;
@@ -44,7 +43,7 @@ namespace Labs.ViewModels
         public async void InitContentAsync(string path)
         {
             int index = 0;
-            foreach (var info in InfoCollection.GetFilesInfo(new DirectoryInfo(path)))
+            foreach (var info in new InfoCollectionViewModel().GetFilesInfo(path))
             {
                 switch (CommonPageHelper.GetTypeName(info.Name))
                 {

@@ -5,7 +5,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:helpers="clr-namespace:Labs.Helpers;assembly=Labs"
              mc:Ignorable="d"
-             x:Class="Labs.MainPages.StartTestPage">
+             x:Class="Labs.Views.StartTestPage">
 
     <ContentPage.Content>
         <StackLayout>
@@ -15,13 +15,15 @@
                            FontSize="Medium"/>
                     <Label x:Name="LabelSubject"/>
                     <Label x:Name="LabelTime"/>
-                    <Label x:Name="LabelCoast"/>
+                    <Label x:Name="LabelPrice"
+                           Text="{helpers:Translate MaxMarck}"/>
                     
                     <BoxView HeightRequest="1"
                              Margin="6"
                              Color="#90A4AE"
                              CornerRadius="90"/>
-                    <Button Text="{helpers:Translate Change}"
+                    <Button x:Name="ChangeButton" 
+                            Text="{helpers:Translate Change}"
                             TextColor="#039BE5"
                             HorizontalOptions="FillAndExpand"
                             VerticalOptions="Center"
@@ -32,7 +34,7 @@
                             CornerRadius="60"
                             Margin="6,0,6,0"
                             Clicked="ChangeButton_OnClicked"/>
-                    <Button x:Name="ButtonStart"
+                    <Button x:Name="StartButton"
                             Text="{helpers:Translate Start}"
                             TextColor="#039BE5"
                             HorizontalOptions="FillAndExpand"
