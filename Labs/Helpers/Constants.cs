@@ -17,5 +17,7 @@
         public const uint AnimationRate = 16;
         public const uint AnimationLength = 700;
         public const string ColorMaterialBlue = "#039BE5";
+        public const string ColorLightBlueHex = "#03A9F4";
+        public const string ColorLightGrayHex = "#757575";
     }
 }

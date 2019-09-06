@@ -17,7 +17,7 @@ namespace Labs.Views
     public partial class CreatorPage
     {
         private bool _tableVisible = true;
-        private readonly InfoCollectionViewModel _infos;
+        private readonly InfoViewModel _infos;
         private readonly CreatorAnimationViewModel _animation;
         private readonly TestViewModel _testVM;
 
@@ -26,7 +26,7 @@ namespace Labs.Views
             InitializeComponent();
             _animation = new CreatorAnimationViewModel(350, (uint)SettingsTableView.HeightRequest, 0);
             _testVM = new TestViewModel(path);
-            _infos = new InfoCollectionViewModel();
+            _infos = new InfoViewModel(path);
             if (path.Contains(Constants.TempFolder)) InitializeTemp();
             else InitializeExist();
 
@@ -54,7 +54,7 @@ namespace Labs.Views
         }
 
         private async void FillListViewAsync() =>
-            ListViewFiles.ItemsSource = await Task.Run(() => _infos.GetFilesInfo(_testVM.GetPath));
+            ListViewFiles.ItemsSource = await Task.Run(() => _infos.GetFilesInfo());
         
         private void FillSettings()
         {
@@ -103,8 +103,7 @@ namespace Labs.Views
 
         private async void DeleteAsync(object sender, EventArgs e)
         {
-            if (await DisplayAlert(AppResources.Warning, AppResources.DeleteAnswer,
-                AppResources.Yes, AppResources.No)) {
+            if (await DisplayAlert(AppResources.Warning, AppResources.DeleteAnswer, AppResources.Yes, AppResources.No)) {
                 _testVM.DeleteFolderAsync(this);
                 await Navigation.PopToRootAsync(true);
             }
@@ -112,17 +111,17 @@ namespace Labs.Views
 
         private async void ListViewFiles_OnItemTapped(object sender, ItemTappedEventArgs e)
         {
-            switch (CommonPageHelper.GetTypeName(_infos.InfosCollection[e.ItemIndex].Name))
+            switch (CommonPageHelper.GetTypeName(_infos.InfosModel[e.ItemIndex].Name))
             {
                 case Constants.TestTypeCheck:
-                    await Navigation.PushAsync(new TypeCheckCreatingPage(_testVM.GetPath, _infos.InfosCollection[e.ItemIndex].Name));
+                    await Navigation.PushAsync(new TypeCheckCreatingPage(_testVM.GetPath, _infos.InfosModel[e.ItemIndex].Name));
                     break;
                 case Constants.TestTypeStack:
-                    await Navigation.PushAsync(new TypeStackCreatingPage(_testVM.GetPath, _infos.InfosCollection[e.ItemIndex].Name));
+                    await Navigation.PushAsync(new TypeStackCreatingPage(_testVM.GetPath, _infos.InfosModel[e.ItemIndex].Name));
                     break;
 
                 case Constants.TestTypeEntry:
-                    await Navigation.PushAsync(new TypeEntryCreatingPage(_testVM.GetPath, _infos.InfosCollection[e.ItemIndex].Name));
+                    await Navigation.PushAsync(new TypeEntryCreatingPage(_testVM.GetPath, _infos.InfosModel[e.ItemIndex].Name));
                     break;
             }
         }
@@ -136,7 +135,6 @@ namespace Labs.Views
         private async void TypeEntry_OnClicked(object sender, EventArgs e) =>
             await Navigation.PushAsync(new TypeEntryCreatingPage(_testVM.GetPath));
         
-
         private async void TypeStack_OnClicked(object sender, EventArgs e) =>
             await Navigation.PushAsync(new TypeStackCreatingPage(_testVM.GetPath));
 

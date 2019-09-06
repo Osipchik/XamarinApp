@@ -43,7 +43,7 @@ namespace Labs.ViewModels
         public async void InitContentAsync(string path)
         {
             int index = 0;
-            foreach (var info in new InfoCollectionViewModel().GetFilesInfo(path))
+            foreach (var info in new InfoViewModel(path).GetFilesInfo())
             {
                 switch (CommonPageHelper.GetTypeName(info.Name))
                 {

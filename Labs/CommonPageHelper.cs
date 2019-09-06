@@ -83,12 +83,6 @@ namespace Labs
             };
         }
 
-        public static Label GetLabel(string text = "")
-        {
-            return new Label
-            {
-                Text = text,
-            };
-        }
+        
     }
 }

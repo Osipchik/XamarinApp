@@ -122,7 +122,7 @@ namespace Labs.ViewModels
         private string GetTotalCoast()
         {
             var totalCoast = 0;
-            foreach (var coast in new InfoCollectionViewModel().GetFilesInfo(GetPath)) {
+            foreach (var coast in new InfoViewModel(GetPath).GetFilesInfo()) {
                 totalCoast += int.Parse(coast.Detail);
             }
 
