@@ -100,21 +100,23 @@ namespace Labs.ViewModels
 
         public async void DeleteItemsAsync()
         {
-            //await Task.Run(() => {
-            //    foreach (var i in _itemIndexList) {
-            //        Models.RemoveAt(i);
-            //    }
+            await Task.Run(() =>
+            {
+                foreach (var model in GetItemsToDelete()) {
+                    Models.Remove(model);
+                }
+            });
+        }
 
-            //    _itemIndexList.Clear();
-            //});
+        private IEnumerable<FrameModel> GetItemsToDelete()
+        {
             var list = new List<FrameModel>();
             foreach (var i in _itemIndexToDeleteList) {
                 list.Add(Models[i]);
             }
-
             _itemIndexToDeleteList.Clear();
-            Models.Remove(list[0]);
-            var asd = Models;
+
+            return list;
         }
 
         public void SetText(string text)

@@ -115,9 +115,9 @@ namespace Labs.Views
 
         private void Editor_OnTextChanged(object sender, TextChangedEventArgs e)
         {
-            var asd = _viewModel;
-            var aaa = e.NewTextValue;
-            //_viewModel.FrameViewModel.SetText(e.NewTextValue.Trim());
+            if (_viewModel != null && !string.IsNullOrEmpty(e.NewTextValue)) {
+                _viewModel.FrameViewModel.SetText(e.NewTextValue.Trim());
+            }
         }
     }
 }
