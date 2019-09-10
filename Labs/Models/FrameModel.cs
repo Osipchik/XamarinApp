@@ -10,14 +10,14 @@ namespace Labs.Models
 {
     public class FrameModel : INotifyPropertyChanged
     {
-        private Color _itemColor;
+        private Color _borderColor;
 
-        public Color ItemColor
+        public Color BorderColor
         {
-            get { return _itemColor; }
+            get { return _borderColor; }
             set
             {
-                _itemColor = value;
+                _borderColor = value;
                 OnPropertyChanged();
             }
         }
@@ -33,13 +33,13 @@ namespace Labs.Models
             }
         }
 
-        private bool _editorLeftIsVisible;
+        private bool _editorLeftIsReadOnly;
         public bool EditorLeftIsReadOnly
         {
-            get { return _editorLeftIsVisible; }
+            get { return _editorLeftIsReadOnly; }
             set
             {
-                _editorLeftIsVisible = value;
+                _editorLeftIsReadOnly = value;
                 OnPropertyChanged();
             }
         }

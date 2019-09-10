@@ -12,13 +12,30 @@ namespace Labs.ViewModels
     public class CheckTypeViewModel 
     {
         private FrameAnimation _animation;
-        private IEnumerable<string> _stringsToSave;
+        private readonly string _fileName;
+        private List<string> _stringsToSave;
         public readonly FrameViewModel FrameViewModel;
-        public CheckTypeViewModel(string path)
+        private string _price;
+        private string _time;
+        private string _question;
+
+        public CheckTypeViewModel(string path, string fileName)
         {
-            GetPath = path;
             Modificator = 0;
             FrameViewModel = new FrameViewModel();
+            GetPath = path;
+            _fileName = fileName;
+            FileExist();
+        }
+
+        private void FileExist()
+        {
+            if (!string.IsNullOrEmpty(_fileName)){
+                ReadFile(GetPath, _fileName);
+            }
+            else {
+                FrameViewModel.AddNewModelAsync();
+            }
         }
 
         public string GetPath { get; }
@@ -51,11 +68,12 @@ namespace Labs.ViewModels
                 case -1:
                     await Task.Run(() => { FrameViewModel.ItemToDelete(index); });
                     break;
-                case 0:
-                    await Task.Run(() => { FrameViewModel.ItemIsWriteAble(index); });
-                    break;
+                case 0: goto default;
                 case 1:
                     await Task.Run(() => { FrameViewModel.RightItems(index); });
+                    break;
+                default:
+                    await Task.Run(() => { FrameViewModel.ItemIsWriteAble(index); });
                     break;
             }
         }
@@ -114,7 +132,7 @@ namespace Labs.ViewModels
         {
             return await Task.Run(() => new List<string> { PageHelper.NormalizeTime(timeSpan, seconds), price, question });
         }
-        private IEnumerable<string> GetFramesInfo()
+        private List<string> GetFramesInfo()
         {
             var answers = string.Empty;
             var textList = new List<string>();
@@ -128,7 +146,7 @@ namespace Labs.ViewModels
 
             return list;
         }
-        private async Task<IEnumerable<string>> GetStringsToSave(string question, string price, TimeSpan timeSpan, string seconds)
+        private async Task<List<string>> GetStringsToSave(string question, string price, TimeSpan timeSpan, string seconds)
         {
             var stringsToSave = new List<string>();
             stringsToSave.AddRange(await GetPageSettingsAsync(question, price, timeSpan, seconds));
@@ -136,10 +154,66 @@ namespace Labs.ViewModels
 
             return stringsToSave;
         }
-
         public void Save()
         {
-            var asd = _stringsToSave;
+            DirectoryHelper.SaveLinesToFile(Constants.TestTypeCheck, GetPath, _fileName, _stringsToSave);
+        }
+
+
+
+        public void GetTime(out TimeSpan timeSpan, out string seconds)
+        {
+            if (string.IsNullOrEmpty(_time)) {
+                timeSpan = TimeSpan.Zero;
+                seconds = "00";
+            }
+            else {
+                SplitUpTimeLine(out var _timeSpan, out var _seconds);
+                timeSpan = _timeSpan;
+                seconds = _seconds;
+            }
+        }
+        private void SplitUpTimeLine(out TimeSpan timeSpan, out string seconds)
+        {
+            PageHelper.GetTime(_time, out var _timeSpan, out var _seconds);
+            timeSpan = _timeSpan;
+            seconds = _seconds;
+        }
+
+        public string GetPrice()
+        {
+            var price = string.Empty;
+            price = string.IsNullOrEmpty(_price) ? "00" : _price;
+
+            return price;
+        }
+
+        public string GetQuestion()
+        {
+            return string.IsNullOrEmpty(_question) ? "" : _question;
+        }
+
+        private void ReadFile(string path, string fileName)
+        {
+            var strings = DirectoryHelper.ReadFile(path, fileName);
+            SetPageSettings(strings);
+            FillFramesAsync(strings, strings[3], 4);
+        }
+
+        private void SetPageSettings(IReadOnlyList<string> strings)
+        {
+            _time = strings[0];
+            _price = strings[1];
+            _question = strings[2];
+        }
+
+        private async void FillFramesAsync(IReadOnlyList<string> strings, string answers, int startIndex)
+        {
+            await Task.Run(() => {
+                for (int i = startIndex; i < strings.Count; i++) {
+                    FrameViewModel.AddModelAsync(strings[i], answers[i - startIndex] == '0');
+                }
+            });
         }
     }
 }

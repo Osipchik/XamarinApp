@@ -18,27 +18,41 @@ namespace Labs.Views
     public partial class TypeCheckCreatingPage
     {
         private readonly string _fileName;
-        private readonly bool _isDeleteAvailable = false;
+        private bool _isDeleteAvailable = false;
         private readonly CheckTypeViewModel _viewModel;
 
-        public TypeCheckCreatingPage(string path)
+        public TypeCheckCreatingPage(string path, string fileName = "")
         {
             InitializeComponent();
 
-            _viewModel = new CheckTypeViewModel(path);
+            _fileName = fileName;
+            _viewModel = new CheckTypeViewModel(path, _fileName);
+            
             BindingContext = _viewModel.FrameViewModel;
+            SetDeleteButton();
+            SetPageSettings();
         }
 
-        public TypeCheckCreatingPage(string path, string fileName) : this(path)
+        private void SetPageSettings()
         {
-            _fileName = fileName;
-            _isDeleteAvailable = true;
-            ItemDeleteFile.Text = AppResources.Delete;
+            _viewModel.GetTime(out var timeSpan, out var seconds);
+            TimePicker.Time = timeSpan;
+            Seconds.Text = seconds;
+            Price.Text = _viewModel.GetPrice();
+            Question.Text = _viewModel.GetQuestion();
+        }
+
+        private void SetDeleteButton()
+        {
+            _isDeleteAvailable = !string.IsNullOrEmpty(_fileName);
+            if (_isDeleteAvailable) {
+                ItemDeleteFile.Text = AppResources.Delete;
+            }
         }
 
         private void Coast_OnTextChanged(object sender, TextChangedEventArgs e) => PageHelper.CheckEntry(sender, e.NewTextValue);
         private void _entrySeconds_OnTextChanged(object sender, TextChangedEventArgs e) => PageHelper.CheckEntry(sender, e.NewTextValue);
-        private void AddItem_OnClicked(object sender, EventArgs e) => _viewModel.FrameViewModel.AddModel();
+        private void AddItem_OnClicked(object sender, EventArgs e) => _viewModel.FrameViewModel.AddNewModelAsync();
 
         private void HideOrShowAsync_OnClicked(object sender, EventArgs e) => 
             _viewModel.RunHideOrShowAnimation(Layout, this, (int)Layout.Height == 0);
@@ -47,7 +61,9 @@ namespace Labs.Views
         {
             if (await PageIsValid()) {
                 _viewModel.Save();
-            };
+                MessagingCenter.Send<Page>(this, Constants.CreatorListUpLoad);
+                await Navigation.PopAsync(true);
+            }
         }
 
         private async Task<bool> PageIsValid()
@@ -91,7 +107,7 @@ namespace Labs.Views
         private void SetActionToAdditionalButtons(ImageButton cross, ImageButton accept, int modificator)
         {
             _viewModel.GetAdditionalButtons(cross, accept, modificator);
-            _viewModel.FrameViewModel.DisableAll();
+            _viewModel.FrameViewModel.DisableAllAsync();
             _viewModel.Modificator = modificator;
         }
         private void ImageButtonCross_OnPressed(object sender, EventArgs e)
@@ -108,7 +124,7 @@ namespace Labs.Views
         private void HideAdditionalButton()
         {
             _viewModel.Modificator = 0;
-            _viewModel.FrameViewModel.DisableAll();
+            _viewModel.FrameViewModel.DisableAllAsync();
             GridAgree.IsVisible = false;
         }
 

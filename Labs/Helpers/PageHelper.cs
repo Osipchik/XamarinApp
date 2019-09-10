@@ -76,36 +76,6 @@ namespace Labs.Helpers
             return message;
         }
 
-        //public static string GetTypeName(string directoryName)
-        //{
-        //    return directoryName.TakeWhile(symbol => symbol != '_').Aggregate("", (current, symbol) => current + symbol);
-        //}
-
-        //public static string GetFileName(string savingType, string path, string fileName)
-        //{
-        //    var Name = string.Empty;
-        //    if (!string.IsNullOrEmpty(fileName)) {
-        //        Name = Path.Combine(path, fileName);
-        //    }
-        //    else {
-        //        int count = 0;
-        //        while (true) {
-        //            Name = Path.Combine(path, savingType + "_Type_" + $"{count}" + ".txt");
-        //            if (File.Exists(Name) == false) break;
-        //            count++;
-        //        }
-        //    }
-
-        //    return Name;
-        //}
-
-        //public static async Task<string> GetFileNameAsync(string savingType, string path, string fileName)
-        //{
-        //    return await Task.Run(() => GetFileName(savingType, path, fileName));
-        //}
-
-
-
         public static string NormalizeTime(TimeSpan timeSpan, string seconds)
         {
             return timeSpan.ToString().Remove(6) + (seconds.Length < 2 ? "00" : seconds);

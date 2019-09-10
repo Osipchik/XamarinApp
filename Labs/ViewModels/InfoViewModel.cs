@@ -14,15 +14,31 @@ using System.Windows.Input;
 
 namespace Labs.ViewModels
 {
-    public sealed class InfoViewModel : IEnumerable<string>, INotifyPropertyChanged
+    public class InfoViewModel : IEnumerable<string>, INotifyPropertyChanged
     {
+        public IEnumerator<string> GetEnumerator()
+        {
+            return new DirectoryInfoListEnumerator(InfosModel);
+        }
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        [NotifyPropertyChangedInvocator]
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+
         private readonly string _path;
         private readonly PropertyInfo[] _modelProperties;
         public InfoViewModel(string path)
         {
             InfosModel = new ObservableCollection<InfoModel>();
             _path = path;
-
             _modelProperties = typeof(InfoModel).GetProperties();
         }
 
@@ -87,14 +103,33 @@ namespace Labs.ViewModels
         private InfoModel GetFileModel(FileInfo fileInfo)
         {
             var collection = new InfoModel { Name = fileInfo.Name, Date = fileInfo.CreationTime.ToShortDateString() };
-            using (var reader = new StreamReader(fileInfo.FullName)) {
-                collection.Detail = reader.ReadLine();
-                reader.ReadLine();
-                collection.Title = reader.ReadLine();
-            }
+            ReadDetailAndTitleFromFile(out var detail, out var title, fileInfo.FullName);
+            collection.Detail = detail;
+            collection.Title = title;
 
             return collection;
         }
+        private void ReadDetailAndTitleFromFile(out string detail, out string title, string filePath)
+        {
+            using (var reader = new StreamReader(filePath))
+            {
+                reader.ReadLine();
+                detail = reader.ReadLine();
+                title = reader.ReadLine();
+            }
+
+            title = CutText(title);
+        }
+        private string CutText(string text)
+        {
+            if (text.Length >= 30) {
+                text = text.Remove(27);
+                text += "...";
+            }
+
+            return text;
+        }
+
         // TODO: add async
         private void ReadSettings(out string title, out string detail, string path)
         {
@@ -103,26 +138,6 @@ namespace Labs.ViewModels
                 detail = reader.ReadLine();
             }
         }
-
-        public IEnumerator<string> GetEnumerator()
-        {
-            return new DirectoryInfoListEnumerator(InfosModel);
-        }
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
-
-        #region INotifyPropertyChanged 
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChangedEventHandler handler = PropertyChanged;
-            if (handler != null)
-                handler(this, new PropertyChangedEventArgs(propertyName));
-        }
-        #endregion
     }
 
     internal class DirectoryInfoListEnumerator : IEnumerator<string>

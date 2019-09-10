@@ -53,8 +53,10 @@ namespace Labs.Views
             _animation.RunShowOrHideAnimation(ButtonSettings, SettingsTableView, this, _tableVisible);
         }
 
-        private async void FillListViewAsync() =>
+        private async void FillListViewAsync()
+        {
             ListViewFiles.ItemsSource = await Task.Run(() => _infos.GetFilesInfo());
+        } 
         
         private void FillSettings()
         {
