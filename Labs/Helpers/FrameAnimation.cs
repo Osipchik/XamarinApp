@@ -1,37 +1,40 @@
 ﻿using System.Threading.Tasks;
-using Labs.Helpers;
 using Xamarin.Forms;
 
-namespace Labs.ViewModels
+namespace Labs.Helpers
 {
-    public class CreatorAnimationViewModel
+    public class FrameAnimation
     {
         private readonly uint _buttonWidthMax, _settingsViewHeightMax, _settingsViewHeightMin;
 
-        public CreatorAnimationViewModel(uint buttonWidthMax, uint settingsViewHeightMax, uint settingsViewHeightMin)
+        public FrameAnimation(uint buttonWidthMax, uint settingsViewHeightMax, uint settingsViewHeightMin)
         {
             _buttonWidthMax = buttonWidthMax;
             _settingsViewHeightMax = settingsViewHeightMax;
             _settingsViewHeightMin = settingsViewHeightMin;
         }
 
-        public void RunShowOrHideAnimation(Button button, TableView tableView, IAnimatable owner, bool show)
+        public void RunShowOrHideAnimation(Button button, View view, IAnimatable owner, bool show)
         {
-            if (show) RunShowAnimation(button, tableView, owner);
-            else RunHideAnimation(button, tableView, owner);
+            if (show) RunShowAnimation(button, view, owner);
+            else RunHideAnimation(button, view, owner);
         }
 
-        private void RunShowAnimation(Button button, TableView tableView, IAnimatable owner)
+        private void RunShowAnimation(Button button, View view, IAnimatable owner)
         {
-            ChangeButtonStyle(button);
-            RunSettingsButtonAnimationToShowAsync(button, owner);
-            RunSettingsViewAnimationToShowAsync(tableView, owner);
+            if (button != null) {
+                ChangeButtonStyle(button);
+                RunSettingsButtonAnimationToShowAsync(button, owner);
+            }
+            RunSettingsViewAnimationToShowAsync(view, owner);
         }
-        private void RunHideAnimation(Button button, TableView tableView, IAnimatable owner)
+        private void RunHideAnimation(Button button, View view, IAnimatable owner)
         {
-            ChangeButtonStyle(button, false);
-            RunSettingsButtonAnimationToHideAsync(button, owner);
-            RunSettingsViewAnimationToHideAsync(tableView, owner);
+            if (button != null) {
+                ChangeButtonStyle(button, false);
+                RunSettingsButtonAnimationToHideAsync(button, owner);
+            }
+            RunSettingsViewAnimationToHideAsync(view, owner);
         }
 
         private async void RunSettingsButtonAnimationToShowAsync(Button button, IAnimatable owner)
@@ -41,10 +44,11 @@ namespace Labs.ViewModels
                     .Commit(owner, "ButtonShow", Constants.AnimationRate, Constants.AnimationLength, Easing.CubicInOut);
             });
         }
-        private async void RunSettingsViewAnimationToShowAsync(TableView settingsTableView, IAnimatable owner)
+
+        private async void RunSettingsViewAnimationToShowAsync(View view, IAnimatable owner)
         {
             await Task.Run(() => {
-                new Animation((d) => settingsTableView.HeightRequest = d, settingsTableView.Height, _settingsViewHeightMax)
+                new Animation((d) => view.HeightRequest = d, view.Height, _settingsViewHeightMax)
                     .Commit(owner, "Show", Constants.AnimationRate, Constants.AnimationLength, Easing.SinInOut);
             });
         }
@@ -57,10 +61,10 @@ namespace Labs.ViewModels
                     .Commit(owner, "ButtonHide", Constants.AnimationRate, Constants.AnimationLength, Easing.CubicInOut);
             });
         }
-        private async void RunSettingsViewAnimationToHideAsync(TableView settingsTableView, IAnimatable owner)
+        private async void RunSettingsViewAnimationToHideAsync(View view, IAnimatable owner)
         {
             await Task.Run(() => {
-                new Animation((d) => settingsTableView.HeightRequest = d, settingsTableView.Height, _settingsViewHeightMin)
+                new Animation((d) => view.HeightRequest = d, view.Height, _settingsViewHeightMin)
                     .Commit(owner, "Hide", Constants.AnimationRate, Constants.AnimationLength, Easing.SinInOut);
             });
         }
@@ -73,14 +77,14 @@ namespace Labs.ViewModels
 
         private void ButtonStyleShow(Button button)
         {
-            button.BackgroundColor = Color.FromHex(Constants.ColorMaterialBlue);
+            button.BackgroundColor = Constants.ColorMaterialBlue;
             button.TextColor = Color.White;
         }
 
         private void ButtonStyleHide(Button button)
         {
             button.BackgroundColor = Color.White;
-            button.TextColor = Color.FromHex(Constants.ColorMaterialBlue);
+            button.TextColor = Constants.ColorMaterialBlue;
         }
     }
 }

@@ -18,14 +18,14 @@ namespace Labs.Views
     {
         private bool _tableVisible = true;
         private readonly InfoViewModel _infos;
-        private readonly CreatorAnimationViewModel _animation;
-        private readonly TestViewModel _testVM;
+        private readonly FrameAnimation _animation;
+        private readonly CreatorViewModel _creatorVm;
 
         public CreatorPage(string path)
         {
             InitializeComponent();
-            _animation = new CreatorAnimationViewModel(350, (uint)SettingsTableView.HeightRequest, 0);
-            _testVM = new TestViewModel(path);
+            _animation = new FrameAnimation(350, (uint)SettingsTableView.HeightRequest, 0);
+            _creatorVm = new CreatorViewModel(path);
             _infos = new InfoViewModel(path);
             if (path.Contains(Constants.TempFolder)) InitializeTemp();
             else InitializeExist();
@@ -36,7 +36,7 @@ namespace Labs.Views
 
         private void InitializeTemp()
         {
-            _testVM.CreateTempFolderAsync();
+            _creatorVm.CreateTempFolderAsync();
             ItemClear.Clicked += Clear;
         }
 
@@ -58,25 +58,24 @@ namespace Labs.Views
         
         private void FillSettings()
         {
-            var settings = _testVM.ReadSettings();
+            var settings = _creatorVm.ReadSettings();
             CellName.Text = settings.TestName;
             CellSubject.Text = settings.TestSubject;
             _timePicker.Time = settings.SettingSpan;
             _entrySeconds.Text = settings.Seconds;
         }
 
-        private void Subscribe()
-        {
+        private void Subscribe() =>
             MessagingCenter.Subscribe<Page>(this, Constants.CreatorListUpLoad, (sender) => FillListViewAsync());
-        }
+        
 
         private async void ItemSave_OnClicked(object sender, EventArgs e)
         {
             if (!_infos.Any()) await DisplayAlert(AppResources.Warning, AppResources.CreatorQuestions, AppResources.Cancel);
-            else if (await _testVM.SaveTestAsync(GetsSettings())) {
+            else if (await _creatorVm.SaveTestAsync(GetsSettings())) {
                 Clear(this, EventArgs.Empty);
                 MessagingCenter.Send<Page>(this, Constants.StartPageCallBack);
-                if (!_testVM.GetPath.Contains(Constants.TempFolder)) await Navigation.PopAsync(true);
+                if (!_creatorVm.GetPath.Contains(Constants.TempFolder)) await Navigation.PopAsync(true);
             }
             else await DisplayAlert(AppResources.Warning, AppResources.FillSettings, AppResources.Cancel);
         }
@@ -104,24 +103,24 @@ namespace Labs.Views
         private async void DeleteAsync(object sender, EventArgs e)
         {
             if (await DisplayAlert(AppResources.Warning, AppResources.DeleteAnswer, AppResources.Yes, AppResources.No)) {
-                _testVM.DeleteFolderAsync(this);
+                _creatorVm.DeleteFolderAsync(this);
                 await Navigation.PopToRootAsync(true);
             }
         }
 
         private async void ListViewFiles_OnItemTapped(object sender, ItemTappedEventArgs e)
         {
-            switch (CommonPageHelper.GetTypeName(_infos.InfosModel[e.ItemIndex].Name))
+            switch (DirectoryHelper.GetTypeName(_infos.InfosModel[e.ItemIndex].Name))
             {
                 case Constants.TestTypeCheck:
-                    await Navigation.PushAsync(new TypeCheckCreatingPage(_testVM.GetPath, _infos.InfosModel[e.ItemIndex].Name));
+                    await Navigation.PushAsync(new TypeCheckCreatingPage(_creatorVm.GetPath, _infos.InfosModel[e.ItemIndex].Name));
                     break;
                 case Constants.TestTypeStack:
-                    await Navigation.PushAsync(new TypeStackCreatingPage(_testVM.GetPath, _infos.InfosModel[e.ItemIndex].Name));
+                    await Navigation.PushAsync(new TypeStackCreatingPage(_creatorVm.GetPath, _infos.InfosModel[e.ItemIndex].Name));
                     break;
 
                 case Constants.TestTypeEntry:
-                    await Navigation.PushAsync(new TypeEntryCreatingPage(_testVM.GetPath, _infos.InfosModel[e.ItemIndex].Name));
+                    await Navigation.PushAsync(new TypeEntryCreatingPage(_creatorVm.GetPath, _infos.InfosModel[e.ItemIndex].Name));
                     break;
             }
         }
@@ -130,17 +129,17 @@ namespace Labs.Views
             ((ListView)sender).SelectedItem = null;
 
         private async void TypeCheck_OnClicked(object sender, EventArgs e) =>
-            await Navigation.PushAsync(new TypeCheckCreatingPage(_testVM.GetPath));
+            await Navigation.PushAsync(new TypeCheckCreatingPage(_creatorVm.GetPath));
 
         private async void TypeEntry_OnClicked(object sender, EventArgs e) =>
-            await Navigation.PushAsync(new TypeEntryCreatingPage(_testVM.GetPath));
+            await Navigation.PushAsync(new TypeEntryCreatingPage(_creatorVm.GetPath));
         
         private async void TypeStack_OnClicked(object sender, EventArgs e) =>
-            await Navigation.PushAsync(new TypeStackCreatingPage(_testVM.GetPath));
+            await Navigation.PushAsync(new TypeStackCreatingPage(_creatorVm.GetPath));
 
         protected override bool OnBackButtonPressed()
         {
-            if (_testVM.GetPath != Constants.TempFolder) {
+            if (_creatorVm.GetPath != Constants.TempFolder) {
                 Device.BeginInvokeOnMainThread(async () => {
                     var result = await DisplayAlert(AppResources.Warning, AppResources.Escape, AppResources.Yes, AppResources.No);
                     if (!result) return;
@@ -153,15 +152,7 @@ namespace Labs.Views
         }
         private async void Back() => await Navigation.PopAsync(true);
 
-        private void _entrySeconds_OnTextChanged(object sender, TextChangedEventArgs e)
-        {
-            var text = e.NewTextValue;
-            for (var i = 0; i < text.Length; i++) {
-                if (text[i] == ',') text = text.Remove(i,1);
-            }
-            if (text.Length > 2) text = text.Remove(2);
-            var entry = sender as Entry;
-            entry.Text = text;
-        }
+        private void _entrySeconds_OnTextChanged(object sender, TextChangedEventArgs e) => 
+            PageHelper.CheckEntry(sender, e.NewTextValue);
     }
 }

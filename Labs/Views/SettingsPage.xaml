@@ -5,7 +5,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:helpers="clr-namespace:Labs.Helpers;assembly=Labs"
              mc:Ignorable="d"
-             x:Class="Labs.MainPages.SettingsPage">
+             x:Class="Labs.Views.SettingsPage">
 
     <ContentPage.Content>
         <TableView Margin="12">

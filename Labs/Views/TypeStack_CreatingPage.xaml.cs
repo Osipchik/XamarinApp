@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
+using Labs.Helpers;
 using Labs.Resources;
 using Xamarin.Forms;
 using Xamarin.Forms.Internals;
@@ -78,13 +79,13 @@ namespace Labs.Views
                 ColumnSpacing = 0,
             };
 
-            var textAreaFirst = CommonPageHelper.GetEditor(textFirst, AppResources.Text);
+            var textAreaFirst = PageHelper.GetEditor(textFirst, AppResources.Text);
             textAreaFirst.WidthRequest = 160 * (Device.info.PixelScreenSize.Width) / 1080;
 
-            var textAreaSecond = CommonPageHelper.GetEditor(textSecond, AppResources.Answer);
+            var textAreaSecond = PageHelper.GetEditor(textSecond, AppResources.Answer);
             textAreaSecond.WidthRequest = 160 * (Device.info.PixelScreenSize.Width) / 1080;
 
-            var deleteButton = CommonPageHelper.GetDeleteButton();
+            var deleteButton = PageHelper.GetDeleteButton();
             deleteButton.Clicked += DeleteButton_Clicked;
 
             grid.Children.Add(textAreaFirst, 0, 0);
@@ -117,7 +118,7 @@ namespace Labs.Views
                 await DisplayAlert(AppResources.Warning, AppResources.Text, AppResources.Cancel);
                 return;
             }
-            if (CommonPageHelper.CheckCoast(Coast.Text) == false)
+            if (PageHelper.CheckCoast(Coast.Text) == false)
             {
                 await DisplayAlert(AppResources.Warning, AppResources.WarningPrice, AppResources.Cancel);
                 return;
@@ -130,7 +131,7 @@ namespace Labs.Views
             }
 
             // TODO чтобы не вылетало при первом сохранении
-            try { File.WriteAllLines(CommonPageHelper.GetFileName("Stack", _path, _fileName), toSaveStrings); }
+            try { File.WriteAllLines(await DirectoryHelper.GetFileNameAsync("Stack", _path, _fileName), toSaveStrings); }
             catch (Exception exception)
             {
                 // ignored
@@ -164,7 +165,7 @@ namespace Labs.Views
 
         private async void Coast_OnTextChanged(object sender, TextChangedEventArgs e)
         {
-            if (CommonPageHelper.CheckCoast(Coast.Text) == false)
+            if (PageHelper.CheckCoast(Coast.Text) == false)
                 await DisplayAlert("Warning", "Invalid coast value", "cancel");
         }
     }

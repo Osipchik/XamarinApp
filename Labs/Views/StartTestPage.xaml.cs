@@ -15,20 +15,20 @@ namespace Labs.Views
     public partial class StartTestPage
     {
         private readonly string _path;
-        private readonly TestViewModel _test;
-        private int _count;
+        private readonly CreatorViewModel _creator;
+        private bool _isClickAble;
 
         public StartTestPage(string path)
         {
             InitializeComponent();
 
             _path = path;
-            _test = new TestViewModel(path);
+            _creator = new CreatorViewModel(path);
             FillInfo();
             Subscribe();
         }
 
-        private async void FillInfo() => GetSettings(await Task.Run(() => _test.GetSettingsDictionary()));
+        private async void FillInfo() => GetSettings(await Task.Run(() => _creator.GetSettingsDictionary()));
         private void GetSettings(Dictionary<string, string> collection)
         {
             LabelName.Text = collection["name"];
@@ -46,7 +46,7 @@ namespace Labs.Views
         private void StartPageCallBack()
         {
             FillInfo();
-            _count = 0;
+            _isClickAble = false;
             ChangeButtonStyle_OnCallBack(ChangeButton);
             ChangeButtonStyle_OnCallBack(StartButton);
             MessagingCenter.Send<Page>(this, Constants.HomeListUpload);
@@ -55,29 +55,29 @@ namespace Labs.Views
         private async void ChangeButton_OnClicked(object sender, EventArgs e)
         {
             ChangeButtonStyle_OnClick(ChangeButton);
-            if (_count != 0) return;
-            _count++;
+            if (_isClickAble) return;
+            _isClickAble = true;
             await Navigation.PushAsync(new CreatorPage(_path));
         }
 
         private async void StartButton_OnClicked(object sender, EventArgs e)
         {
             ChangeButtonStyle_OnClick(StartButton);
-            if (_count != 0) return;
-            _count++;
+            if (_isClickAble) return;
+            _isClickAble = true;
             await Navigation.PushModalAsync(new TestPage(_path));
         }
 
         private void ChangeButtonStyle_OnClick(Button button)
         {
-            button.BackgroundColor = Color.FromHex(Constants.ColorMaterialBlue);
+            button.BackgroundColor = Constants.ColorMaterialBlue;
             button.TextColor = Color.White;
         }
 
         private void ChangeButtonStyle_OnCallBack(Button button)
         {
             button.BackgroundColor = Color.White;
-            button.TextColor = Color.FromHex(Constants.ColorMaterialBlue);
+            button.TextColor = Constants.ColorMaterialBlue;
         }
     }
 }

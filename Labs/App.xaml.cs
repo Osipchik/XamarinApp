@@ -1,5 +1,4 @@
 ﻿using System;
-using Labs.MainPages;
 using Labs.Resources;
 using Labs.Views;
 using Plugin.Multilingual;

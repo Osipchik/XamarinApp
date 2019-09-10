@@ -1,15 +1,14 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Globalization;
-using System.Threading.Tasks;
+using Labs.Helpers;
 using Labs.Models;
 using Labs.Resources;
-using Labs.Views;
 using Plugin.Multilingual;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
-namespace Labs.MainPages
+namespace Labs.Views
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class SettingsPage : ContentPage
@@ -46,7 +45,7 @@ namespace Labs.MainPages
 
             SetPickerWidth();
 
-            MessagingCenter.Send<Page>(this, "UploadTitles");
+            MessagingCenter.Send<Page>(this, Constants.UploadTitles);
         }
 
         private void SetIndex()

@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
 using System.Threading.Tasks;
+using Labs.Helpers;
 using Labs.Models;
 using Labs.Views;
 using Xamarin.Forms;
@@ -14,7 +15,6 @@ namespace Labs.ViewModels
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
-        private List<CheckTypePageView> _checkTypePages;
         private List<EntryTypePageView> _entryTypePages;
         private List<StackTypePageView> _stackTypePages;
 
@@ -24,7 +24,6 @@ namespace Labs.ViewModels
         {
             ItemsSource = new ObservableCollection<View>();
 
-            _checkTypePages = new List<CheckTypePageView>();
             _entryTypePages = new List<EntryTypePageView>();
             _stackTypePages = new List<StackTypePageView>();
         }
@@ -45,16 +44,8 @@ namespace Labs.ViewModels
             int index = 0;
             foreach (var info in new InfoViewModel(path).GetFilesInfo())
             {
-                switch (CommonPageHelper.GetTypeName(info.Name))
+                switch (DirectoryHelper.GetTypeName(info.Name))
                 {
-                    case "Check":
-                        ItemsSource.Add(new ScrollView
-                        {
-                            Content = await Task.Run(()=>
-                                CheckTypePageView.GetCheckTypeLayout(Path.Combine(path, info.Name), index, ref _checkTypePages)),
-                            Padding = 5
-                        });
-                        break;
                     case "Entry":
                         ItemsSource.Add(new ScrollView
                         {
@@ -81,11 +72,6 @@ namespace Labs.ViewModels
 
         public void CheckIt(ref int coast, ref int rightCount)
         {
-            foreach (var page in _checkTypePages)
-            {
-                page.CheckIt(ref _itemsSource, ref coast, ref rightCount);
-            }
-
             foreach (var page in _entryTypePages)
             {
                 page.CheckIt(ref _itemsSource, ref coast, ref rightCount);
@@ -100,16 +86,6 @@ namespace Labs.ViewModels
         public async void DisableAsync(int index)
         {
             _isDisable[index] = true;
-
-            await Task.Run(() =>
-            {
-                foreach (var page in _checkTypePages)
-                {
-                    if (index != page.Index) continue;
-                    page.Disable(ref _itemsSource);
-                    return;
-                }
-            });
 
             await Task.Run(() =>
             {

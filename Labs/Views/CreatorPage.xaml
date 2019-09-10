@@ -25,7 +25,7 @@
                     <ContentView Padding="5">
                         <Frame Padding="10,0,10,5"
                                BorderColor="#039BE5"
-                               CornerRadius="30">
+                               CornerRadius="10">
                             <StackLayout>
                                 <Button x:Name="ButtonSettings"
                                         Text="{helpers:Translate TestSettingsButton}"

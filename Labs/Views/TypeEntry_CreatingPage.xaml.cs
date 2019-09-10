@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Threading.Tasks;
+using Labs.Helpers;
 using Labs.Resources;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -51,7 +52,7 @@ namespace Labs.Views
 
         private async void Coast_OnTextChanged(object sender, TextChangedEventArgs e)
         {
-            if (CommonPageHelper.CheckCoast(Coast.Text) == false)
+            if (PageHelper.CheckCoast(Coast.Text) == false)
                 await DisplayAlert("Warning", "Invalid coast value", "cancel");
         }
 
@@ -67,7 +68,7 @@ namespace Labs.Views
                 await DisplayAlert(AppResources.Warning, AppResources.WarningAnswer, AppResources.Cancel);
                 return;
             }
-            if (CommonPageHelper.CheckCoast(Coast.Text) == false)
+            if (PageHelper.CheckCoast(Coast.Text) == false)
             {
                 await DisplayAlert(AppResources.Warning, AppResources.WarningPrice, AppResources.Cancel);
                 return;
@@ -78,7 +79,7 @@ namespace Labs.Views
             toSaveStrings[1] = Answer.Text;
             toSaveStrings[2] = Question.Text;
 
-            string fileName = await Task.Run(() => CommonPageHelper.GetFileName("Entry", _path, _fileName));
+            string fileName = await DirectoryHelper.GetFileNameAsync("Entry", _path, _fileName);
 
             // TODO чтобы не вылетало при первом сохранении
             try { await Task.Run(() => File.WriteAllLines(fileName, toSaveStrings)); }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
 using System.Threading.Tasks;
 using Labs.Helpers;
 using Labs.Models;
@@ -10,9 +11,9 @@ using Xamarin.Forms;
 
 namespace Labs.ViewModels
 {
-    public class TestViewModel
+    public class CreatorViewModel
     {
-        public TestViewModel(string path)
+        public CreatorViewModel(string path)
         {
             GetPath = path;
         }
@@ -24,7 +25,9 @@ namespace Labs.ViewModels
             using (var reader = new StreamReader(Path.Combine(GetPath, Constants.SettingsFileTxt))) {
                 settings.TestName = reader.ReadLine();
                 settings.TestSubject = reader.ReadLine();
-                GetTime(reader.ReadLine(), settings);
+                PageHelper.GetTime(reader.ReadLine(), out var timeSpan, out var seconds);
+                settings.SettingSpan = timeSpan;
+                settings.Seconds = seconds;
             }
 
             return settings;
@@ -46,7 +49,7 @@ namespace Labs.ViewModels
         {
             var settingsModel = ReadSettings();
             var infos = new Dictionary<string, string> {
-                {"time", AppResources.TestSettingsTime + ' ' + NormalizeTime(settingsModel.SettingSpan, settingsModel.Seconds)},
+                {"time", AppResources.TestSettingsTime + ' ' + PageHelper.NormalizeTime(settingsModel.SettingSpan, settingsModel.Seconds)},
                 {"name", AppResources.TestSettingsName + ' ' + settingsModel.TestName},
                 {"subject", AppResources.Subject + ' ' + settingsModel.TestSubject},
                 {"price", AppResources.Price + ' ' + GetTotalCoast()},
@@ -72,7 +75,7 @@ namespace Labs.ViewModels
             if (!string.IsNullOrEmpty(settingsModel.TestName) && !string.IsNullOrEmpty(settingsModel.TestSubject)) {
                 settings.Add(settingsModel.TestName);
                 settings.Add(settingsModel.TestSubject);
-                settings.Add(NormalizeTime(settingsModel.SettingSpan, settingsModel.Seconds));
+                settings.Add(PageHelper.NormalizeTime(settingsModel.SettingSpan, settingsModel.Seconds));
             }
 
             return settings;
@@ -92,7 +95,7 @@ namespace Labs.ViewModels
 
         private void Save(string directory, ICollection<string> settings)
         {
-            File.WriteAllLines(Path.Combine(directory, Constants.SettingsFileTxt), settings);
+            File.WriteAllLines(Path.Combine(directory, Constants.SettingsFileTxt), settings, Encoding.UTF8);
             if (directory.Contains(Constants.TempFolder)) {
                 var path = GetTestPath(directory.Remove(directory.LastIndexOf('/') + 1));
                 MoveFiles(path, directory);
@@ -105,18 +108,6 @@ namespace Labs.ViewModels
             foreach (var file in new DirectoryInfo(sourcePath).GetFiles()) {
                 File.Move(Path.Combine(sourcePath, file.Name), Path.Combine(destPath, file.Name));
             }
-        }
-
-        private string NormalizeTime(TimeSpan timeSpan, string seconds)
-        {
-            return timeSpan.ToString().Remove(6) + (seconds.Length < 2 ? "00" : seconds);
-        }
-
-        private void GetTime(string time, SettingsModel settingsModel)
-        {
-            var timeStrings = time.Split(':');
-            settingsModel.SettingSpan = new TimeSpan(int.Parse(timeStrings[0]), int.Parse(timeStrings[1]), 00);
-            settingsModel.Seconds = timeStrings[2];
         }
 
         private string GetTotalCoast()

@@ -1,14 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Diagnostics.Tracing;
 using System.IO;
-using System.Text;
 using Labs.Helpers;
 using Labs.Models;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Windows.Input;
 using Xamarin.Forms;
 
 namespace Labs.ViewModels
@@ -64,8 +60,8 @@ namespace Labs.ViewModels
         {
             IEnumerable<InfoModel> models;
             if (string.IsNullOrEmpty(keyword)) {
-                DisableSearchModificationAsync();
                 _grid.IsVisible = false;
+                DisableSearchModificationAsync();
                 models = GetModels.InfosModel;
             }
             else {
@@ -80,7 +76,7 @@ namespace Labs.ViewModels
         {
             var filter = string.Empty;
             for (var i = 0; i < _labels.Length; i++) {
-                if (_labels[i].TextColor == Color.FromHex(Constants.ColorLightBlueHex)) {
+                if (_labels[i].TextColor == Constants.ColorMaterialBlue) {
                     filter = GetModels.GetNameOfPropertyInModel(i);
                     break;
                 }
@@ -92,14 +88,14 @@ namespace Labs.ViewModels
         public void ActiveSearchLabelStyle(Label label)
         {
             label.FontSize = 16;
-            label.TextColor = Color.FromHex(Constants.ColorLightBlueHex);
+            label.TextColor = Constants.ColorMaterialBlue;
         }
         
         public void DisableSearchLabelStyle(Label activeLabel)
         {
             foreach (var label in _labels.Where(label => activeLabel != label)) {
                 label.FontSize = 14;
-                label.TextColor = Color.FromHex(Constants.ColorLightGrayHex);
+                label.TextColor = Constants.ColorMaterialBlueGray;
             }
         }
 
@@ -115,7 +111,7 @@ namespace Labs.ViewModels
 
         private Color GetColor(string filter, string propertyName)
         {
-            var color = Color.FromHex(filter == propertyName ? Constants.ColorLightBlueHex : Constants.ColorLightGrayHex);
+            var color = filter == propertyName ? Constants.ColorMaterialBlue : Constants.ColorMaterialBlueGray;
             return color;
         }
 
@@ -125,8 +121,7 @@ namespace Labs.ViewModels
                 foreach (var model in GetModels.InfosModel) {
                     model.TitleColor =
                         model.DetailColor =
-                            model.DateColor =
-                                Color.FromHex(Constants.ColorLightGrayHex);
+                            model.DateColor = Constants.ColorMaterialBlueGray;
                 }
             });
         }

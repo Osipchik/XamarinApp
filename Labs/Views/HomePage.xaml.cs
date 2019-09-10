@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Labs.Helpers;
-using Labs.MainPages;
 using Labs.Models;
 using Labs.ViewModels;
 using Lottie.Forms;
@@ -17,7 +16,7 @@ namespace Labs.Views
     public partial class HomePage
     {
         private readonly HomeViewModel _homeViewModel;
-
+        private Frame _tappedFrame;
         [Obsolete]
         public HomePage()
         {
@@ -35,15 +34,16 @@ namespace Labs.Views
 
         private void ListUploadAsync() => listView.ItemsSource = _homeViewModel.GetModels.GetDirectoryInfo();
         
-        private void Subscribe()
-        {
-            MessagingCenter.Subscribe<Page>(
-                this, Constants.HomeListUpload, (sender) => { ListUploadAsync(); });
-        }
+        private void Subscribe() =>
+            MessagingCenter.Subscribe<Page>(this, Constants.HomeListUpload, (sender) =>
+            {
+                ListUploadAsync();
+            });
+        
 
         private async void ListView_OnItemTapped(object sender, ItemTappedEventArgs e) =>
             await Navigation.PushAsync(new StartTestPage(_homeViewModel.GetModels.GetElementPath(e.ItemIndex)));
-        
+
         private void ListView_OnItemSelected(object sender, SelectedItemChangedEventArgs e) =>
             ((ListView) sender).SelectedItem = null;
         
@@ -53,8 +53,7 @@ namespace Labs.Views
         private void LabelNameTapFunc()
         {
             LabelName.GestureRecognizers.Add(
-                new TapGestureRecognizer()
-                {
+                new TapGestureRecognizer() {
                     Command = new Command(() => {
                         _homeViewModel.ActiveSearchLabelStyle(LabelName);
                         _homeViewModel.DisableSearchLabelStyle(LabelName);
@@ -65,8 +64,7 @@ namespace Labs.Views
 
         private void LabelSubjectTapFunc()
         {
-            LabelSubject.GestureRecognizers.Add(new TapGestureRecognizer()
-            {
+            LabelSubject.GestureRecognizers.Add(new TapGestureRecognizer() {
                 Command = new Command(() => {
                     _homeViewModel.ActiveSearchLabelStyle(LabelSubject);
                     _homeViewModel.DisableSearchLabelStyle(LabelSubject);
@@ -77,8 +75,7 @@ namespace Labs.Views
 
         private void LabelDateTapFunc()
         {
-            LabelDate.GestureRecognizers.Add(new TapGestureRecognizer()
-            {
+            LabelDate.GestureRecognizers.Add(new TapGestureRecognizer() {
                 Command = new Command(() => {
                     _homeViewModel.ActiveSearchLabelStyle(LabelDate);
                     _homeViewModel.DisableSearchLabelStyle(LabelDate);
@@ -86,5 +83,7 @@ namespace Labs.Views
                 })
             });
         }
+
+        private void TapEvent() => TapViewModel.GetTapGestureRecognizer(_tappedFrame);
     }
 }

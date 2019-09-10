@@ -10,6 +10,8 @@ using Labs.Annotations;
 using Labs.Helpers;
 using Labs.Models;
 
+using System.Windows.Input;
+
 namespace Labs.ViewModels
 {
     public sealed class InfoViewModel : IEnumerable<string>, INotifyPropertyChanged
@@ -111,11 +113,16 @@ namespace Labs.ViewModels
             return GetEnumerator();
         }
 
+        #region INotifyPropertyChanged 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        [NotifyPropertyChangedInvocator]
-        private void OnPropertyChanged([CallerMemberName] string propertyName = null) =>
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChangedEventHandler handler = PropertyChanged;
+            if (handler != null)
+                handler(this, new PropertyChangedEventArgs(propertyName));
+        }
+        #endregion
     }
 
     internal class DirectoryInfoListEnumerator : IEnumerator<string>

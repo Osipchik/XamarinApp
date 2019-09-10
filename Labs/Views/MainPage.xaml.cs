@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
 using Labs.Helpers;
-using Labs.MainPages;
 using Labs.Models;
-using Labs.Resources;
 using Xamarin.Forms;
 
 namespace Labs.Views
@@ -20,21 +17,18 @@ namespace Labs.Views
             IsPresented = false;
             
             ShowHomePage();
-
             BindingContext = this;
             ListViewDetail.ItemsSource = MasterDetail.GetDetailItems();
-
             Subscribe();
         }
 
-        private void Subscribe()
-        {
+        private void Subscribe() =>
             MessagingCenter.Subscribe<Page>(this, Constants.UploadTitles, (sender) => UploadTitles());
-        }
+        
 
         private void UploadTitles()
         {
-            ListViewDetail.ItemsSource = null;
+            //ListViewDetail.ItemsSource = null;
             ListViewDetail.ItemsSource = MasterDetail.GetDetailItems();
         }
 
