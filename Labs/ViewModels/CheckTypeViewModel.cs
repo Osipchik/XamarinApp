@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using Labs.Helpers;
 using Labs.Models;
 using Labs.Resources;
@@ -16,6 +17,21 @@ namespace Labs.ViewModels
         private List<string> _stringsToSave;
         public readonly FrameViewModel FrameViewModel;
         private readonly PageSettingsViewModel _settingsViewModel;
+
+        private int _modificator;
+        public int Modificator
+        {
+            get => _modificator;
+            set
+            {
+                _modificator = value;
+                if (_modificator != 0)
+                {
+                    FrameViewModel.DisableLastItem();
+                }
+            }
+        }
+        public string GetPath { get; }
 
         public CheckTypeViewModel(string path, string fileName)
         {
@@ -37,8 +53,6 @@ namespace Labs.ViewModels
             }
         }
 
-        public string GetPath { get; }
-
         public PageSettingsModel GetSettingsModel => _settingsViewModel.SettingsModel;
 
         public void RunHideOrShowAnimation(View view, IAnimatable owner, bool show)
@@ -49,17 +63,6 @@ namespace Labs.ViewModels
             _animation.RunShowOrHideAnimation(null, view, owner, show);
         }
 
-        private int _modificator;
-        public int Modificator
-        {
-            get => _modificator;
-            set {
-                _modificator = value;
-                if (_modificator != 0) {
-                    FrameViewModel.DisableLastItem();
-                }
-            }
-        }
 
         public async void TapEvent(int index)
         {
@@ -168,7 +171,7 @@ namespace Labs.ViewModels
         {
             await Task.Run(() => {
                 for (int i = startIndex; i < strings.Count; i++) {
-                    FrameViewModel.AddModelAsync(strings[i], answers[i - startIndex] == '0');
+                    FrameViewModel.AddModel(strings[i], answers[i - startIndex] == '0');
                 }
             });
         }

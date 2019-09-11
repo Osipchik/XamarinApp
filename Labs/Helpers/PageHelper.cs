@@ -55,7 +55,7 @@ namespace Labs.Helpers
         private static string FixText(string text)
         {
             for (var i = 0; i < text.Length; i++){
-                if (text[i] == ',') text = text.Remove(i, 1);
+                if (text[i] == ',' || text[i] == '-') text = text.Remove(i, 1);
             }
             if (text.Length > 2) text = text.Remove(2);
 

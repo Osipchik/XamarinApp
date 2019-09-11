@@ -67,7 +67,7 @@
                                    Margin="0"
                                    WidthRequest="30"
                                    Keyboard="Numeric"
-                                   TextChanged="Coast_OnTextChanged"/>
+                                   TextChanged="Price_OnTextChanged"/>
                         </StackLayout>
                         <BoxView Margin="12,0,12,0"
                                  HeightRequest="1"

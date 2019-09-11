@@ -17,67 +17,70 @@
                      Text="{helpers:Translate Clear}"
                      Order="Secondary"
                      Clicked="ItemDeleteFileAsync_OnClicked"/>
-        <ToolbarItem x:Name="ItemDelete"
-                     Text="Delete items"
-                     Order="Secondary"
-                     Clicked="ChooseItemsToDelete_OnClicked"/>
     </ContentPage.ToolbarItems>
 
     <ContentPage.Content>
-        <ScrollView x:Name="ContentScroll"
-                    VerticalOptions="StartAndExpand">
+        <ScrollView VerticalOptions="StartAndExpand">
             <StackLayout Margin="12, 0, 12, 0">
                 <ContentView Padding="5">
-                    <Frame Padding="10"
+                    <Frame Padding="10,5,10,5"
                        BorderColor="#03A9F4"
                        CornerRadius="10">
                         <Frame.GestureRecognizers>
                             <TapGestureRecognizer Tapped="HideOrShowAsync_OnClicked"/>
                         </Frame.GestureRecognizers>
-                        <StackLayout x:Name="Layout"
-                                     Orientation="Horizontal"
+                        <StackLayout x:Name="SettingsLayout">
+                            <StackLayout Orientation="Horizontal"
                                      HorizontalOptions="FillAndExpand"
                                      Margin="0">
-                            <Label Text="{helpers:Translate TestSettingsTime}"
+                                <Label Text="{helpers:Translate TestSettingsTime}"
                                    VerticalOptions="Center"
                                    Margin="0"/>
-                            <TimePicker x:Name="TimePicker"
-                                        Format="hh:mm"
+                                <TimePicker Format="hh:mm"
+                                        Time="{Binding TimeSpan}"
                                         Margin="0"/>
-                            <Label Text=":"
+                                <Label Text=":"
                                    FontSize="Medium"
                                    TextColor="Black"
                                    VerticalOptions="Center"
                                    Margin="0"/>
-                            <Entry x:Name="Seconds"
-                                   Text="00"
+                                <Entry Text="{Binding Seconds}"
                                    Margin="0"
-                                   Keyboard="Numeric"
-                                   TextChanged="_entrySeconds_OnTextChanged"/>
-                            <Label Text="{helpers:Translate Price}"
+                                   Keyboard="Numeric"/>
+                                <Label Text="{helpers:Translate Price}"
                                    HorizontalOptions="EndAndExpand"
                                    HorizontalTextAlignment="End"
                                    FontSize="16"
                                    Margin="0"
                                    VerticalOptions="Center"/>
-                            <Entry x:Name="Price"
-                                   Text="0"
+                                <Entry Text="{Binding Price}"
                                    Margin="0"
                                    WidthRequest="30"
                                    Keyboard="Numeric"
                                    TextChanged="Coast_OnTextChanged"/>
+                            </StackLayout>
+                            <BoxView Margin="12,0,12,0"
+                                 HeightRequest="1"
+                                 Color="#BDBDBD"/>
+                            <Editor Margin="0"
+                                Text="{Binding Question}"
+                                AutoSize="TextChanges"
+                                HorizontalOptions="Center"
+                                Placeholder="{helpers:Translate Question}"/>
                         </StackLayout>
                     </Frame>
                 </ContentView>
-                <Editor x:Name="Question"
-                    AutoSize="TextChanges"
-                    HorizontalOptions="Center"
-                    Placeholder="{helpers:Translate Question}"/>
-                <Editor x:Name="Answer"
-                        AutoSize="TextChanges"
-                       HorizontalOptions="Center"
-                       Placeholder="{helpers:Translate Answer}"/>
-                </StackLayout>
+                <ContentView Padding="5">
+                    <Frame Padding="10,5,10,5"
+                       BorderColor="#03A9F4"
+                       CornerRadius="10">
+                        <Editor x:Name="Answer"
+                                AutoSize="TextChanges"
+                                HorizontalOptions="Center"
+                                Placeholder="{helpers:Translate Answer}"/>
+                    </Frame>
+                </ContentView>
+            </StackLayout>
         </ScrollView>
     </ContentPage.Content>
 </ContentPage>

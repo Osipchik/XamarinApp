@@ -38,7 +38,6 @@ namespace Labs.ViewModels
             return string.IsNullOrEmpty(text) ? "" : text;
         }
 
-
         public void SetPageSettingsModel(string time, string price, string question)
         {
             PageHelper.GetTime(time, out var timeSpan, out var seconds);
@@ -47,5 +46,7 @@ namespace Labs.ViewModels
             SettingsModel.Price = price;
             SettingsModel.Question = question;
         }
+
+
     }
 }

@@ -40,7 +40,7 @@ namespace Labs.Views
             }
         }
 
-        private void Coast_OnTextChanged(object sender, TextChangedEventArgs e) => PageHelper.CheckEntry(sender, e.NewTextValue);
+        private void Price_OnTextChanged(object sender, TextChangedEventArgs e) => PageHelper.CheckEntry(sender, e.NewTextValue);
         private void _entrySeconds_OnTextChanged(object sender, TextChangedEventArgs e) => PageHelper.CheckEntry(sender, e.NewTextValue);
         private void AddItem_OnClicked(object sender, EventArgs e) => _viewModel.FrameViewModel.AddNewModelAsync();
 

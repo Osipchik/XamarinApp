@@ -48,6 +48,27 @@ namespace Labs.Models
             }
         }
 
+        private string _name;
+        public string Name
+        {
+            get => _name;
+            set
+            {
+                _name = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private string _subject;
+        public string Subject
+        {
+            get => _subject;
+            set
+            {
+                _subject = value;
+                OnPropertyChanged();
+            }
+        }
 
         public event PropertyChangedEventHandler PropertyChanged;
 

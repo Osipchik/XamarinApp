@@ -43,16 +43,14 @@ namespace Labs.ViewModels
             });
         }
 
-        public async void AddModelAsync(string textLeft, bool isRight)
+        public void AddModel(string textLeft, bool isRight)
         {
-            await Task.Run(() => {
-                Models.Add(new FrameModel
-                {
-                    BorderColor = GetColor(isRight),
-                    ItemTextLeft = textLeft,
-                    EditorLeftIsReadOnly = true,
-                    IsRight = isRight,
-                });
+            Models.Add(new FrameModel
+            {
+                BorderColor = GetColor(isRight),
+                ItemTextLeft = textLeft,
+                EditorLeftIsReadOnly = true,
+                IsRight = isRight,
             });
         }
 
