@@ -12,14 +12,6 @@ namespace Labs.ViewModels
 {
     public class FrameViewModel : INotifyPropertyChanged
     {
-        public event PropertyChangedEventHandler PropertyChanged;
-        [NotifyPropertyChangedInvocator]
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-
-
         private ObservableCollection<FrameModel> _models = new ObservableCollection<FrameModel>();
         public ObservableCollection<FrameModel> Models
         {
@@ -46,20 +38,20 @@ namespace Labs.ViewModels
                     BorderColor = Constants.ColorMaterialGray,
                     ItemTextLeft = string.Empty,
                     EditorLeftIsReadOnly = true,
-                    isRight = false
+                    IsRight = false
                 });
             });
         }
 
-        public async void AddModelAsync(string textLeft, bool _isRight)
+        public async void AddModelAsync(string textLeft, bool isRight)
         {
             await Task.Run(() => {
                 Models.Add(new FrameModel
                 {
-                    BorderColor = GetColor(_isRight),
+                    BorderColor = GetColor(isRight),
                     ItemTextLeft = textLeft,
                     EditorLeftIsReadOnly = true,
-                    isRight = _isRight,
+                    IsRight = isRight,
                 });
             });
         }
@@ -69,7 +61,7 @@ namespace Labs.ViewModels
             DisableLastItem();
             await Task.Run(() => {
                 foreach (var model in Models) {
-                    model.BorderColor = model.isRight ? Constants.ColorMaterialGreen : Constants.ColorMaterialGray;
+                    model.BorderColor = model.IsRight ? Constants.ColorMaterialGreen : Constants.ColorMaterialGray;
                 }
             });
         }
@@ -87,7 +79,7 @@ namespace Labs.ViewModels
             if (_itemIndex >= 0)
             {
                 Models[_itemIndex].EditorLeftIsReadOnly = true;
-                Models[_itemIndex].BorderColor = Models[_itemIndex].isRight
+                Models[_itemIndex].BorderColor = Models[_itemIndex].IsRight
                     ? Constants.ColorMaterialGreen
                     : Constants.ColorMaterialGray;
             }
@@ -96,8 +88,8 @@ namespace Labs.ViewModels
 
         public void RightItems(int index)
         {
-            Models[index].isRight = !Models[index].isRight;
-            Models[index].BorderColor = GetColor(Models[index].isRight);
+            Models[index].IsRight = !Models[index].IsRight;
+            Models[index].BorderColor = GetColor(Models[index].IsRight);
         }
 
         private Color GetColor(bool isRight)
@@ -109,7 +101,7 @@ namespace Labs.ViewModels
         {
             if (Models[index].BorderColor == Constants.ColorMaterialRed) {
                 _itemIndexToDeleteList.Remove(index);
-                Models[index].BorderColor = Models[index].isRight ? Constants.ColorMaterialGreen : Constants.ColorMaterialGray;
+                Models[index].BorderColor = Models[index].IsRight ? Constants.ColorMaterialGreen : Constants.ColorMaterialGray;
             }
             else {
                 _itemIndexToDeleteList.Add(index);
@@ -138,11 +130,13 @@ namespace Labs.ViewModels
             return list;
         }
 
-        public void SetText(string text)
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        [NotifyPropertyChangedInvocator]
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
-            if (_itemIndex >= 0) {
-                Models[_itemIndex].ItemTextLeft = text;
-            }
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

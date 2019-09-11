@@ -21,7 +21,7 @@
                                <ViewCell>
                                    <StackLayout Orientation="Horizontal"
                                                 Margin="24,0,12,0">
-                                       <Image Source="{Binding Image}"
+                                        <Image Source="{Binding ImageSource}"
                                               Aspect="AspectFit"
                                               WidthRequest="24"
                                               HeightRequest="24"

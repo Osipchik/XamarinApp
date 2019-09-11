@@ -1,7 +1,4 @@
 ﻿using System;
-using System.IO;
-using System.Linq;
-using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 using Labs.Models;
 using Labs.Resources;
@@ -65,27 +62,32 @@ namespace Labs.Helpers
             return text;
         }
 
-        public static string CheckQuestionPageSettings(string question, string price, string seconds, int count)
-        {
-            var message = string.Empty;
-            message += string.IsNullOrEmpty(question) ? AppResources.WarningQuestion + " \n" : "";
-            message += string.IsNullOrEmpty(price) ? AppResources.WarningPrice + " \n" : "";
-            message += string.IsNullOrEmpty(seconds) ? "Add seconds" + " \n" : "";
-            message += count < 1 ? "Add frame" : "";
-
-            return message;
-        }
 
         public static string NormalizeTime(TimeSpan timeSpan, string seconds)
         {
             return timeSpan.ToString().Remove(6) + (seconds.Length < 2 ? "00" : seconds);
         }
 
-        public static void GetTime(string time, out TimeSpan timeSpan, out string seconds)
+        private static void SplitUpTimeLine(string time, out TimeSpan timeSpan, out string seconds)
         {
             var timeStrings = time.Split(':');
             timeSpan = new TimeSpan(int.Parse(timeStrings[0]), int.Parse(timeStrings[1]), 00);
             seconds = timeStrings[2];
+        }
+
+        public static void GetTime(string time, out TimeSpan timeSpan, out string seconds)
+        {
+            if (string.IsNullOrEmpty(time))
+            {
+                timeSpan = TimeSpan.Zero;
+                seconds = "00";
+            }
+            else
+            {
+                SplitUpTimeLine(time, out var _timeSpan, out var _seconds);
+                timeSpan = _timeSpan;
+                seconds = _seconds;
+            }
         }
     }
 }

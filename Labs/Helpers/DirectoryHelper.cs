@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using Xamarin.Essentials;
+using Xamarin.Forms;
 
 namespace Labs.Helpers
 {
@@ -22,25 +20,33 @@ namespace Labs.Helpers
         private static string GenerateFileName(string path, string savingType)
         {
             var fileName = string.Empty;
-            for (int i = 0; !File.Exists(fileName) && string.IsNullOrEmpty(fileName); i++) {
+            for (int i = 0; File.Exists(fileName) || string.IsNullOrEmpty(fileName); i++) {
                 fileName = Path.Combine(path, savingType + "_Type_" + $"{i}" + ".txt");
             }
 
             return fileName;
         }
+
         public static async Task<string> GetFileNameAsync(string savingType, string path, string fileName = "")
         {
             return await Task.Run(() => GetFileName(savingType, path, fileName));
         }
 
-        public static async void SaveLinesToFile(string savingType, string path, string fileName, IEnumerable<string> stringsToSave)
+        public static void SaveFile(string savingType, string path, string fileName, IEnumerable<string> stringsToSave)
         {
-            File.WriteAllLines(await GetFileNameAsync(savingType, path, fileName), stringsToSave);
+            File.WriteAllLines(GetFileName(savingType, path, fileName), stringsToSave);
         }
 
-        public static string[] ReadFile(string path, string fileName)
+        public static string[] ReadStringsFromFile(string path, string fileName)
         {
             return File.ReadAllLines(GetFileName("", path, fileName));
         }
+
+        public static async void DeleteFileAsync(Page sender, string path)
+        {
+            await Task.Run(() => File.Delete(path));
+            await Task.Run(() => MessagingCenter.Send<Page>(sender, Constants.CreatorListUpLoad));
+        }
+
     }
 }

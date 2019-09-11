@@ -1,15 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.IO;
 using System.Threading.Tasks;
 using Labs.Helpers;
-using Labs.Models;
 using Labs.Resources;
 using Labs.ViewModels;
 using Xamarin.Forms;
-using Xamarin.Forms.Internals;
 using Xamarin.Forms.Xaml;
 
 namespace Labs.Views
@@ -18,7 +13,7 @@ namespace Labs.Views
     public partial class TypeCheckCreatingPage
     {
         private readonly string _fileName;
-        private bool _isDeleteAvailable = false;
+        private bool _isDeleteAvailable;
         private readonly CheckTypeViewModel _viewModel;
 
         public TypeCheckCreatingPage(string path, string fileName = "")
@@ -27,21 +22,16 @@ namespace Labs.Views
 
             _fileName = fileName;
             _viewModel = new CheckTypeViewModel(path, _fileName);
-            
-            BindingContext = _viewModel.FrameViewModel;
+
+            SetBindings();
             SetDeleteButton();
-            SetPageSettings();
         }
 
-        private void SetPageSettings()
+        private void SetBindings()
         {
-            _viewModel.GetTime(out var timeSpan, out var seconds);
-            TimePicker.Time = timeSpan;
-            Seconds.Text = seconds;
-            Price.Text = _viewModel.GetPrice();
-            Question.Text = _viewModel.GetQuestion();
+            ListView.BindingContext = _viewModel.FrameViewModel;
+            SettingsLayout.BindingContext = _viewModel.GetSettingsModel;
         }
-
         private void SetDeleteButton()
         {
             _isDeleteAvailable = !string.IsNullOrEmpty(_fileName);
@@ -54,8 +44,10 @@ namespace Labs.Views
         private void _entrySeconds_OnTextChanged(object sender, TextChangedEventArgs e) => PageHelper.CheckEntry(sender, e.NewTextValue);
         private void AddItem_OnClicked(object sender, EventArgs e) => _viewModel.FrameViewModel.AddNewModelAsync();
 
-        private void HideOrShowAsync_OnClicked(object sender, EventArgs e) => 
-            _viewModel.RunHideOrShowAnimation(Layout, this, (int)Layout.Height == 0);
+        private void HideOrShowAsync_OnClicked(object sender, EventArgs e)
+        {
+            _viewModel.RunHideOrShowAnimation(SettingsLayout, this, (int)SettingsLayout.Height == 0);
+        }
 
         private async void SaveButton_OnClicked(object sender, EventArgs e)
         {
@@ -68,7 +60,7 @@ namespace Labs.Views
 
         private async Task<bool> PageIsValid()
         {
-            var message = await _viewModel.PageIsValidAsync(Question.Text, Price.Text, TimePicker.Time, Seconds.Text);
+            var message = await _viewModel.PageIsValidAsync();
             var returnValue = string.IsNullOrEmpty(message);
             if (!returnValue) {
                 await DisplayAlert(AppResources.Warning, message, AppResources.Cancel);
@@ -79,10 +71,10 @@ namespace Labs.Views
 
         private async void ItemDeleteFileAsync_OnClicked(object sender, EventArgs e)
         {
-            if(!_isDeleteAvailable) return;
-            await Task.Run(() => File.Delete(Path.Combine(_viewModel.GetPath, _fileName)));
-            await Task.Run(() => MessagingCenter.Send<Page>(this, Constants.CreatorListUpLoad));
-            await Navigation.PopAsync(true);
+            if (_isDeleteAvailable) {
+                DirectoryHelper.DeleteFileAsync(this, Path.Combine(_viewModel.GetPath, _fileName));
+                await Navigation.PopAsync(true);
+            };
         }
 
         private void ListView_OnItemSelected(object sender, SelectedItemChangedEventArgs e)
@@ -100,7 +92,7 @@ namespace Labs.Views
         private void ChooseItems(int modificator)
         {
             HideOrShowAsync_OnClicked(this, EventArgs.Empty);
-            GridAgree.IsVisible = true;
+            GridAdditionalButtons.IsVisible = true;
             SetActionToAdditionalButtons(ImageButtonCross, ImageButtonAccept, modificator);
         }
 
@@ -125,15 +117,7 @@ namespace Labs.Views
         {
             _viewModel.Modificator = 0;
             _viewModel.FrameViewModel.DisableAllAsync();
-            GridAgree.IsVisible = false;
-        }
-
-
-        private void Editor_OnTextChanged(object sender, TextChangedEventArgs e)
-        {
-            if (_viewModel != null && !string.IsNullOrEmpty(e.NewTextValue)) {
-                _viewModel.FrameViewModel.SetText(e.NewTextValue.Trim());
-            }
+            GridAdditionalButtons.IsVisible = false;
         }
     }
 }
