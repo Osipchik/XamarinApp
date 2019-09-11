@@ -32,7 +32,7 @@
                                         BorderWidth="1"
                                         BackgroundColor="#039BE5"
                                         Clicked="SettingsButton_OnClickedAsync"
-                                         HorizontalOptions="Center"
+                                        HorizontalOptions="Center"
                                         WidthRequest="350"
                                         CornerRadius="30"
                                         Margin="12,10,12,0"/>

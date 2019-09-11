@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -10,14 +11,15 @@ using Xamarin.Forms;
 
 namespace Labs.ViewModels
 {
-    public class CheckTypeViewModel 
+    public class CheckTypeCreatorViewModel 
     {
-        private FrameAnimation _animation;
+        private readonly string _path;
         private readonly string _fileName;
-        private List<string> _stringsToSave;
         public readonly FrameViewModel FrameViewModel;
         private readonly PageSettingsViewModel _settingsViewModel;
-
+        private bool _deletionIsAvailable;
+        private readonly Page _page;
+        private readonly Grid _gridButtons;
         private int _modificator;
         public int Modificator
         {
@@ -31,22 +33,36 @@ namespace Labs.ViewModels
                 }
             }
         }
-        public string GetPath { get; }
 
-        public CheckTypeViewModel(string path, string fileName)
+
+        public CheckTypeCreatorViewModel(string path, string fileName, Page page, Grid gridButtons = null)
         {
-            GetPath = path;
-            _fileName = fileName;
             Modificator = 0;
+            _page = page;
+            _path = path;
+            _fileName = fileName;
+            _gridButtons = gridButtons;
             FrameViewModel = new FrameViewModel();
             _settingsViewModel = new PageSettingsViewModel();
             FileExist();
+
+            AddItemCommand = new Command(() => { FrameViewModel.AddNewModelAsync(); });
+            DeleteCurrentFileCommand = new Command(Delete);
+            SaveFileCommand = new Command(Save);
+            HideGridButtonsCommand = new Command(HideGridButtons);
+            AcceptGridButtonCommand = new Command(AcceptGridButton);
         }
+
+        private ICommand AddItemCommand { set; get; }
+        private ICommand DeleteCurrentFileCommand { set; get; }
+        private ICommand SaveFileCommand { set; get; }
+        private ICommand HideGridButtonsCommand { set; get; }
+        private ICommand AcceptGridButtonCommand { set; get; }
 
         private void FileExist()
         {
             if (!string.IsNullOrEmpty(_fileName)){
-                ReadFileAsync(GetPath, _fileName);
+                ReadFileAsync(_path, _fileName);
             }
             else {
                 FrameViewModel.AddNewModelAsync();
@@ -54,15 +70,6 @@ namespace Labs.ViewModels
         }
 
         public PageSettingsModel GetSettingsModel => _settingsViewModel.SettingsModel;
-
-        public void RunHideOrShowAnimation(View view, IAnimatable owner, bool show)
-        {
-            if (_animation == null) {
-                _animation = new FrameAnimation(0, (uint)view.Height, 0);
-            }
-            _animation.RunShowOrHideAnimation(null, view, owner, show);
-        }
-
 
         public async void TapEvent(int index)
         {
@@ -81,11 +88,10 @@ namespace Labs.ViewModels
             }
         }
 
-
-        public void GetAdditionalButtons(ImageButton crossButton, ImageButton acceptButton, int modificator)
+        public void GetAdditionalButtons(ImageButton crossButton, ImageButton acceptButton)
         {
             if (crossButton.Source == null) crossButton.Source = "CrossBlack.png";
-            if (modificator < 0) {
+            if (Modificator < 0) {
                 SetCheckedRed(acceptButton);
             }
             else {
@@ -94,26 +100,14 @@ namespace Labs.ViewModels
         }
         private void SetCheckedRed(ImageButton agreeButton)
         {
-            agreeButton.Opacity = 1;
             agreeButton.Source = "CheckedRed.png";
         }
         private void SetCheckedBlack(ImageButton agreeButton)
         {
-            agreeButton.Opacity = 0.3;
             agreeButton.Source = "CheckedBlack.png";
         }
 
 
-        // TODO: add to resources
-        public async Task<string> PageIsValidAsync()
-        {
-            var message = await Task.Run(GetMessage);
-            if (string.IsNullOrEmpty(message)) {
-                _stringsToSave = await GetStringsToSave();
-            }
-
-            return message;
-        }
         private string GetMessage()
         {
             var message = _settingsViewModel.CheckQuestionPageSettings();
@@ -153,14 +147,10 @@ namespace Labs.ViewModels
 
             return stringsToSave;
         }
-        public void Save()
-        {
-            DirectoryHelper.SaveFile(Constants.TestTypeCheck, GetPath, _fileName, _stringsToSave);
-        }
-
 
         private async void ReadFileAsync(string path, string fileName)
         {
+            _deletionIsAvailable = true;
             var strings = DirectoryHelper.ReadStringsFromFile(path, fileName);
             await Task.Run(() => {
                 _settingsViewModel.SetPageSettingsModel(strings[0], strings[1], strings[2]);
@@ -174,6 +164,46 @@ namespace Labs.ViewModels
                     FrameViewModel.AddModel(strings[i], answers[i - startIndex] == '0');
                 }
             });
+        }
+
+        private void Delete()
+        {
+            if (_deletionIsAvailable) {
+                DirectoryHelper.DeleteFileAsync(_page, Path.Combine(_path, _fileName));
+                _page.Navigation.PopAsync(true);
+            }
+        }
+        private async void Save()
+        {
+            if (await PageIsValid()) {
+                DirectoryHelper.SaveFile(Constants.TestTypeCheck, _path, _fileName, await GetStringsToSave());
+                MessagingCenter.Send<Page>(_page, Constants.CreatorListUpLoad);
+                await _page.Navigation.PopAsync(true);
+            }
+        }
+        private async Task<bool> PageIsValid()
+        {
+            var message = await Task.Run(GetMessage);
+            var returnValue = string.IsNullOrEmpty(message);
+            if (!returnValue) {
+                await _page.DisplayAlert(AppResources.Warning, message, AppResources.Cancel);
+            }
+
+            return returnValue;
+        }
+
+        private void HideGridButtons()
+        {
+            Modificator = 0;
+            FrameViewModel.DisableAllAsync();
+            _gridButtons.IsVisible = false;
+        }
+        private void AcceptGridButton()
+        {
+            if (Modificator < 0) {
+                FrameViewModel.DeleteItemsAsync();
+            }
+            HideGridButtons();
         }
     }
 }

@@ -9,14 +9,12 @@
              Title="{helpers:Translate TypeEntryTitle}">
 
     <ContentPage.ToolbarItems>
-        <ToolbarItem x:Name="ItemSave"
-                     Text="{helpers:Translate Save}"
+        <ToolbarItem Text="{helpers:Translate Save}"
                      Order="Secondary"
-                     Clicked="SaveButton_OnClicked"/>
-        <ToolbarItem x:Name="ItemDeleteFile"
-                     Text="{helpers:Translate Clear}"
+                     Command="{Binding SaveFileCommand}"/>
+        <ToolbarItem Text="{helpers:Translate Clear}"
                      Order="Secondary"
-                     Clicked="ItemDeleteFileAsync_OnClicked"/>
+                     Command="{Binding DeleteCurrentFileCommand}"/>
     </ContentPage.ToolbarItems>
 
     <ContentPage.Content>
@@ -56,8 +54,7 @@
                                 <Entry Text="{Binding Price}"
                                    Margin="0"
                                    WidthRequest="30"
-                                   Keyboard="Numeric"
-                                   TextChanged="Coast_OnTextChanged"/>
+                                   Keyboard="Numeric"/>
                             </StackLayout>
                             <BoxView Margin="12,0,12,0"
                                  HeightRequest="1"
@@ -72,10 +69,9 @@
                 </ContentView>
                 <ContentView Padding="5">
                     <Frame Padding="10,5,10,5"
-                       BorderColor="#03A9F4"
-                       CornerRadius="10">
-                        <Editor x:Name="Answer"
-                                AutoSize="TextChanges"
+                           BorderColor="#03A9F4"
+                           CornerRadius="10">
+                        <Editor AutoSize="TextChanges"
                                 HorizontalOptions="Center"
                                 Placeholder="{helpers:Translate Answer}"/>
                     </Frame>

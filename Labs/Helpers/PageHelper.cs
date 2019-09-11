@@ -44,14 +44,15 @@ namespace Labs.Helpers
 
 
 
-
+        
 
         public static async void CheckEntry(object sender, string text)
         {
-            var entry = sender as Entry;
-            entry.Text = await Task.Run(() => FixText(text));
+            if (sender is Entry entry) {
+                if (string.IsNullOrEmpty(entry.Text)) return;
+                entry.Text = await Task.Run(() => FixText(text));
+            }
         }
-
         private static string FixText(string text)
         {
             for (var i = 0; i < text.Length; i++){
@@ -67,14 +68,12 @@ namespace Labs.Helpers
         {
             return timeSpan.ToString().Remove(6) + (seconds.Length < 2 ? "00" : seconds);
         }
-
         private static void SplitUpTimeLine(string time, out TimeSpan timeSpan, out string seconds)
         {
             var timeStrings = time.Split(':');
             timeSpan = new TimeSpan(int.Parse(timeStrings[0]), int.Parse(timeStrings[1]), 00);
             seconds = timeStrings[2];
         }
-
         public static void GetTime(string time, out TimeSpan timeSpan, out string seconds)
         {
             if (string.IsNullOrEmpty(time))

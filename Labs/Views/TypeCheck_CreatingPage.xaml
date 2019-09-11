@@ -9,21 +9,19 @@
              Title="{helpers:Translate TypeCheckTitle}">
 
     <ContentPage.ToolbarItems>
-        <ToolbarItem x:Name="ItemSave"
-                     Text="{helpers:Translate Save}"
+        <ToolbarItem Text="{helpers:Translate Save}"
                      Order="Secondary"
-                     Clicked="SaveButton_OnClicked"/>
+                     Command="{Binding SaveFileCommand}"/>
         <ToolbarItem x:Name="ItemDeleteFile"
                      Text="{helpers:Translate Clear}"
                      Order="Secondary"
-                     Clicked="ItemDeleteFileAsync_OnClicked"/>
-        <ToolbarItem x:Name="ItemDelete"
-                     Text="Delete items"
+                     Command="{Binding DeleteCurrentFileCommand}"/>
+        <ToolbarItem Text="Delete items"
                      Order="Secondary"
                      Clicked="ChooseItemsToDelete_OnClicked"/>
         <ToolbarItem Text="Add"
                      Order="Secondary"
-                     Clicked="AddItem_OnClicked"/>
+                     Command="{Binding AddItemCommand}"/>
         <ToolbarItem Text="ChooseRight"
                      Order="Secondary"
                      Clicked="ChooseRightItems_OnClicked"/>
@@ -55,8 +53,7 @@
                                    Margin="0"/>
                             <Entry Text="{Binding Seconds}"
                                    Margin="0"
-                                   Keyboard="Numeric"
-                                   TextChanged="_entrySeconds_OnTextChanged"/>
+                                   Keyboard="Numeric"/>
                             <Label Text="{helpers:Translate Price}"
                                    HorizontalOptions="EndAndExpand"
                                    HorizontalTextAlignment="End"
@@ -65,9 +62,7 @@
                                    VerticalOptions="Center"/>
                             <Entry Text="{Binding Price}"
                                    Margin="0"
-                                   WidthRequest="30"
-                                   Keyboard="Numeric"
-                                   TextChanged="Price_OnTextChanged"/>
+                                   Keyboard="Numeric"/>
                         </StackLayout>
                         <BoxView Margin="12,0,12,0"
                                  HeightRequest="1"
@@ -80,7 +75,7 @@
                     </StackLayout>
                 </Frame>
             </ContentView>
-            <Grid x:Name="GridAdditionalButtons"
+            <Grid x:Name="GridButtons"
                   HorizontalOptions="Center"
                   IsVisible="False">
                 <Grid.RowDefinitions>
@@ -99,7 +94,7 @@
                              HeightRequest="22"
                              Opacity="0.3"
                              BackgroundColor="Transparent"
-                             Clicked="ImageButtonCross_OnPressed"
+                             Command="{Binding HideGridButtonsCommand}"
                              Grid.Row="0" Grid.Column="0"/>
                 <Label Text="{helpers:Translate Cancel}"
                        Grid.Row="0" Grid.Column="1"/>
@@ -114,7 +109,7 @@
                              WidthRequest="22"
                              HeightRequest="22"
                              BackgroundColor="Transparent"
-                             Clicked="ImageButtonAccept_OnPressed"
+                             Command="{Binding AcceptGridButtonCommand}"
                              Grid.Row="0" Grid.Column="4"/>
             </Grid>
             <ListView x:Name="ListView"

@@ -7,11 +7,11 @@ namespace Labs.Helpers
     {
         private readonly uint _buttonWidthMax, _settingsViewHeightMax, _settingsViewHeightMin;
 
-        public FrameAnimation(uint buttonWidthMax, uint settingsViewHeightMax, uint settingsViewHeightMin)
+        public FrameAnimation(uint buttonWidthMax, uint viewHeightMax, uint viewHeightMin)
         {
             _buttonWidthMax = buttonWidthMax;
-            _settingsViewHeightMax = settingsViewHeightMax;
-            _settingsViewHeightMin = settingsViewHeightMin;
+            _settingsViewHeightMax = viewHeightMax;
+            _settingsViewHeightMin = viewHeightMin;
         }
 
         public void RunShowOrHideAnimation(Button button, View view, IAnimatable owner, bool show)

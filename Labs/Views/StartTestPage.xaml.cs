@@ -15,7 +15,7 @@ namespace Labs.Views
     public partial class StartTestPage
     {
         private readonly string _path;
-        private readonly CreatorViewModel _creator;
+        private readonly MenuCreatorViewModel _menuCreator;
         private bool _isClickAble;
 
         public StartTestPage(string path)
@@ -23,12 +23,12 @@ namespace Labs.Views
             InitializeComponent();
 
             _path = path;
-            _creator = new CreatorViewModel(path);
+            _menuCreator = new MenuCreatorViewModel(path);
             FillInfo();
             Subscribe();
         }
 
-        private async void FillInfo() => GetSettings(await Task.Run(() => _creator.GetSettingsDictionary()));
+        private async void FillInfo() => GetSettings(await Task.Run(() => _menuCreator.GetSettingsDictionary()));
         private void GetSettings(Dictionary<string, string> collection)
         {
             LabelName.Text = collection["name"];

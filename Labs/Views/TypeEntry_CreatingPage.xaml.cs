@@ -1,8 +1,6 @@
 ﻿using System;
-using System.IO;
-using System.Threading.Tasks;
 using Labs.Helpers;
-using Labs.Resources;
+using Labs.ViewModels;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -13,34 +11,27 @@ namespace Labs.Views
     {
         private readonly string _path;
         private readonly string _fileName;
-
+        private readonly CheckTypeCreatorViewModel _viewModel;
+        private FrameAnimation _animation;
         public TypeEntryCreatingPage(string path, string fileName = "")
         {
             InitializeComponent();
+
             _fileName = fileName;
             _path = path;
-        }
+            _animation = new FrameAnimation( 0, (uint)SettingsLayout.Height, 0);
+            _viewModel = new CheckTypeCreatorViewModel(path, fileName, this);
 
-
-        private void ItemDeleteFileAsync_OnClicked(object sender, EventArgs e)
-        {
-            throw new NotImplementedException();
-        }
-
-        private void SaveButton_OnClicked(object sender, EventArgs e)
-        {
-            throw new NotImplementedException();
-        }
-
-
-        private void Coast_OnTextChanged(object sender, TextChangedEventArgs e)
-        {
-            throw new NotImplementedException();
+            BindingContext = _viewModel;
+            SettingsLayout.BindingContext = _viewModel.GetSettingsModel;
         }
 
         private void HideOrShowAsync_OnClicked(object sender, EventArgs e)
         {
-            throw new NotImplementedException();
+            if (_animation == null) {
+                _animation = new FrameAnimation(0, (uint)SettingsLayout.Height, 0);
+            }
+            _animation.RunShowOrHideAnimation(null, SettingsLayout, this, (int)SettingsLayout.Height == 0);
         }
     }
 }

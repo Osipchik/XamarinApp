@@ -1,15 +1,16 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Labs.Helpers;
 using Labs.Models;
 using Labs.Resources;
+using Xamarin.Forms;
 
 namespace Labs.ViewModels
 {
     public class PageSettingsViewModel
     {
         public readonly PageSettingsModel SettingsModel;
-
         public PageSettingsViewModel()
         {
             SettingsModel = new PageSettingsModel();
@@ -47,6 +48,17 @@ namespace Labs.ViewModels
             SettingsModel.Question = question;
         }
 
+        public static string FixText(string text, bool isSeconds = false)
+        {
+            if (text == string.Empty) return string.Empty;
+            if (isSeconds && int.Parse(text) > 60) return "60";
+            if (text.Length > 2) text = text.Remove(2);
 
+            for (var i = 0; i < text.Length; i++) {
+                if (text[i] == ',' || text[i] == '-') text = text.Remove(i, 1);
+            }
+
+            return text;
+        }
     }
 }

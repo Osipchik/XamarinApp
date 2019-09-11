@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Labs.Helpers;
@@ -19,13 +16,13 @@ namespace Labs.Views
         private bool _tableVisible = true;
         private readonly InfoViewModel _infos;
         private readonly FrameAnimation _animation;
-        private readonly CreatorViewModel _creatorVm;
+        private readonly MenuCreatorViewModel _menuCreatorVm;
 
         public CreatorPage(string path)
         {
             InitializeComponent();
-            _animation = new FrameAnimation(350, (uint)SettingsTableView.HeightRequest, 0);
-            _creatorVm = new CreatorViewModel(path);
+            _animation = new FrameAnimation( 350, (uint)SettingsTableView.HeightRequest, 0);
+            _menuCreatorVm = new MenuCreatorViewModel(path);
             _infos = new InfoViewModel(path);
             if (path.Contains(Constants.TempFolder)) InitializeTemp();
             else InitializeExist();
@@ -36,7 +33,7 @@ namespace Labs.Views
 
         private void InitializeTemp()
         {
-            _creatorVm.CreateTempFolderAsync();
+            _menuCreatorVm.CreateTempFolderAsync();
             ItemClear.Clicked += Clear;
         }
 
@@ -60,7 +57,7 @@ namespace Labs.Views
         
         private void FillSettings()
         {
-            var settings = _creatorVm.ReadSettings();
+            var settings = _menuCreatorVm.ReadSettings();
             CellName.Text = settings.TestName;
             CellSubject.Text = settings.TestSubject;
             _timePicker.Time = settings.SettingSpan;
@@ -74,10 +71,10 @@ namespace Labs.Views
         private async void ItemSave_OnClicked(object sender, EventArgs e)
         {
             if (!_infos.Any()) await DisplayAlert(AppResources.Warning, AppResources.CreatorQuestions, AppResources.Cancel);
-            else if (await _creatorVm.SaveTestAsync(GetsSettings())) {
+            else if (await _menuCreatorVm.SaveTestAsync(GetsSettings())) {
                 Clear(this, EventArgs.Empty);
                 MessagingCenter.Send<Page>(this, Constants.StartPageCallBack);
-                if (!_creatorVm.GetPath.Contains(Constants.TempFolder)) await Navigation.PopAsync(true);
+                if (!_menuCreatorVm.GetPath.Contains(Constants.TempFolder)) await Navigation.PopAsync(true);
             }
             else await DisplayAlert(AppResources.Warning, AppResources.FillSettings, AppResources.Cancel);
         }
@@ -105,7 +102,7 @@ namespace Labs.Views
         private async void DeleteAsync(object sender, EventArgs e)
         {
             if (await DisplayAlert(AppResources.Warning, AppResources.DeleteAnswer, AppResources.Yes, AppResources.No)) {
-                _creatorVm.DeleteFolderAsync(this);
+                _menuCreatorVm.DeleteFolderAsync(this);
                 await Navigation.PopToRootAsync(true);
             }
         }
@@ -115,14 +112,14 @@ namespace Labs.Views
             switch (DirectoryHelper.GetTypeName(_infos.InfosModel[e.ItemIndex].Name))
             {
                 case Constants.TestTypeCheck:
-                    await Navigation.PushAsync(new TypeCheckCreatingPage(_creatorVm.GetPath, _infos.InfosModel[e.ItemIndex].Name));
+                    await Navigation.PushAsync(new TypeCheckCreatingPage(_menuCreatorVm.GetPath, _infos.InfosModel[e.ItemIndex].Name));
                     break;
                 case Constants.TestTypeStack:
-                    await Navigation.PushAsync(new TypeStackCreatingPage(_creatorVm.GetPath, _infos.InfosModel[e.ItemIndex].Name));
+                    await Navigation.PushAsync(new TypeStackCreatingPage(_menuCreatorVm.GetPath, _infos.InfosModel[e.ItemIndex].Name));
                     break;
 
                 case Constants.TestTypeEntry:
-                    await Navigation.PushAsync(new TypeEntryCreatingPage(_creatorVm.GetPath, _infos.InfosModel[e.ItemIndex].Name));
+                    await Navigation.PushAsync(new TypeEntryCreatingPage(_menuCreatorVm.GetPath, _infos.InfosModel[e.ItemIndex].Name));
                     break;
             }
         }
@@ -131,17 +128,17 @@ namespace Labs.Views
             ((ListView)sender).SelectedItem = null;
 
         private async void TypeCheck_OnClicked(object sender, EventArgs e) =>
-            await Navigation.PushAsync(new TypeCheckCreatingPage(_creatorVm.GetPath));
+            await Navigation.PushAsync(new TypeCheckCreatingPage(_menuCreatorVm.GetPath));
 
         private async void TypeEntry_OnClicked(object sender, EventArgs e) =>
-            await Navigation.PushAsync(new TypeEntryCreatingPage(_creatorVm.GetPath));
+            await Navigation.PushAsync(new TypeEntryCreatingPage(_menuCreatorVm.GetPath));
         
         private async void TypeStack_OnClicked(object sender, EventArgs e) =>
-            await Navigation.PushAsync(new TypeStackCreatingPage(_creatorVm.GetPath));
+            await Navigation.PushAsync(new TypeStackCreatingPage(_menuCreatorVm.GetPath));
 
         protected override bool OnBackButtonPressed()
         {
-            if (_creatorVm.GetPath != Constants.TempFolder) {
+            if (_menuCreatorVm.GetPath != Constants.TempFolder) {
                 Device.BeginInvokeOnMainThread(async () => {
                     var result = await DisplayAlert(AppResources.Warning, AppResources.Escape, AppResources.Yes, AppResources.No);
                     if (!result) return;

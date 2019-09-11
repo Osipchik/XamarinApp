@@ -2,11 +2,12 @@
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Labs.ViewModels;
 using Xamarin.Forms;
 
 namespace Labs.Helpers
 {
-    public class DirectoryHelper
+    public static class DirectoryHelper
     {
         public static string GetTypeName(string directoryName)
         {
@@ -47,6 +48,5 @@ namespace Labs.Helpers
             await Task.Run(() => File.Delete(path));
             await Task.Run(() => MessagingCenter.Send<Page>(sender, Constants.CreatorListUpLoad));
         }
-
     }
 }

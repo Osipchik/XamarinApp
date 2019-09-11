@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using Labs.Annotations;
+using Labs.ViewModels;
 
 namespace Labs.Models
 {
@@ -21,9 +22,10 @@ namespace Labs.Models
         private string _seconds;
         public string Seconds
         {
-            get => string.IsNullOrEmpty(_seconds) ? "00" : _seconds;
-            set {
-                _seconds = value;
+            get => _seconds ?? "00";
+            set
+            {
+                _seconds = PageSettingsViewModel.FixText(value, true);
                 OnPropertyChanged();
             }
         }
@@ -31,9 +33,10 @@ namespace Labs.Models
         private string _price;
         public string Price
         {
-            get => _price;
-            set {
-                _price = value;
+            get => _price ?? "00";
+            set
+            {
+                _price = PageSettingsViewModel.FixText(value);
                 OnPropertyChanged();
             }
         }

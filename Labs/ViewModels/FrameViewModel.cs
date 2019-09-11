@@ -42,7 +42,6 @@ namespace Labs.ViewModels
                 });
             });
         }
-
         public void AddModel(string textLeft, bool isRight)
         {
             Models.Add(new FrameModel
@@ -63,7 +62,6 @@ namespace Labs.ViewModels
                 }
             });
         }
-
         public void ItemIsWriteAble(int index)
         {
             DisableLastItem();
@@ -71,7 +69,6 @@ namespace Labs.ViewModels
             Models[_itemIndex].EditorLeftIsReadOnly = false;
             Models[_itemIndex].BorderColor = Constants.ColorMaterialBlue;
         }
-
         public void DisableLastItem()
         {
             if (_itemIndex >= 0)
@@ -95,6 +92,7 @@ namespace Labs.ViewModels
             return isRight ? Constants.ColorMaterialGreen : Constants.ColorMaterialGray;
         }
 
+
         public void ItemToDelete(int index)
         {
             if (Models[index].BorderColor == Constants.ColorMaterialRed) {
@@ -106,7 +104,6 @@ namespace Labs.ViewModels
                 Models[index].BorderColor = Constants.ColorMaterialRed;
             }
         }
-
         public async void DeleteItemsAsync()
         {
             await Task.Run(() =>
@@ -116,7 +113,6 @@ namespace Labs.ViewModels
                 }
             });
         }
-
         private IEnumerable<FrameModel> GetItemsToDelete()
         {
             var list = new List<FrameModel>();
@@ -127,6 +123,7 @@ namespace Labs.ViewModels
 
             return list;
         }
+
 
 
         public event PropertyChangedEventHandler PropertyChanged;

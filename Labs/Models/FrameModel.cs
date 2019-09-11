@@ -20,6 +20,7 @@ namespace Labs.Models
             }
         }
 
+
         private string _itemTextLeft;
         public string ItemTextLeft
         {
@@ -30,16 +31,6 @@ namespace Labs.Models
                 _itemTextLeft = value;
                 OnPropertyChanged();
 
-            }
-        }
-
-        private bool _editorLeftIsReadOnly;
-        public bool EditorLeftIsReadOnly
-        {
-            get => _editorLeftIsReadOnly;
-            set {
-                _editorLeftIsReadOnly = value;
-                OnPropertyChanged();
             }
         }
 
@@ -55,6 +46,41 @@ namespace Labs.Models
             }
         }
 
+
+        private string _labelTextLeft;
+        public string LabelTextLeft
+        {
+            get => _labelTextLeft;
+            set
+            {
+                _labelTextLeft = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private string _labelTextRight;
+        public string LabelTextRight
+        {
+            get => _labelTextRight;
+            set
+            {
+                _labelTextRight = value;
+                OnPropertyChanged();
+            }
+        }
+
+
+        private bool _editorLeftIsReadOnly;
+        public bool EditorLeftIsReadOnly
+        {
+            get => _editorLeftIsReadOnly;
+            set
+            {
+                _editorLeftIsReadOnly = value;
+                OnPropertyChanged();
+            }
+        }
+
         private bool _editorRightIsReadOnly;
         public bool EditorRightIsReadOnly
         {
@@ -66,10 +92,10 @@ namespace Labs.Models
             }
         }
 
+
         public bool IsRight { get; set; }
 
         private string _rightString;
-
         public string RightString
         {
             get => _rightString;

@@ -11,9 +11,9 @@ using Xamarin.Forms;
 
 namespace Labs.ViewModels
 {
-    public class CreatorViewModel
+    public class MenuCreatorViewModel
     {
-        public CreatorViewModel(string path)
+        public MenuCreatorViewModel(string path)
         {
             GetPath = path;
         }
