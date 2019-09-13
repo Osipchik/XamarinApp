@@ -157,7 +157,7 @@ namespace Labs.ViewModels
         private async void Save()
         {
             if (await PageIsValid()) {
-                DirectoryHelper.SaveFileAsync(Constants.TestTypeCheck, _path, _fileName, await GetStringsToSave());
+                DirectoryHelper.SaveFile(Constants.TestTypeCheck, _path, _fileName, await GetStringsToSave());
                 MessagingCenter.Send<Page>(_page, Constants.CreatorListUpLoad);
                 await _page.Navigation.PopAsync(true);
             }

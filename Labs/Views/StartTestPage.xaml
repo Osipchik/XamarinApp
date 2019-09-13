@@ -7,6 +7,22 @@
              mc:Ignorable="d"
              x:Class="Labs.Views.StartTestPage">
 
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <Style x:Key="ButtonNormalStyle" TargetType="Button">
+                <Setter Property="TextColor" Value="#039BE5"/>
+                <Setter Property="HorizontalOptions" Value="FillAndExpand"/>
+                <Setter Property="VerticalOptions" Value="Center"/>
+                <Setter Property="BorderColor" Value="#039BE5"/>
+                <Setter Property="BackgroundColor" Value="White"/>
+                <Setter Property="Padding" Value="12"/>
+                <Setter Property="BorderWidth" Value="1"/>
+                <Setter Property="CornerRadius" Value="60"/>
+                <Setter Property="Margin" Value="6,0,6,0"/>
+            </Style>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
     <ContentPage.Content>
         <StackLayout>
             <ScrollView>
@@ -39,35 +55,18 @@
                         <Label Text="{Binding Price}"
                                Grid.Row="3" Grid.Column="1"/>
                     </Grid>
-
                     <BoxView HeightRequest="1"
                              Margin="6"
                              Color="#90A4AE"
                              CornerRadius="90"/>
                     <Button x:Name="ChangeButton" 
                             Text="{helpers:Translate Change}"
-                            TextColor="#039BE5"
-                            HorizontalOptions="FillAndExpand"
-                            VerticalOptions="Center"
-                            BorderColor="#039BE5"
-                            BackgroundColor="White"
-                            Padding="12"
-                            BorderWidth="1"
-                            CornerRadius="60"
-                            Margin="6,0,6,0"
-                            Clicked="ChangeButton_OnClicked"/>
+                            Style="{StaticResource ButtonNormalStyle}"
+                            Command="{Binding ChangeButtonCommand}"/>
                     <Button x:Name="StartButton"
                             Text="{helpers:Translate Start}"
-                            TextColor="#039BE5"
-                            HorizontalOptions="FillAndExpand"
-                            VerticalOptions="Center"
-                            BorderColor="#039BE5"
-                            BackgroundColor="White"
-                            Padding="12"
-                            BorderWidth="1"
-                            CornerRadius="60"
-                            Margin="6,0,6,0"
-                            Clicked="StartButton_OnClicked"/>
+                            Style="{StaticResource ButtonNormalStyle}"
+                            Command="{Binding StartButtonCommand}"/>
                 </StackLayout>
             </ScrollView>
         </StackLayout>

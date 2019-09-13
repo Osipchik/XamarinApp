@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
 using System.Reflection;
@@ -13,8 +14,8 @@ namespace Labs.ViewModels
 {
     public class InfoViewModel : INotifyPropertyChanged
     {
-        private List<InfoModel> _infoModels = new List<InfoModel>();
-        public List<InfoModel> InfoModels
+        private ObservableCollection<InfoModel> _infoModels = new ObservableCollection<InfoModel>();
+        public ObservableCollection<InfoModel> InfoModels
         {
             get => _infoModels;
             set
@@ -46,7 +47,6 @@ namespace Labs.ViewModels
             return Path.Combine(_path, InfoModels[index].Name);
         }
 
-        // TODO: make this async
         public async void GetFilesModelAsync()
         {
             await Task.Run(() =>
@@ -60,7 +60,7 @@ namespace Labs.ViewModels
         }
 
         // TODO: add async
-        public List<InfoModel> GetFilesInfo()
+        public ObservableCollection<InfoModel> GetFilesInfo()
         {
             InfoModels.Clear();
             foreach (var info in new DirectoryInfo(_path).GetFiles()) {
@@ -81,15 +81,6 @@ namespace Labs.ViewModels
                 }
             });
         }
-        public List<InfoModel> GetDirectoryInfo()
-        {
-            InfoModels.Clear();
-            foreach (var dirInfo in new DirectoryInfo(_path).GetDirectories()) {
-                InfoModels.Add(GetDirectoryModel(dirInfo));
-            }
-
-            return InfoModels; 
-        }
 
         private InfoModel GetDirectoryModel(DirectoryInfo dirInfo)
         {
@@ -101,11 +92,6 @@ namespace Labs.ViewModels
                 Date = dirInfo.CreationTime.ToShortDateString()
             };
         }
-
-
-
-
-
 
         private InfoModel GetFileModel(FileInfo fileInfo)
         {
@@ -144,11 +130,6 @@ namespace Labs.ViewModels
                 detail = reader.ReadLine();
             }
         }
-
-
-
-
-
 
         public event PropertyChangedEventHandler PropertyChanged;
 

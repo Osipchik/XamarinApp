@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using Xamarin.Forms;
 using System.Runtime.CompilerServices;
-using System.Text;
 using Labs.Annotations;
 
 namespace Labs.Models
@@ -19,7 +16,6 @@ namespace Labs.Models
                 OnPropertyChanged();
             }
         }
-
 
         private string _itemTextLeft;
         public string ItemTextLeft
@@ -46,7 +42,6 @@ namespace Labs.Models
             }
         }
 
-
         private bool _editorLeftIsReadOnly;
         public bool EditorLeftIsReadOnly
         {
@@ -68,7 +63,6 @@ namespace Labs.Models
                 OnPropertyChanged();
             }
         }
-
 
         public bool IsRight { get; set; }
 

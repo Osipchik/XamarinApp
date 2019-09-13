@@ -49,14 +49,14 @@ namespace Labs.Helpers
 
         private static void ButtonStyleShow(Button button)
         {
-            button.BackgroundColor = Constants.ColorMaterialBlue;
+            button.BackgroundColor = Constants.Colors.ColorMaterialBlue;
             button.TextColor = Color.White;
         }
 
         private static void ButtonStyleHide(Button button)
         {
             button.BackgroundColor = Color.White;
-            button.TextColor = Constants.ColorMaterialBlue;
+            button.TextColor = Constants.Colors.ColorMaterialBlue;
         }
     }
 }

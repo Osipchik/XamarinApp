@@ -19,11 +19,14 @@ namespace Labs.Helpers
         public const uint AnimationRate = 16;
         public const uint AnimationLength = 700;
 
-        public static readonly Color ColorMaterialBlue = Color.FromHex("#03A9F4");
-        public static readonly Color ColorMaterialDarkBlue = Color.FromHex("#0D47A1");
-        public static readonly Color ColorMaterialRed = Color.FromHex("#f44336");
-        public static readonly Color ColorMaterialBlueGray = Color.FromHex("#607D8B");
-        public static readonly Color ColorMaterialGray = Color.FromHex("#B0BEC5");
-        public static readonly Color ColorMaterialGreen = Color.FromHex("#4CAF50");
+        public static class Colors
+        {
+            public static readonly Color ColorMaterialBlue = Color.FromHex("#03A9F4");
+            public static readonly Color ColorMaterialRed = Color.FromHex("#f44336");
+            public static readonly Color ColorMaterialBlueGray = Color.FromHex("#607D8B");
+            public static readonly Color ColorMaterialGray = Color.FromHex("#B0BEC5");
+            public static readonly Color ColorMaterialGrayText = Color.FromHex("##9E9E9E");
+            public static readonly Color ColorMaterialGreen = Color.FromHex("#4CAF50");
+        }
     }
 }

@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using System.Text;
 using System.Threading.Tasks;
 using Labs.Models;
-using Labs.Views;
 using Xamarin.Forms;
 
 namespace Labs.ViewModels

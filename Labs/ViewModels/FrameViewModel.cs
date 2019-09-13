@@ -35,7 +35,7 @@ namespace Labs.ViewModels
         {
             await Task.Run(() => {
                 Models.Add(new FrameModel {
-                    BorderColor = Constants.ColorMaterialGray,
+                    BorderColor = Constants.Colors.ColorMaterialGray,
                     ItemTextLeft = string.Empty,
                     EditorLeftIsReadOnly = true,
                     IsRight = false
@@ -58,7 +58,7 @@ namespace Labs.ViewModels
             DisableLastItem();
             await Task.Run(() => {
                 foreach (var model in Models) {
-                    model.BorderColor = model.IsRight ? Constants.ColorMaterialGreen : Constants.ColorMaterialGray;
+                    model.BorderColor = model.IsRight ? Constants.Colors.ColorMaterialGreen : Constants.Colors.ColorMaterialGray;
                 }
             });
         }
@@ -67,7 +67,7 @@ namespace Labs.ViewModels
             DisableLastItem();
             _itemIndex = index;
             Models[_itemIndex].EditorLeftIsReadOnly = false;
-            Models[_itemIndex].BorderColor = Constants.ColorMaterialBlue;
+            Models[_itemIndex].BorderColor = Constants.Colors.ColorMaterialBlue;
         }
         public void DisableLastItem()
         {
@@ -75,8 +75,8 @@ namespace Labs.ViewModels
             {
                 Models[_itemIndex].EditorLeftIsReadOnly = true;
                 Models[_itemIndex].BorderColor = Models[_itemIndex].IsRight
-                    ? Constants.ColorMaterialGreen
-                    : Constants.ColorMaterialGray;
+                    ? Constants.Colors.ColorMaterialGreen
+                    : Constants.Colors.ColorMaterialGray;
             }
             _itemIndex = -1;
         }
@@ -89,19 +89,21 @@ namespace Labs.ViewModels
 
         private Color GetColor(bool isRight)
         {
-            return isRight ? Constants.ColorMaterialGreen : Constants.ColorMaterialGray;
+            return isRight ? Constants.Colors.ColorMaterialGreen : Constants.Colors.ColorMaterialGray;
         }
 
 
         public void ItemToDelete(int index)
         {
-            if (Models[index].BorderColor == Constants.ColorMaterialRed) {
+            if (Models[index].BorderColor == Constants.Colors.ColorMaterialRed) {
                 _itemIndexToDeleteList.Remove(index);
-                Models[index].BorderColor = Models[index].IsRight ? Constants.ColorMaterialGreen : Constants.ColorMaterialGray;
+                Models[index].BorderColor = Models[index].IsRight 
+                    ? Constants.Colors.ColorMaterialGreen 
+                    : Constants.Colors.ColorMaterialGray;
             }
             else {
                 _itemIndexToDeleteList.Add(index);
-                Models[index].BorderColor = Constants.ColorMaterialRed;
+                Models[index].BorderColor = Constants.Colors.ColorMaterialRed;
             }
         }
         public async void DeleteItemsAsync()

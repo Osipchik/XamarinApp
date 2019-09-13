@@ -35,9 +35,9 @@ namespace Labs.Helpers
             return await Task.Run(() => GetFileName(savingType, path, fileName));
         }
 
-        public static async void SaveFileAsync(string savingType, string path, string fileName, IEnumerable<string> stringsToSave)
+        public static void SaveFile(string savingType, string path, string fileName, IEnumerable<string> stringsToSave)
         {
-            await Task.Run(() => File.WriteAllLines(GetFileName(savingType, path, fileName), stringsToSave));
+            File.WriteAllLines(GetFileName(savingType, path, fileName), stringsToSave, Encoding.UTF8);
         }
 
         public static string[] ReadStringsFromFile(string path, string fileName)
@@ -48,7 +48,7 @@ namespace Labs.Helpers
 
         public static async void DeleteFileAsync(Page sender, string path)
         {
-            await Task.Run(() => File.Delete(path));
+            File.Delete(path);
             await Task.Run(() => MessagingCenter.Send<Page>(sender, Constants.CreatorListUpLoad));
         }
 
@@ -64,9 +64,9 @@ namespace Labs.Helpers
 
         public static async void SaveTestAsync(string path, IEnumerable<string> settings)
         {
+            File.WriteAllLines(Path.Combine(path, Constants.SettingsFileTxt), settings, Encoding.UTF8);
             await Task.Run(() =>
             {
-                File.WriteAllLines(Path.Combine(path, Constants.SettingsFileTxt), settings, Encoding.UTF8);
                 if (path.Contains(Constants.TempFolder)) {
                     MoveFiles(path);
                 }

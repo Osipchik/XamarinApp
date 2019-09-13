@@ -10,6 +10,7 @@ using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Labs.Annotations;
+using Labs.Views;
 using Xamarin.Forms;
 
 namespace Labs.ViewModels
@@ -19,7 +20,8 @@ namespace Labs.ViewModels
         private readonly Grid _grid;
         private readonly Label[] _labels;
         public readonly InfoViewModel InfoViewModel;
-        private readonly IEnumerable<InfoModel> _infoModels;
+        private IEnumerable<InfoModel> _infoModels;
+
         private string _searchBarText;
         public string SearchBarText
         {
@@ -27,7 +29,7 @@ namespace Labs.ViewModels
             set
             {
                 _searchBarText = value;
-                InfoViewModel.InfoModels = Search(SearchBarText).ToList();
+                InfoViewModel.InfoModels = Search(SearchBarText).ToObservableCollection();
                 OnPropertyChanged();
             }
         }
@@ -37,9 +39,14 @@ namespace Labs.ViewModels
             _grid = grid;
             _labels = labels;
             InfoViewModel = new InfoViewModel(GetMainTestFolderPath());
+            RefreshModels();
+            SetCommands();
+        }
+
+        public void RefreshModels()
+        {
             InfoViewModel.SetDirectoriesInfoAsync();
             _infoModels = InfoViewModel.InfoModels;
-            SetCommands();
         }
 
         public ICommand NameLabelTapCommand { protected set; get; }
@@ -56,7 +63,7 @@ namespace Labs.ViewModels
         {
             ActiveSearchLabelStyle(_labels[index]);
             DisableSearchLabelStyle(_labels[index]);
-            InfoViewModel.InfoModels = Search(SearchBarText).ToList();
+            InfoViewModel.InfoModels = Search(SearchBarText).ToList().ToObservableCollection();
         }
 
         private string GetMainTestFolderPath()
@@ -84,7 +91,7 @@ namespace Labs.ViewModels
         {
             var filter = string.Empty;
             for (var i = 0; i < _labels.Length; i++) {
-                if (_labels[i].TextColor == Constants.ColorMaterialBlue) {
+                if (_labels[i].TextColor == Constants.Colors.ColorMaterialBlue) {
                     filter = InfoViewModel.GetNameOfPropertyInModel(i);
                     break;
                 }
@@ -122,13 +129,13 @@ namespace Labs.ViewModels
         private void ActiveSearchLabelStyle(Label label)
         {
             label.FontSize = 16;
-            label.TextColor = Constants.ColorMaterialBlue;
+            label.TextColor = Constants.Colors.ColorMaterialBlue;
         }
         private void DisableSearchLabelStyle(Label activeLabel)
         {
             foreach (var label in _labels.Where(label => activeLabel != label)) {
                 label.FontSize = 14;
-                label.TextColor = Constants.ColorMaterialGray;
+                label.TextColor = Constants.Colors.ColorMaterialGray;
             }
         }
         private async void ChangeStyleOfLabelsAsync(InfoModel model, string filter)
@@ -142,7 +149,7 @@ namespace Labs.ViewModels
         }
         private Color GetColor(string filter, string propertyName)
         {
-            return filter == propertyName ? Constants.ColorMaterialBlue : Constants.ColorMaterialGray;
+            return filter == propertyName ? Constants.Colors.ColorMaterialBlue : Constants.Colors.ColorMaterialGrayText;
         }
 
         private async void DisableSearchModificationAsync()
@@ -151,11 +158,15 @@ namespace Labs.ViewModels
                 foreach (var model in _infoModels) {
                     model.TitleColor =
                         model.DetailColor =
-                            model.DateColor = Constants.ColorMaterialBlueGray;
+                            model.DateColor = Constants.Colors.ColorMaterialGrayText;
                 }
             });
         }
 
+        public async void GoToStartTestPage(int index, Page page)
+        {
+            await page.Navigation.PushAsync(new StartTestPage(InfoViewModel.GetElementPath(index)));
+        }
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -163,6 +174,14 @@ namespace Labs.ViewModels
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+    }
+
+    public static class Extensions
+    {
+        public static ObservableCollection<T> ToObservableCollection<T>(this IEnumerable<T> collection)
+        {
+            return new ObservableCollection<T>(collection);
         }
     }
 }

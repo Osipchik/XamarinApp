@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Labs.Helpers;
 using Labs.Models;
 using Labs.Resources;
-using Xamarin.Forms;
 
 namespace Labs.ViewModels
 {
