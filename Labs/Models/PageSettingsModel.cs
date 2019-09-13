@@ -30,6 +30,8 @@ namespace Labs.Models
             }
         }
 
+        public string Time { get; set; }
+
         private string _price;
         public string Price
         {

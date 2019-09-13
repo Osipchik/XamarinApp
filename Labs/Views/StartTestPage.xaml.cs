@@ -15,26 +15,25 @@ namespace Labs.Views
     public partial class StartTestPage
     {
         private readonly string _path;
-        private readonly MenuCreatorViewModel _menuCreator;
         private bool _isClickAble;
+        private readonly PageSettingsViewModel _settingsViewModel;
 
         public StartTestPage(string path)
         {
             InitializeComponent();
 
+            _settingsViewModel = new PageSettingsViewModel();
             _path = path;
-            _menuCreator = new MenuCreatorViewModel(path);
-            FillInfo();
-            Subscribe();
+            ReadSettings();
+            BindingContext = _settingsViewModel.SettingsModel;
         }
 
-        private async void FillInfo() => GetSettings(await Task.Run(() => _menuCreator.GetSettingsDictionary()));
-        private void GetSettings(Dictionary<string, string> collection)
+        private void ReadSettings()
         {
-            LabelName.Text = collection["name"];
-            LabelSubject.Text = collection["subject"];
-            LabelPrice.Text = collection["price"];
-            LabelTime.Text = collection["time"];
+            var settings = DirectoryHelper.ReadStringsFromFile(_path, Constants.SettingsFileTxt);
+            if (settings != null) {
+                _settingsViewModel.SetStartPageSettings(settings);
+            }
         }
 
         private void Subscribe()
@@ -45,7 +44,7 @@ namespace Labs.Views
 
         private void StartPageCallBack()
         {
-            FillInfo();
+            //FillInfo();
             _isClickAble = false;
             ChangeButtonStyle_OnCallBack(ChangeButton);
             ChangeButtonStyle_OnCallBack(StartButton);

@@ -9,123 +9,126 @@
              Title="{helpers:Translate CreatorTitle}">
 
     <ContentPage.ToolbarItems>
-        <ToolbarItem x:Name="ItemSave"
-                     Text="{helpers:Translate Save}"
+        <ToolbarItem Text="{helpers:Translate Save}"
                      Order="Secondary"
-                     Clicked="ItemSave_OnClicked"/>
-        <ToolbarItem x:Name="ItemClear"
-                     Text="{helpers:Translate Clear}"
-                     Order="Secondary"/>
+                     Command="{Binding SaveTestCommand}"/>
+        <ToolbarItem Text="{helpers:Translate Delete}"
+                     Order="Secondary"
+                     Command="{Binding DeleteTestCommand}"/>
     </ContentPage.ToolbarItems>
 
     <ContentPage.Content>
         <StackLayout>
-            <ContentView Padding="5">
+          <ScrollView>
+            <StackLayout>
+              <ContentView Padding="5">
                 <Frame Padding="10,0,10,5"
                        BorderColor="#039BE5"
                        CornerRadius="10">
-                    <StackLayout>
-                        <Button x:Name="ButtonSettings"
-                                        Text="{helpers:Translate TestSettingsButton}"
-                                        TextColor="White"
-                                        BorderColor="#039BE5"
-                                        BorderWidth="1"
-                                        BackgroundColor="#039BE5"
-                                        Clicked="SettingsButton_OnClickedAsync"
-                                        HorizontalOptions="Center"
-                                        WidthRequest="350"
-                                        CornerRadius="30"
-                                        Margin="12,10,12,0"/>
-                        <TableView x:Name="SettingsTableView"
-                                           Intent="Settings"
-                                           HeightRequest="220">
-                            <TableRoot>
-                                <TableSection Title="{helpers:Translate TestSettingsInfo}">
-                                    <EntryCell x:Name="CellName"
-                                                       Label="{helpers:Translate TestSettingsName}"
-                                                       Placeholder="{helpers:Translate TestSettingsNPlaceh}"/>
-                                    <EntryCell x:Name="CellSubject"
-                                                       Label="{helpers:Translate Subject}"
-                                                       Placeholder="{helpers:Translate TestSettingsSPlaceh}"/>
-                                </TableSection>
-                                <TableSection>
-                                    <ViewCell>
-                                        <Grid ColumnSpacing="0">
-                                            <Grid.RowDefinitions>
-                                                <RowDefinition Height="Auto"/>
-                                            </Grid.RowDefinitions>
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="Auto"/>
-                                                <ColumnDefinition Width="Auto"/>
-                                                <ColumnDefinition Width="Auto"/>
-                                                <ColumnDefinition Width="Auto"/>
-                                            </Grid.ColumnDefinitions>
-                                            <Label Text="{helpers:Translate TestSettingsTime}"
-                                                           VerticalOptions="Center"
-                                                           Margin="12,0,0,0"
-                                                           Grid.Column="0" Grid.Row="0"/>
-                                            <TimePicker x:Name="_timePicker"
-                                                                Format="hh:mm"
-                                                                Margin="0"
-                                                                Grid.Column="1" Grid.Row="0"/>
-                                            <Label Text=":"
-                                                           FontSize="Medium"
-                                                           TextColor="Black"
-                                                           VerticalOptions="Center"
-                                                           Margin="0"
-                                                           Grid.Column="2" Grid.Row="0"/>
-                                            <Entry x:Name="_entrySeconds"
-                                                           Text="00"
-                                                           Margin="0"
-                                                           Keyboard="Numeric"
-                                                           TextChanged="_entrySeconds_OnTextChanged"
-                                                           Grid.Column="3" Grid.Row="0"/>
-                                        </Grid>
-                                    </ViewCell>
-                                </TableSection>
-                            </TableRoot>
-                        </TableView>
-                    </StackLayout>
+                  <StackLayout HorizontalOptions="FillAndExpand">
+                    <Button x:Name="ButtonSettings"
+                                    Text="{helpers:Translate TestSettingsButton}"
+                                    TextColor="White"
+                                    BorderColor="#039BE5"
+                                    BorderWidth="1"
+                                    BackgroundColor="#039BE5"
+                                    Clicked="SettingsButton_OnClickedAsync"
+                                    WidthRequest="350"
+                                    CornerRadius="30"
+                                    Margin="12,10,12,0"/>
+                    <TableView x:Name="SettingsTableView"
+                                       Intent="Settings"
+                                       HeightRequest="220">
+                      <TableRoot>
+                          <TableSection Title="{helpers:Translate TestSettingsInfo}">
+                              <EntryCell Text="{Binding Name}"
+                                         Label="{helpers:Translate TestSettingsName}"
+                                         Placeholder="{helpers:Translate TestSettingsNPlaceh}"/>
+                              <EntryCell Text="{Binding Subject}"
+                                         Label="{helpers:Translate Subject}"
+                                         Placeholder="{helpers:Translate TestSettingsSPlaceh}"/>
+                        </TableSection>
+                        <TableSection>
+                          <ViewCell>
+                            <Grid ColumnSpacing="0">
+                              <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                              </Grid.RowDefinitions>
+                              <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                              </Grid.ColumnDefinitions>
+                              <Label Text="{helpers:Translate TestSettingsTime}"
+                                             VerticalOptions="Center"
+                                             Margin="12,0,0,0"
+                                             Grid.Column="0" Grid.Row="0"/>
+                              <TimePicker Time="{Binding TimeSpan}"
+                                          Format="hh:mm"
+                                          Margin="0"
+                                          Grid.Column="1" Grid.Row="0"/>
+                              <Label Text=":"
+                                             FontSize="Medium"
+                                             TextColor="Black"
+                                             VerticalOptions="Center"
+                                             Margin="0"
+                                             Grid.Column="2" Grid.Row="0"/>
+                              <Entry Text="{Binding Seconds}"
+                                     Margin="0"
+                                     Keyboard="Numeric"
+                                     Grid.Column="3" Grid.Row="0"/>
+                            </Grid>
+                          </ViewCell>
+                        </TableSection>
+                      </TableRoot>
+                    </TableView>
+                  </StackLayout>
                 </Frame>
-            </ContentView>
-            <ListView x:Name="ListViewFiles"
-                              SeparatorVisibility="None"
-                              VerticalScrollBarVisibility="Never"
-                              HasUnevenRows="True"
-                              ItemSelected="ListViewFiles_OnItemSelected"
-                              ItemTapped="ListViewFiles_OnItemTapped">
+              </ContentView>
+              <ListView x:Name="ListViewFiles"
+                                SeparatorVisibility="None"
+                                VerticalScrollBarVisibility="Never"
+                                HasUnevenRows="True"
+                                ItemSelected="ListViewFiles_OnItemSelected"
+                                ItemTapped="ListViewFiles_OnItemTapped"
+                                ItemsSource="{Binding InfoModels}">
                 <ListView.ItemTemplate>
-                    <DataTemplate>
-                        <ViewCell>
-                            <ContentView Padding="5">
-                                <Frame BorderColor="#CFD8DC"
-                                               Padding="10">
-                                    <StackLayout HorizontalOptions="FillAndExpand"
-                                                         VerticalOptions="FillAndExpand">
-                                        <Label Text="{Binding Title}"
-                                                       FontSize="18"/>
-                                        <StackLayout Orientation="Horizontal">
-                                            <Label Text="{helpers:Translate Price}"
-                                                           HorizontalOptions="Start"
-                                                           FontSize="12"
-                                                           Opacity="0.5"/>
-                                            <Label Text="{Binding Detail}"
-                                                           HorizontalOptions="FillAndExpand"
-                                                           FontSize="14"
-                                                           Opacity="0.7"/>
-                                            <Label Text="{Binding Date}"
-                                                           HorizontalOptions="End"
-                                                           FontSize="12"
-                                                           Opacity="0.7"/>
-                                        </StackLayout>
-                                    </StackLayout>
-                                </Frame>
-                            </ContentView>
-                        </ViewCell>
-                    </DataTemplate>
+                  <DataTemplate>
+                    <ViewCell>
+                      <ContentView Padding="5">
+                        <Frame BorderColor="#CFD8DC"
+                                       Padding="10">
+                          <StackLayout HorizontalOptions="FillAndExpand"
+                                               VerticalOptions="FillAndExpand">
+                            <Label Text="{Binding Title}"
+                                           FontSize="18"/>
+                            <StackLayout Orientation="Horizontal">
+                              <Label Text="{helpers:Translate Price}"
+                                             HorizontalOptions="Start"
+                                             FontSize="12"
+                                             Opacity="0.5"/>
+                              <Label Text="{Binding Detail}"
+                                             HorizontalOptions="FillAndExpand"
+                                             FontSize="14"
+                                             Opacity="0.7"/>
+                              <Label Text="{Binding Date}"
+                                             HorizontalOptions="End"
+                                             FontSize="12"
+                                             Opacity="0.7"/>
+                            </StackLayout>
+                          </StackLayout>
+                        </Frame>
+                      </ContentView>
+                    </ViewCell>
+                  </DataTemplate>
                 </ListView.ItemTemplate>
-            </ListView>
-            <Grid BackgroundColor="Transparent">
+              </ListView>
+
+            </StackLayout>
+          </ScrollView>
+            <Grid x:Name="GridButtons"
+                  BackgroundColor="Transparent">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
@@ -147,8 +150,8 @@
                              Opacity="0.3"
                              Margin="0,0,0,6"
                              BackgroundColor="Transparent"
-                             Grid.Column="0" Grid.Row="1"
-                             Clicked="TypeCheck_OnClicked"/>
+                             Command="{Binding CreateCheckTypePageCommand}"
+                             Grid.Column="0" Grid.Row="1"/>
                 <ImageButton Source="Contract.png"
                              Aspect="AspectFit"
                              WidthRequest="36"
@@ -156,8 +159,8 @@
                              Opacity="0.3"
                              Margin="0,0,0,6"
                              BackgroundColor="Transparent"
-                             Grid.Column="1" Grid.Row="1"
-                             Clicked="TypeEntry_OnClicked"/>
+                             Command="{Binding CreateEntryTypePageCommand}"
+                             Grid.Column="1" Grid.Row="1"/>
                 <ImageButton Source="Table.png"
                              Aspect="AspectFit"
                              WidthRequest="36"
@@ -165,8 +168,8 @@
                              Opacity="0.3"
                              Margin="0,0,0,6"
                              BackgroundColor="Transparent"
-                             Grid.Column="2" Grid.Row="1"
-                             Clicked="TypeStack_OnClicked"/>
+                             Command="{Binding CreateStackTypePageCommand}"
+                             Grid.Column="2" Grid.Row="1"/>
             </Grid>
         </StackLayout>
     </ContentPage.Content>

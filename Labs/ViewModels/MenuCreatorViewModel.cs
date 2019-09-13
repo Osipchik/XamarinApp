@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Text;
+﻿using System.IO;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using Labs.Helpers;
 using Labs.Models;
 using Labs.Resources;
@@ -13,111 +11,151 @@ namespace Labs.ViewModels
 {
     public class MenuCreatorViewModel
     {
-        public MenuCreatorViewModel(string path)
-        {
-            GetPath = path;
-        }
-        public string GetPath { get; }
+        private readonly string _path;
+        private readonly PageSettingsViewModel _settingsViewModel;
+        private readonly Page _page;
 
-        public SettingsModel ReadSettings()
+        public readonly InfoViewModel InfoViewModel;
+
+        public MenuCreatorViewModel(string path, Page page = null)
         {
-            var settings = new SettingsModel();
-            using (var reader = new StreamReader(Path.Combine(GetPath, Constants.SettingsFileTxt))) {
-                settings.TestName = reader.ReadLine();
-                settings.TestSubject = reader.ReadLine();
-                PageHelper.GetTime(reader.ReadLine(), out var timeSpan, out var seconds);
-                settings.SettingSpan = timeSpan;
-                settings.Seconds = seconds;
+            _path = path;
+            _page = page;
+            _settingsViewModel = new PageSettingsViewModel();
+            
+            InfoViewModel = new InfoViewModel(path);
+            ReadSettings();
+            GetFiles();
+            CreateTempFolderAsync();
+            SetCommands();
+        }
+
+        public ICommand CreateCheckTypePageCommand { protected set; get; }
+        public ICommand CreateEntryTypePageCommand { protected set; get; }
+        public ICommand CreateStackTypePageCommand { protected set; get; }
+        public ICommand SaveTestCommand { protected set; get; }
+        public ICommand DeleteTestCommand { protected set; get; }
+        private void SetCommands()
+        {
+            CreateCheckTypePageCommand = new Command(async () =>
+            {
+                await _page.Navigation.PushAsync(new TypeCheckCreatingPage(_path));
+            });
+
+            CreateEntryTypePageCommand = new Command(async () =>
+            {
+                await _page.Navigation.PushAsync(new TypeEntryCreatingPage(_path));
+            });
+
+            CreateStackTypePageCommand = new Command(async () =>
+            {
+                await _page.Navigation.PushAsync(new TypeStackCreatingPage(_path));
+            });
+
+            SaveTestCommand = new Command(Save);
+            DeleteTestCommand = new Command(DeleteFolderAsync);
+        }
+
+        private void ReadSettings()
+        {
+            var settings = DirectoryHelper.ReadStringsFromFile(_path, Constants.SettingsFileTxt);
+            if (settings != null) {
+                _settingsViewModel.SetMenuPageSettings(settings);
             }
-
-            return settings;
         }
+        public PageSettingsModel GetSettingsModel => _settingsViewModel.SettingsModel;
 
-        public async Task<bool> SaveTestAsync(SettingsModel settingsModel)
+        public void GetFiles()
         {
-            var result = false;
-            var settings = await Task.Run(() => GetSettingsToSave(settingsModel));
-            if (settings.Count != 0) {
-                await Task.Run(() => Save(GetPath, settings));
-                result = true;
-            }
-
-            return result;
-        }
-
-        public Dictionary<string, string> GetSettingsDictionary()
-        {
-            var settingsModel = ReadSettings();
-            var infos = new Dictionary<string, string> {
-                {"time", AppResources.TestSettingsTime + ' ' + PageHelper.NormalizeTime(settingsModel.SettingSpan, settingsModel.Seconds)},
-                {"name", AppResources.TestSettingsName + ' ' + settingsModel.TestName},
-                {"subject", AppResources.Subject + ' ' + settingsModel.TestSubject},
-                {"price", AppResources.Price + ' ' + GetTotalCoast()},
-            };
-
-            return infos;
-        }
-
-        public async void DeleteFolderAsync(CreatorPage senderPage)
-        {
-            await Task.Run(() => { Directory.Delete(GetPath, true); });
-            await Task.Run(() => MessagingCenter.Send<Page>(senderPage, Constants.HomeListUpload));
-        }
-
-        public async void CreateTempFolderAsync()
-        {
-            if (!Directory.Exists(GetPath)) await Task.Run(() => Directory.CreateDirectory(GetPath));
-        }
-
-        private List<string> GetSettingsToSave(SettingsModel settingsModel)
-        {
-            var settings = new List<string>();
-            if (!string.IsNullOrEmpty(settingsModel.TestName) && !string.IsNullOrEmpty(settingsModel.TestSubject)) {
-                settings.Add(settingsModel.TestName);
-                settings.Add(settingsModel.TestSubject);
-                settings.Add(PageHelper.NormalizeTime(settingsModel.SettingSpan, settingsModel.Seconds));
-            }
-
-            return settings;
-        }
-
-        private string GetTestPath(string path)
-        {
-            string testPath;
-            int count = 0;
-            do {
-                testPath = Path.Combine(path, Constants.TestFolder, $"{Constants.TestName}{count}");
-                count++;
-            } while (Directory.Exists(testPath));
-
-            return testPath;
-        }
-
-        private void Save(string directory, ICollection<string> settings)
-        {
-            File.WriteAllLines(Path.Combine(directory, Constants.SettingsFileTxt), settings, Encoding.UTF8);
-            if (directory.Contains(Constants.TempFolder)) {
-                var path = GetTestPath(directory.Remove(directory.LastIndexOf('/') + 1));
-                MoveFiles(path, directory);
+            if (_page != null) {
+                InfoViewModel.GetFilesModelAsync();
             }
         }
 
-        private void MoveFiles(string destPath, string sourcePath)
+        public async void OpenCreatingPage(int index)
         {
-            Directory.CreateDirectory(destPath);
-            foreach (var file in new DirectoryInfo(sourcePath).GetFiles()) {
-                File.Move(Path.Combine(sourcePath, file.Name), Path.Combine(destPath, file.Name));
+            switch (DirectoryHelper.GetTypeName(InfoViewModel.InfoModels[index].Name))
+            {
+                case Constants.TestTypeCheck:
+                    await _page.Navigation.PushAsync(new TypeCheckCreatingPage(_path, InfoViewModel.InfoModels[index].Name));
+                    break;
+                case Constants.TestTypeStack:
+                    await _page.Navigation.PushAsync(new TypeStackCreatingPage(_path, InfoViewModel.InfoModels[index].Name));
+                    break;
+
+                case Constants.TestTypeEntry:
+                    await _page.Navigation.PushAsync(new TypeEntryCreatingPage(_path, InfoViewModel.InfoModels[index].Name));
+                    break;
             }
         }
 
-        private string GetTotalCoast()
+        private async void DeleteFolderAsync()
         {
-            var totalCoast = 0;
-            foreach (var coast in new InfoViewModel(GetPath).GetFilesInfo()) {
-                totalCoast += int.Parse(coast.Detail);
+            await Task.Run(() => { Directory.Delete(_path, true); });
+            await Task.Run(() => MessagingCenter.Send<Page>(_page, Constants.HomeListUpload));
+            await _page.Navigation.PopToRootAsync(true);
+        }
+
+        private async void CreateTempFolderAsync()
+        {
+            if (!Directory.Exists(_path)) {
+                await Task.Run(() => Directory.CreateDirectory(_path));
+            }
+        }
+
+        private async void Save()
+        {
+            if (await PageIsValid()) {
+                DirectoryHelper.SaveTestAsync(_path, await _settingsViewModel.GetPageSettingsAsync(true));
+                MessagingCenter.Send<Page>(_page, Constants.HomeListUpload);
+                if (_path.Contains(Constants.TempFolder)) GetFiles();
+                else await _page.Navigation.PopToRootAsync(true);
+            }
+        }
+
+        private async Task<bool> PageIsValid()
+        {
+            var message = await Task.Run(GetMessage);
+            var returnValue = string.IsNullOrEmpty(message);
+            if (!returnValue) {
+                await _page.DisplayAlert(AppResources.Warning, message, AppResources.Cancel);
             }
 
-            return totalCoast.ToString();
+            return returnValue;
+        }
+        private string GetMessage()
+        {
+            var message = _settingsViewModel.CheckCreatorMenuPageSettings();
+            message += InfoViewModel.InfoModels.Count < 1 ? "asd" : string.Empty;
+            return message;
+        }
+
+        private string GetTotalPrice()
+        {
+            var totalPrice = 0;
+            foreach (var price in InfoViewModel.InfoModels) {
+                totalPrice += int.Parse(price.Detail);
+            }
+
+            return totalPrice.ToString();
+        }
+
+
+
+        public bool OnBackButtonPressed()
+        {
+            if (_path != Constants.TempFolder)
+            {
+                Device.BeginInvokeOnMainThread(async () =>
+                {
+                    var result = await _page.DisplayAlert(AppResources.Warning, AppResources.Escape, AppResources.Yes, AppResources.No);
+                    if (!result) return;
+                    MessagingCenter.Send<Page>(_page, Constants.StartPageCallBack);
+                    await _page.Navigation.PopAsync(true);
+                });
+            }
+
+            return true;
         }
     }
 }

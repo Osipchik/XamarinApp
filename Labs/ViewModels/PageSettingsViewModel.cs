@@ -16,36 +16,93 @@ namespace Labs.ViewModels
             SettingsModel = new PageSettingsModel();
         }
 
-        public string CheckQuestionPageSettings()
+        private string CheckTime()
         {
             var message = string.Empty;
-            message += string.IsNullOrEmpty(SettingsModel.Question) ? AppResources.WarningQuestion + " \n" : "";
             message += string.IsNullOrEmpty(SettingsModel.Price) ? AppResources.WarningPrice + " \n" : "";
             message += string.IsNullOrEmpty(SettingsModel.Seconds) ? "Add seconds" + " \n" : "";
 
             return message;
         }
-
-        public async Task<IEnumerable<string>> GetPageSettingsAsync()
+        public string CheckPageSettings()
         {
-            return await Task.Run(() => new List<string> {
+            var message = string.Empty;
+            message += string.IsNullOrEmpty(SettingsModel.Question) ? AppResources.WarningQuestion + " \n" : "";
+            message += CheckTime();
+
+            return message;
+        }
+
+        public string CheckCreatorMenuPageSettings()
+        {
+            var message = string.Empty;
+            message += string.IsNullOrEmpty(SettingsModel.Name) ? "name" + " \n" : "";
+            message += string.IsNullOrEmpty(SettingsModel.Subject) ? "subject" + " \n" : "";
+            message += CheckTime();
+
+            return message;
+        }
+
+        public async Task<IEnumerable<string>> GetPageSettingsAsync(bool all = false)
+        {
+            if (all) return GetSettingsForCreating();
+            return await Task.Run(GetSettings);
+        }
+
+        private IEnumerable<string> GetSettings()
+        {
+            var settings = new List<string> {
                 PageHelper.NormalizeTime(SettingsModel.TimeSpan, CheckText(SettingsModel.Seconds)),
                 CheckText(SettingsModel.Price),
                 CheckText(SettingsModel.Question)
-            });
+            };
+
+            return settings;
         }
+
+        private IEnumerable<string> GetSettingsForCreating()
+        {
+            var settings = new List<string> {
+                CheckText(SettingsModel.Name),
+                CheckText(SettingsModel.Subject),
+                PageHelper.NormalizeTime(SettingsModel.TimeSpan, CheckText(SettingsModel.Seconds)),
+                CheckText(SettingsModel.Price)
+            };
+
+            return settings;
+        }
+
         private string CheckText(string text)
         {
             return string.IsNullOrEmpty(text) ? "" : text;
         }
 
-        public void SetPageSettingsModel(string time, string price, string question)
+        //string time, string price, string question, string name = "", string subject = ""
+        public void SetPageSettingsModel(params string[] settings)
         {
-            PageHelper.GetTime(time, out var timeSpan, out var seconds);
+            PageHelper.GetTime(settings[0], out var timeSpan, out var seconds);
             SettingsModel.TimeSpan = timeSpan;
             SettingsModel.Seconds = seconds;
-            SettingsModel.Price = price;
-            SettingsModel.Question = question;
+            SettingsModel.Price = settings[1];
+            SettingsModel.Question = settings[2];
+        }
+
+        public void SetMenuPageSettings(params string[] settings)
+        {
+            SettingsModel.Name = settings[0];
+            SettingsModel.Subject = settings[1];
+            PageHelper.GetTime(settings[2], out var timeSpan, out var seconds);
+            SettingsModel.TimeSpan = timeSpan;
+            SettingsModel.Seconds = seconds;
+            SettingsModel.Price = settings[3];
+        }
+
+        public void SetStartPageSettings(params string[] settings)
+        {
+            SettingsModel.Name = settings[0];
+            SettingsModel.Subject = settings[1];
+            SettingsModel.Time = settings[2];
+            SettingsModel.Price = settings[3];
         }
 
         public static string FixText(string text, bool isSeconds = false)

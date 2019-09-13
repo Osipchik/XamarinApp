@@ -17,7 +17,6 @@ namespace Labs.ViewModels
         private readonly string _fileName;
         public readonly FrameViewModel FrameViewModel;
         private readonly PageSettingsViewModel _settingsViewModel;
-        private bool _deletionIsAvailable;
         private readonly Page _page;
         private readonly Grid _gridButtons;
         private int _modificator;
@@ -34,7 +33,6 @@ namespace Labs.ViewModels
             }
         }
 
-
         public CheckTypeCreatorViewModel(string path, string fileName, Page page, Grid gridButtons = null)
         {
             Modificator = 0;
@@ -45,19 +43,23 @@ namespace Labs.ViewModels
             FrameViewModel = new FrameViewModel();
             _settingsViewModel = new PageSettingsViewModel();
             FileExist();
+            SetCommands();
+        }
 
+        public ICommand AddItemCommand { protected set; get; }
+        public ICommand DeleteCurrentFileCommand { protected set; get; }
+        public ICommand SaveFileCommand { protected set; get; }
+        public ICommand HideGridButtonsCommand { protected set; get; }
+        public ICommand AcceptGridButtonCommand { protected set; get; }
+
+        private void SetCommands()
+        {
             AddItemCommand = new Command(() => { FrameViewModel.AddNewModelAsync(); });
             DeleteCurrentFileCommand = new Command(Delete);
             SaveFileCommand = new Command(Save);
             HideGridButtonsCommand = new Command(HideGridButtons);
             AcceptGridButtonCommand = new Command(AcceptGridButton);
         }
-
-        private ICommand AddItemCommand { set; get; }
-        private ICommand DeleteCurrentFileCommand { set; get; }
-        private ICommand SaveFileCommand { set; get; }
-        private ICommand HideGridButtonsCommand { set; get; }
-        private ICommand AcceptGridButtonCommand { set; get; }
 
         private void FileExist()
         {
@@ -88,29 +90,9 @@ namespace Labs.ViewModels
             }
         }
 
-        public void GetAdditionalButtons(ImageButton crossButton, ImageButton acceptButton)
-        {
-            if (crossButton.Source == null) crossButton.Source = "CrossBlack.png";
-            if (Modificator < 0) {
-                SetCheckedRed(acceptButton);
-            }
-            else {
-                SetCheckedBlack(acceptButton);
-            }
-        }
-        private void SetCheckedRed(ImageButton agreeButton)
-        {
-            agreeButton.Source = "CheckedRed.png";
-        }
-        private void SetCheckedBlack(ImageButton agreeButton)
-        {
-            agreeButton.Source = "CheckedBlack.png";
-        }
-
-
         private string GetMessage()
         {
-            var message = _settingsViewModel.CheckQuestionPageSettings();
+            var message = _settingsViewModel.CheckPageSettings();
             message += CheckFrames();
             return message;
         }
@@ -150,7 +132,6 @@ namespace Labs.ViewModels
 
         private async void ReadFileAsync(string path, string fileName)
         {
-            _deletionIsAvailable = true;
             var strings = DirectoryHelper.ReadStringsFromFile(path, fileName);
             await Task.Run(() => {
                 _settingsViewModel.SetPageSettingsModel(strings[0], strings[1], strings[2]);
@@ -168,15 +149,15 @@ namespace Labs.ViewModels
 
         private void Delete()
         {
-            if (_deletionIsAvailable) {
+            if (!string.IsNullOrEmpty(_fileName)) {
                 DirectoryHelper.DeleteFileAsync(_page, Path.Combine(_path, _fileName));
-                _page.Navigation.PopAsync(true);
             }
+            _page.Navigation.PopAsync(true);
         }
         private async void Save()
         {
             if (await PageIsValid()) {
-                DirectoryHelper.SaveFile(Constants.TestTypeCheck, _path, _fileName, await GetStringsToSave());
+                DirectoryHelper.SaveFileAsync(Constants.TestTypeCheck, _path, _fileName, await GetStringsToSave());
                 MessagingCenter.Send<Page>(_page, Constants.CreatorListUpLoad);
                 await _page.Navigation.PopAsync(true);
             }

@@ -14,7 +14,7 @@
             <SearchBar x:Name="searchBar" 
                        Placeholder="{helpers:Translate SearchBarPlaceHolder}"
                        HorizontalOptions="Center"
-                       TextChanged="SearchBar_OnTextChanged"/>
+                       Text="{Binding SearchBarText}"/>
             <Grid x:Name="GridButtons"
                   IsVisible="False"
                   HorizontalOptions="Center"
@@ -35,25 +35,38 @@
                        FontSize="16"
                        VerticalOptions="Center"
                        HorizontalOptions="Center"
-                       Grid.Row="0" Grid.Column="0"/>
+                       Grid.Row="0" Grid.Column="0">
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding NameLabelTapCommand}"/>
+                    </Label.GestureRecognizers>
+                </Label>
                 <Label x:Name="LabelSubject"
                        Text="{helpers:Translate SearchSubject}"
                        Margin="14,0,14,0"
                        VerticalOptions="Center"
                        HorizontalOptions="Center"
-                       Grid.Row="0" Grid.Column="1"/>
+                       Grid.Row="0" Grid.Column="1">
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding SubjectLabelTapCommand}"/>
+                    </Label.GestureRecognizers>
+                </Label>
                 <Label x:Name="LabelDate"
                        Text="{helpers:Translate SearchDate}"
                        VerticalOptions="Center"
                        HorizontalOptions="Center"
-                       Grid.Row="0" Grid.Column="2"/>
+                       Grid.Row="0" Grid.Column="2">
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding DateLabelTapCommand}"/>
+                    </Label.GestureRecognizers>
+                </Label>
             </Grid>
             <ListView x:Name="listView"
                       SeparatorVisibility="None"
                       VerticalScrollBarVisibility="Never"
                       HasUnevenRows="True"
                       ItemSelected="ListView_OnItemSelected"
-                      ItemTapped="ListView_OnItemTapped">
+                      ItemTapped="ListView_OnItemTapped"
+                      ItemsSource="{Binding InfoModels}">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <ViewCell>

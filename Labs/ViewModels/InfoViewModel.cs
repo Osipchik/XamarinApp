@@ -1,43 +1,33 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
 using System.Reflection;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 using Labs.Annotations;
 using Labs.Helpers;
 using Labs.Models;
 
-using System.Windows.Input;
-
 namespace Labs.ViewModels
 {
-    public class InfoViewModel : IEnumerable<string>, INotifyPropertyChanged
+    public class InfoViewModel : INotifyPropertyChanged
     {
-        public IEnumerator<string> GetEnumerator()
+        private List<InfoModel> _infoModels = new List<InfoModel>();
+        public List<InfoModel> InfoModels
         {
-            return new DirectoryInfoListEnumerator(InfosModel);
+            get => _infoModels;
+            set
+            {
+                _infoModels = value;
+                OnPropertyChanged();
+            }
         }
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-        [NotifyPropertyChangedInvocator]
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-
 
         private readonly string _path;
         private readonly PropertyInfo[] _modelProperties;
         public InfoViewModel(string path)
         {
-            InfosModel = new ObservableCollection<InfoModel>();
             _path = path;
             _modelProperties = typeof(InfoModel).GetProperties();
         }
@@ -49,44 +39,56 @@ namespace Labs.ViewModels
 
         public string GetElementPath(int index)
         {
-            if (InfosModel.Count == 0) {
+            if (InfoModels.Count == 0) {
                 throw new ArgumentNullException();
             }
 
-            return Path.Combine(_path, InfosModel[index].Name);
+            return Path.Combine(_path, InfoModels[index].Name);
         }
 
-        private ObservableCollection<InfoModel> _infosModel;
-        public ObservableCollection<InfoModel> InfosModel
+        // TODO: make this async
+        public async void GetFilesModelAsync()
         {
-            get => _infosModel;
-            set {
-                _infosModel = value;
-                OnPropertyChanged();
-            }
+            await Task.Run(() =>
+            {
+                InfoModels.Clear();
+                foreach (var info in new DirectoryInfo(_path).GetFiles()) {
+                    if (info.Name == Constants.SettingsFileTxt) continue;
+                    InfoModels.Add(GetFileModel(info));
+                }
+            });
         }
 
         // TODO: add async
-        public ObservableCollection<InfoModel> GetFilesInfo()
+        public List<InfoModel> GetFilesInfo()
         {
-            InfosModel.Clear();
+            InfoModels.Clear();
             foreach (var info in new DirectoryInfo(_path).GetFiles()) {
                 if (info.Name == Constants.SettingsFileTxt) continue;
-                InfosModel.Add(GetFileModel(info));
+                InfoModels.Add(GetFileModel(info));
             }
 
-            return InfosModel;
+            return InfoModels;
         }
 
-        // TODO: add async
-        public ObservableCollection<InfoModel> GetDirectoryInfo()
+        public async void SetDirectoriesInfoAsync()
         {
-            InfosModel.Clear();
+            await Task.Run(() =>
+            {
+                InfoModels.Clear();
+                foreach (var dirInfo in new DirectoryInfo(_path).GetDirectories()) {
+                    InfoModels.Add(GetDirectoryModel(dirInfo));
+                }
+            });
+        }
+        public List<InfoModel> GetDirectoryInfo()
+        {
+            InfoModels.Clear();
             foreach (var dirInfo in new DirectoryInfo(_path).GetDirectories()) {
-                InfosModel.Add(GetDirectoryModel(dirInfo));
+                InfoModels.Add(GetDirectoryModel(dirInfo));
             }
 
-            return InfosModel; 
+            return InfoModels; 
         }
 
         private InfoModel GetDirectoryModel(DirectoryInfo dirInfo)
@@ -100,25 +102,29 @@ namespace Labs.ViewModels
             };
         }
 
+
+
+
+
+
         private InfoModel GetFileModel(FileInfo fileInfo)
         {
-            var collection = new InfoModel { Name = fileInfo.Name, Date = fileInfo.CreationTime.ToShortDateString() };
-            ReadDetailAndTitleFromFile(out var detail, out var title, fileInfo.FullName);
-            collection.Detail = detail;
-            collection.Title = title;
+            var model = new InfoModel { Name = fileInfo.Name, Date = fileInfo.CreationTime.ToShortDateString() };
+            ReadDetailAndTitleFromFile(out var price, out var question, fileInfo.FullName);
+            model.Detail = price;
+            model.Title = question;
 
-            return collection;
+            return model;
         }
-        private void ReadDetailAndTitleFromFile(out string detail, out string title, string filePath)
+        private void ReadDetailAndTitleFromFile(out string price, out string question, string filePath)
         {
-            using (var reader = new StreamReader(filePath))
-            {
+            using (var reader = new StreamReader(filePath)) {
                 reader.ReadLine();
-                detail = reader.ReadLine();
-                title = reader.ReadLine();
+                price = reader.ReadLine();
+                question = reader.ReadLine();
             }
 
-            title = CutText(title);
+            question = CutText(question);
         }
         private string CutText(string text)
         {
@@ -138,36 +144,18 @@ namespace Labs.ViewModels
                 detail = reader.ReadLine();
             }
         }
-    }
 
-    internal class DirectoryInfoListEnumerator : IEnumerator<string>
-    {
-        private readonly ObservableCollection<InfoModel> _items;
-        private int _position = -1;
 
-        public DirectoryInfoListEnumerator(ObservableCollection<InfoModel> list) => _items = list;
-        public string Current
+
+
+
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        [NotifyPropertyChangedInvocator]
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
-            get {
-                if (_position == -1 || _position >= _items.Count) {
-                    throw new InvalidOperationException();
-                }
-                return _items[_position].Name;
-            }
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
-
-        object IEnumerator.Current => throw new NotImplementedException();
-
-        public bool MoveNext()
-        {
-            if (_position < _items.Count - 1) {
-                _position++;
-                return true;
-            }
-            else return false;
-        }
-
-        public void Reset() => _position = -1;
-        public void Dispose() { }
     }
 }

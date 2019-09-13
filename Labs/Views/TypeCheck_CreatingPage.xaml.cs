@@ -1,6 +1,5 @@
 ﻿using System;
 using Labs.Helpers;
-using Labs.Resources;
 using Labs.ViewModels;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -10,20 +9,15 @@ namespace Labs.Views
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class TypeCheckCreatingPage
     {
-        private readonly string _fileName;
-        private bool _isDeleteAvailable;
         private readonly CheckTypeCreatorViewModel _viewModel;
-        private FrameAnimation _animation;
-
+        private bool _settingsIsVisible = true;
+        private uint _heightMax;
         public TypeCheckCreatingPage(string path, string fileName = "")
         {
             InitializeComponent();
 
-            _fileName = fileName;
-            _viewModel = new CheckTypeCreatorViewModel(path, _fileName, this, GridButtons);
-
+            _viewModel = new CheckTypeCreatorViewModel(path, fileName, this, GridButtons);
             SetBindings();
-            SetDeleteButton();
         }
 
         private void SetBindings()
@@ -31,13 +25,6 @@ namespace Labs.Views
             BindingContext = _viewModel;
             ListView.BindingContext = _viewModel.FrameViewModel;
             SettingsLayout.BindingContext = _viewModel.GetSettingsModel;
-        }
-        private void SetDeleteButton()
-        {
-            _isDeleteAvailable = !string.IsNullOrEmpty(_fileName);
-            if (_isDeleteAvailable) {
-                ItemDeleteFile.Text = AppResources.Delete;
-            }
         }
 
         private void ListView_OnItemSelected(object sender, SelectedItemChangedEventArgs e)
@@ -51,10 +38,9 @@ namespace Labs.Views
 
         private void HideOrShowAsync_OnClicked(object sender, EventArgs eventArgs)
         {
-            if (_animation == null) {
-                _animation = new FrameAnimation(0, (uint)SettingsLayout.Height, 0);
-            }
-            _animation.RunShowOrHideAnimation(null, SettingsLayout, this, (int)SettingsLayout.Height == 0);
+            _settingsIsVisible = !_settingsIsVisible;
+            if (_heightMax == 0) _heightMax = (uint) SettingsLayout.Height;
+            FrameAnimation.RunShowOrHideAnimation(SettingsLayout, _heightMax, 0, _settingsIsVisible);
         }
 
         private void ChooseItemsToDelete_OnClicked(object sender, EventArgs e) => ChooseItems(-1);
@@ -63,14 +49,21 @@ namespace Labs.Views
         {
             HideOrShowAsync_OnClicked(this, EventArgs.Empty);
             GridButtons.IsVisible = true;
-            SetActionToAdditionalButtons(ImageButtonCross, ImageButtonAccept, modificator);
+            SetActionToGridButtons(ImageButtonAccept, modificator);
         }
 
-        private void SetActionToAdditionalButtons(ImageButton cross, ImageButton accept, int modificator)
+        private void SetActionToGridButtons(ImageButton accept, int modificator)
         {
             _viewModel.Modificator = modificator;
-            _viewModel.GetAdditionalButtons(cross, accept);
             _viewModel.FrameViewModel.DisableAllAsync();
+            if (modificator < 0) {
+                accept.Opacity = 1;
+                accept.Source = "CheckedRed.png";
+            }
+            else {
+                accept.Opacity = 0.3;
+                accept.Source = "CheckedBlack.png";
+            }
         }
     }
 }

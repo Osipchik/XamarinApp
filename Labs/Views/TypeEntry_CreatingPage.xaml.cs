@@ -12,14 +12,14 @@ namespace Labs.Views
         private readonly string _path;
         private readonly string _fileName;
         private readonly CheckTypeCreatorViewModel _viewModel;
-        private FrameAnimation _animation;
+        private bool _settingsIsVisible;
+        private uint _heightMax = 0;
         public TypeEntryCreatingPage(string path, string fileName = "")
         {
             InitializeComponent();
 
             _fileName = fileName;
             _path = path;
-            _animation = new FrameAnimation( 0, (uint)SettingsLayout.Height, 0);
             _viewModel = new CheckTypeCreatorViewModel(path, fileName, this);
 
             BindingContext = _viewModel;
@@ -28,10 +28,9 @@ namespace Labs.Views
 
         private void HideOrShowAsync_OnClicked(object sender, EventArgs e)
         {
-            if (_animation == null) {
-                _animation = new FrameAnimation(0, (uint)SettingsLayout.Height, 0);
-            }
-            _animation.RunShowOrHideAnimation(null, SettingsLayout, this, (int)SettingsLayout.Height == 0);
+            _settingsIsVisible = !_settingsIsVisible;
+            if (_heightMax == 0) _heightMax = (uint)SettingsLayout.Height;
+            FrameAnimation.RunShowOrHideAnimation(SettingsLayout, _heightMax, 0, _settingsIsVisible);
         }
     }
 }

@@ -47,29 +47,6 @@ namespace Labs.Models
         }
 
 
-        private string _labelTextLeft;
-        public string LabelTextLeft
-        {
-            get => _labelTextLeft;
-            set
-            {
-                _labelTextLeft = value;
-                OnPropertyChanged();
-            }
-        }
-
-        private string _labelTextRight;
-        public string LabelTextRight
-        {
-            get => _labelTextRight;
-            set
-            {
-                _labelTextRight = value;
-                OnPropertyChanged();
-            }
-        }
-
-
         private bool _editorLeftIsReadOnly;
         public bool EditorLeftIsReadOnly
         {

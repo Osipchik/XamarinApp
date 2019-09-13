@@ -12,8 +12,7 @@
         <ToolbarItem Text="{helpers:Translate Save}"
                      Order="Secondary"
                      Command="{Binding SaveFileCommand}"/>
-        <ToolbarItem x:Name="ItemDeleteFile"
-                     Text="{helpers:Translate Clear}"
+        <ToolbarItem Text="{helpers:Translate Delete}"
                      Order="Secondary"
                      Command="{Binding DeleteCurrentFileCommand}"/>
         <ToolbarItem Text="Delete items"
@@ -88,22 +87,30 @@
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
-                <ImageButton x:Name="ImageButtonCross"
-                             Aspect="AspectFit"
+                <ImageButton Aspect="AspectFit"
                              WidthRequest="22"
                              HeightRequest="22"
                              Opacity="0.3"
+                             Source="CrossBlack.png"
                              BackgroundColor="Transparent"
                              Command="{Binding HideGridButtonsCommand}"
                              Grid.Row="0" Grid.Column="0"/>
                 <Label Text="{helpers:Translate Cancel}"
-                       Grid.Row="0" Grid.Column="1"/>
+                       Grid.Row="0" Grid.Column="1">
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding HideGridButtonsCommand}"/>
+                    </Label.GestureRecognizers>
+                </Label>
                 <BoxView WidthRequest="2"
                          HeightRequest="3"
                          Color="Brown"
                          Grid.Row="0" Grid.Column="2"/>
                 <Label Text="{helpers:Translate Yes}"
-                       Grid.Row="0" Grid.Column="3"/>
+                       Grid.Row="0" Grid.Column="3">
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding AcceptGridButtonCommand}"/>
+                    </Label.GestureRecognizers>
+                </Label>
                 <ImageButton x:Name="ImageButtonAccept"
                              Aspect="AspectFit"
                              WidthRequest="22"

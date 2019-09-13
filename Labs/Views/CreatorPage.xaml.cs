@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Linq;
-using System.Threading.Tasks;
 using Labs.Helpers;
-using Labs.Models;
-using Labs.Resources;
 using Labs.ViewModels;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -14,144 +10,50 @@ namespace Labs.Views
     public partial class CreatorPage
     {
         private bool _tableVisible = true;
-        private readonly InfoViewModel _infos;
-        private readonly FrameAnimation _animation;
-        private readonly MenuCreatorViewModel _menuCreatorVm;
+        private readonly MenuCreatorViewModel _menuCreatorViewModel;
 
         public CreatorPage(string path)
         {
             InitializeComponent();
-            _animation = new FrameAnimation( 350, (uint)SettingsTableView.HeightRequest, 0);
-            _menuCreatorVm = new MenuCreatorViewModel(path);
-            _infos = new InfoViewModel(path);
-            if (path.Contains(Constants.TempFolder)) InitializeTemp();
-            else InitializeExist();
 
-            FillListViewAsync();
+            _menuCreatorViewModel = new MenuCreatorViewModel(path, this);
+            SetBindings();
             Subscribe();
         }
 
-        private void InitializeTemp()
+        private void SetBindings()
         {
-            _menuCreatorVm.CreateTempFolderAsync();
-            ItemClear.Clicked += Clear;
-        }
-
-        private async void InitializeExist()
-        {
-            await Task.Run(FillSettings);
-            ItemClear.Clicked += DeleteAsync;
-            ItemClear.Text = AppResources.Delete;
+            BindingContext = _menuCreatorViewModel;
+            GridButtons.BindingContext = _menuCreatorViewModel;
+            ListViewFiles.BindingContext = _menuCreatorViewModel.InfoViewModel;
+            SettingsTableView.BindingContext = _menuCreatorViewModel.GetSettingsModel;
         }
 
         private void SettingsButton_OnClickedAsync(object sender, EventArgs e)
         {
             _tableVisible = !_tableVisible;
-            _animation.RunShowOrHideAnimation(ButtonSettings, SettingsTableView, this, _tableVisible);
+            FrameAnimation.RunShowOrHideButtonAnimation(ButtonSettings, 350, _tableVisible);
+            FrameAnimation.RunShowOrHideAnimation(SettingsTableView, 220, 0, _tableVisible);
         }
 
-        private async void FillListViewAsync()
+        private void Subscribe()
         {
-            ListViewFiles.ItemsSource = await Task.Run(() => _infos.GetFilesInfo());
-        } 
-        
-        private void FillSettings()
-        {
-            var settings = _menuCreatorVm.ReadSettings();
-            CellName.Text = settings.TestName;
-            CellSubject.Text = settings.TestSubject;
-            _timePicker.Time = settings.SettingSpan;
-            _entrySeconds.Text = settings.Seconds;
+            MessagingCenter.Subscribe<Page>(this, Constants.CreatorListUpLoad,
+                (sender) => _menuCreatorViewModel.GetFiles());
         }
 
-        private void Subscribe() =>
-            MessagingCenter.Subscribe<Page>(this, Constants.CreatorListUpLoad, (sender) => FillListViewAsync());
-        
-
-        private async void ItemSave_OnClicked(object sender, EventArgs e)
+        private void ListViewFiles_OnItemTapped(object sender, ItemTappedEventArgs e)
         {
-            if (!_infos.Any()) await DisplayAlert(AppResources.Warning, AppResources.CreatorQuestions, AppResources.Cancel);
-            else if (await _menuCreatorVm.SaveTestAsync(GetsSettings())) {
-                Clear(this, EventArgs.Empty);
-                MessagingCenter.Send<Page>(this, Constants.StartPageCallBack);
-                if (!_menuCreatorVm.GetPath.Contains(Constants.TempFolder)) await Navigation.PopAsync(true);
-            }
-            else await DisplayAlert(AppResources.Warning, AppResources.FillSettings, AppResources.Cancel);
+            _menuCreatorViewModel.OpenCreatingPage(e.ItemIndex);
         }
-
-        private SettingsModel GetsSettings()
+        private void ListViewFiles_OnItemSelected(object sender, SelectedItemChangedEventArgs e)
         {
-            var settings = new SettingsModel {
-                TestName = CellName.Text,
-                TestSubject = CellSubject.Text,
-                SettingSpan = _timePicker.Time,
-                Seconds = _entrySeconds.Text
-            };
-
-            return settings;
-        }
-
-        private void Clear(object sender, EventArgs e)
-        {
-            _entrySeconds.Text = "00";
-            _timePicker.Time = TimeSpan.Zero;
-            CellName.Text = CellSubject.Text = string.Empty;
-            ListViewFiles.ItemsSource = null;
-        }
-
-        private async void DeleteAsync(object sender, EventArgs e)
-        {
-            if (await DisplayAlert(AppResources.Warning, AppResources.DeleteAnswer, AppResources.Yes, AppResources.No)) {
-                _menuCreatorVm.DeleteFolderAsync(this);
-                await Navigation.PopToRootAsync(true);
-            }
-        }
-
-        private async void ListViewFiles_OnItemTapped(object sender, ItemTappedEventArgs e)
-        {
-            switch (DirectoryHelper.GetTypeName(_infos.InfosModel[e.ItemIndex].Name))
-            {
-                case Constants.TestTypeCheck:
-                    await Navigation.PushAsync(new TypeCheckCreatingPage(_menuCreatorVm.GetPath, _infos.InfosModel[e.ItemIndex].Name));
-                    break;
-                case Constants.TestTypeStack:
-                    await Navigation.PushAsync(new TypeStackCreatingPage(_menuCreatorVm.GetPath, _infos.InfosModel[e.ItemIndex].Name));
-                    break;
-
-                case Constants.TestTypeEntry:
-                    await Navigation.PushAsync(new TypeEntryCreatingPage(_menuCreatorVm.GetPath, _infos.InfosModel[e.ItemIndex].Name));
-                    break;
-            }
-        }
-
-        private void ListViewFiles_OnItemSelected(object sender, SelectedItemChangedEventArgs e) => 
             ((ListView)sender).SelectedItem = null;
-
-        private async void TypeCheck_OnClicked(object sender, EventArgs e) =>
-            await Navigation.PushAsync(new TypeCheckCreatingPage(_menuCreatorVm.GetPath));
-
-        private async void TypeEntry_OnClicked(object sender, EventArgs e) =>
-            await Navigation.PushAsync(new TypeEntryCreatingPage(_menuCreatorVm.GetPath));
-        
-        private async void TypeStack_OnClicked(object sender, EventArgs e) =>
-            await Navigation.PushAsync(new TypeStackCreatingPage(_menuCreatorVm.GetPath));
+        }
 
         protected override bool OnBackButtonPressed()
         {
-            if (_menuCreatorVm.GetPath != Constants.TempFolder) {
-                Device.BeginInvokeOnMainThread(async () => {
-                    var result = await DisplayAlert(AppResources.Warning, AppResources.Escape, AppResources.Yes, AppResources.No);
-                    if (!result) return;
-                    MessagingCenter.Send<Page>(this, Constants.StartPageCallBack);
-                    Back();
-                });
-            }
-
-            return true;
+            return _menuCreatorViewModel.OnBackButtonPressed();
         }
-        private async void Back() => await Navigation.PopAsync(true);
-
-        private void _entrySeconds_OnTextChanged(object sender, TextChangedEventArgs e) => 
-            PageHelper.CheckEntry(sender, e.NewTextValue);
     }
 }
