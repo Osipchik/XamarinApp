@@ -14,9 +14,11 @@ namespace Labs.ViewModels
             SettingsModel = new PageSettingsModel();
         }
 
-        private string CheckTime()
+        private string CheckTimeAndPrice()
         {
             var message = string.Empty;
+            SettingsModel.Price = CheckText(SettingsModel.Price);
+            SettingsModel.Seconds = CheckText(SettingsModel.Seconds);
             message += string.IsNullOrEmpty(SettingsModel.Price) ? AppResources.WarningPrice + " \n" : "";
             message += string.IsNullOrEmpty(SettingsModel.Seconds) ? "Add seconds" + " \n" : "";
 
@@ -25,8 +27,9 @@ namespace Labs.ViewModels
         public string CheckPageSettings()
         {
             var message = string.Empty;
+            SettingsModel.Question = CheckText(SettingsModel.Question);
             message += string.IsNullOrEmpty(SettingsModel.Question) ? AppResources.WarningQuestion + " \n" : "";
-            message += CheckTime();
+            message += CheckTimeAndPrice();
 
             return message;
         }
@@ -34,9 +37,11 @@ namespace Labs.ViewModels
         public string CheckCreatorMenuPageSettings()
         {
             var message = string.Empty;
+            SettingsModel.Name = CheckText(SettingsModel.Name);
+            SettingsModel.Subject = CheckText(SettingsModel.Subject);
             message += string.IsNullOrEmpty(SettingsModel.Name) ? "name" + " \n" : "";
             message += string.IsNullOrEmpty(SettingsModel.Subject) ? "subject" + " \n" : "";
-            message += CheckTime();
+            message += CheckTimeAndPrice();
 
             return message;
         }
@@ -50,9 +55,9 @@ namespace Labs.ViewModels
         private IEnumerable<string> GetSettings()
         {
             var settings = new List<string> {
-                PageHelper.NormalizeTime(SettingsModel.TimeSpan, CheckText(SettingsModel.Seconds)),
-                CheckText(SettingsModel.Price),
-                CheckText(SettingsModel.Question)
+                PageHelper.NormalizeTime(SettingsModel.TimeSpan, SettingsModel.Seconds),
+                SettingsModel.Price,
+                SettingsModel.Question
             };
 
             return settings;
@@ -61,10 +66,10 @@ namespace Labs.ViewModels
         private IEnumerable<string> GetSettingsForCreating()
         {
             var settings = new List<string> {
-                CheckText(SettingsModel.Name),
-                CheckText(SettingsModel.Subject),
-                PageHelper.NormalizeTime(SettingsModel.TimeSpan, CheckText(SettingsModel.Seconds)),
-                CheckText(SettingsModel.Price)
+                SettingsModel.Name,
+                SettingsModel.Subject,
+                PageHelper.NormalizeTime(SettingsModel.TimeSpan, SettingsModel.Seconds),
+                SettingsModel.Price
             };
 
             return settings;
@@ -72,7 +77,7 @@ namespace Labs.ViewModels
 
         private string CheckText(string text)
         {
-            return string.IsNullOrEmpty(text) ? "" : text;
+            return string.IsNullOrEmpty(text) ? null : text.Trim();
         }
 
         //string time, string price, string question, string name = "", string subject = ""

@@ -12,7 +12,7 @@
         <ToolbarItem Text="{helpers:Translate Save}"
                      Order="Secondary"
                      Command="{Binding SaveFileCommand}"/>
-        <ToolbarItem Text="{helpers:Translate Clear}"
+        <ToolbarItem Text="{helpers:Translate Delete}"
                      Order="Secondary"
                      Command="{Binding DeleteCurrentFileCommand}"/>
     </ContentPage.ToolbarItems>
@@ -73,6 +73,7 @@
                            CornerRadius="10">
                         <Editor AutoSize="TextChanges"
                                 HorizontalOptions="Center"
+                                Text="{Binding Answer}"
                                 Placeholder="{helpers:Translate Answer}"/>
                     </Frame>
                 </ContentView>

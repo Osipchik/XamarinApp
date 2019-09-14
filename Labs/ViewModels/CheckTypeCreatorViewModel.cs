@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -51,11 +49,10 @@ namespace Labs.ViewModels
         public ICommand SaveFileCommand { protected set; get; }
         public ICommand HideGridButtonsCommand { protected set; get; }
         public ICommand AcceptGridButtonCommand { protected set; get; }
-
         private void SetCommands()
         {
             AddItemCommand = new Command(() => { FrameViewModel.AddNewModelAsync(); });
-            DeleteCurrentFileCommand = new Command(Delete);
+            DeleteCurrentFileCommand = new Command(() => PageHelper.DeleteCurrentFile(_path, _fileName, _page));
             SaveFileCommand = new Command(Save);
             HideGridButtonsCommand = new Command(HideGridButtons);
             AcceptGridButtonCommand = new Command(AcceptGridButton);
@@ -69,6 +66,23 @@ namespace Labs.ViewModels
             else {
                 FrameViewModel.AddNewModelAsync();
             }
+        }
+        private async void ReadFileAsync(string path, string fileName)
+        {
+            var strings = DirectoryHelper.ReadStringsFromFile(path, fileName);
+            await Task.Run(() => {
+                _settingsViewModel.SetPageSettingsModel(strings[0], strings[1], strings[2]);
+                FillFramesAsync(strings, strings[3], 4);
+            });
+        }
+        private async void FillFramesAsync(IReadOnlyList<string> strings, string answers, int startIndex)
+        {
+            await Task.Run(() => {
+                for (int i = startIndex; i < strings.Count; i++)
+                {
+                    FrameViewModel.AddModel(strings[i], answers[i - startIndex] == '0');
+                }
+            });
         }
 
         public PageSettingsModel GetSettingsModel => _settingsViewModel.SettingsModel;
@@ -90,6 +104,46 @@ namespace Labs.ViewModels
             }
         }
 
+        private async void Save()
+        {
+            if (await PageIsValid()) {
+                PageHelper.SaveCurrentFile(Constants.TestTypeCheck, _path, _fileName, _page, await GetStringsToSave());
+            }
+        }
+        private async Task<List<string>> GetStringsToSave()
+        {
+            var stringsToSave = new List<string>();
+            stringsToSave.AddRange(await _settingsViewModel.GetPageSettingsAsync());
+            stringsToSave.AddRange(await Task.Run(GetFramesInfo));
+
+            return stringsToSave;
+        }
+        private List<string> GetFramesInfo()
+        {
+            var answers = string.Empty;
+            var textList = new List<string>();
+            foreach (var model in FrameViewModel.Models) {
+                answers += model.IsRight ? "0" : "1";
+                textList.Add(model.ItemTextLeft);
+            }
+
+            var list = new List<string> { answers };
+            list.AddRange(textList);
+
+            return list;
+        }
+
+        private async Task<bool> PageIsValid()
+        {
+            var message = await Task.Run(GetMessage);
+            var returnValue = string.IsNullOrEmpty(message);
+            if (!returnValue)
+            {
+                await _page.DisplayAlert(AppResources.Warning, message, AppResources.Cancel);
+            }
+
+            return returnValue;
+        }
         private string GetMessage()
         {
             var message = _settingsViewModel.CheckPageSettings();
@@ -103,74 +157,22 @@ namespace Labs.ViewModels
             if (FrameViewModel.Models.Any(model => string.IsNullOrEmpty(model.ItemTextLeft))) {
                 message += AppResources.WarningAnswer;
             }
+            message += CheckFramesText();
 
             return message;
         }
-
-        private List<string> GetFramesInfo()
+        private string CheckFramesText()
         {
-            var answers = string.Empty;
-            var textList = new List<string>();
+            var message = string.Empty;
             foreach (var model in FrameViewModel.Models) {
-                answers += model.IsRight ? "0" : "1";
-                textList.Add(model.ItemTextLeft);
-            }
-
-            var list = new List<string>{answers};
-            list.AddRange(textList);
-
-            return list;
-        }
-        private async Task<List<string>> GetStringsToSave()
-        {
-            var stringsToSave = new List<string>();
-            stringsToSave.AddRange(await _settingsViewModel.GetPageSettingsAsync());
-            stringsToSave.AddRange(await Task.Run(GetFramesInfo));
-
-            return stringsToSave;
-        }
-
-        private async void ReadFileAsync(string path, string fileName)
-        {
-            var strings = DirectoryHelper.ReadStringsFromFile(path, fileName);
-            await Task.Run(() => {
-                _settingsViewModel.SetPageSettingsModel(strings[0], strings[1], strings[2]);
-                FillFramesAsync(strings, strings[3], 4);
-            });
-        }
-        private async void FillFramesAsync(IReadOnlyList<string> strings, string answers, int startIndex)
-        {
-            await Task.Run(() => {
-                for (int i = startIndex; i < strings.Count; i++) {
-                    FrameViewModel.AddModel(strings[i], answers[i - startIndex] == '0');
+                if (!string.IsNullOrEmpty(model.ItemTextLeft)) {
+                    model.ItemTextLeft = model.ItemTextLeft.Trim();
                 }
-            });
-        }
 
-        private void Delete()
-        {
-            if (!string.IsNullOrEmpty(_fileName)) {
-                DirectoryHelper.DeleteFileAsync(_page, Path.Combine(_path, _fileName));
-            }
-            _page.Navigation.PopAsync(true);
-        }
-        private async void Save()
-        {
-            if (await PageIsValid()) {
-                DirectoryHelper.SaveFile(Constants.TestTypeCheck, _path, _fileName, await GetStringsToSave());
-                MessagingCenter.Send<Page>(_page, Constants.CreatorListUpLoad);
-                await _page.Navigation.PopAsync(true);
-            }
-        }
-        private async Task<bool> PageIsValid()
-        {
-            var message = await Task.Run(GetMessage);
-            var returnValue = string.IsNullOrEmpty(message);
-            if (!returnValue) {
-                await _page.DisplayAlert(AppResources.Warning, message, AppResources.Cancel);
+                message += string.IsNullOrEmpty(model.ItemTextLeft) ? AppResources.WarningAnswer : string.Empty;
             }
 
-            return returnValue;
+            return message;
         }
 
         private void HideGridButtons()

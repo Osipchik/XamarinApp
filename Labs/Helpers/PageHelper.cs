@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Threading.Tasks;
 using Labs.Models;
 using Labs.Resources;
@@ -44,25 +46,6 @@ namespace Labs.Helpers
 
 
 
-        
-
-        public static async void CheckEntry(object sender, string text)
-        {
-            if (sender is Entry entry) {
-                if (string.IsNullOrEmpty(entry.Text)) return;
-                entry.Text = await Task.Run(() => FixText(text));
-            }
-        }
-        private static string FixText(string text)
-        {
-            for (var i = 0; i < text.Length; i++){
-                if (text[i] == ',' || text[i] == '-') text = text.Remove(i, 1);
-            }
-            if (text.Length > 2) text = text.Remove(2);
-
-            return text;
-        }
-
 
         public static string NormalizeTime(TimeSpan timeSpan, string seconds)
         {
@@ -87,6 +70,22 @@ namespace Labs.Helpers
                 timeSpan = _timeSpan;
                 seconds = _seconds;
             }
+        }
+
+
+        public static void DeleteCurrentFile(string path, string fileName, Page page)
+        {
+            if (!string.IsNullOrEmpty(fileName)) {
+                DirectoryHelper.DeleteFileAsync(page, Path.Combine(path, fileName));
+            }
+            page.Navigation.PopAsync(true);
+        }
+
+        public static async void SaveCurrentFile(string type, string path, string fileName, Page page, IEnumerable<string> stringsToSave)
+        {
+            DirectoryHelper.SaveFile(type, path, fileName, stringsToSave);
+            MessagingCenter.Send<Page>(page, Constants.CreatorListUpLoad);
+            await page.Navigation.PopAsync(true);
         }
     }
 }

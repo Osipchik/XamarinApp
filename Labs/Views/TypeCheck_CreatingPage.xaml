@@ -131,6 +131,7 @@
                         <ViewCell>
                             <ContentView Padding="5">
                                 <Frame BorderColor="{Binding BorderColor}"
+                                       CornerRadius="10"
                                        Padding="10">
                                     <StackLayout HorizontalOptions="FillAndExpand"
                                                  VerticalOptions="FillAndExpand">

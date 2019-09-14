@@ -17,30 +17,9 @@ namespace Labs.Models
             }
         }
 
-        private string _itemTextLeft;
-        public string ItemTextLeft
-        {
-            get => _itemTextLeft;
-            set
-            {
-                if (string.IsNullOrEmpty(value)) return;
-                _itemTextLeft = value;
-                OnPropertyChanged();
+        public string ItemTextLeft { get; set; }
 
-            }
-        }
-
-        private string _itemTextRight;
-        public string ItemTextRight
-        {
-            get => _itemTextRight;
-            set
-            {
-                if (string.IsNullOrEmpty(value)) return;
-                _itemTextRight = value;
-                OnPropertyChanged();
-            }
-        }
+        public string ItemTextRight { get; set; }
 
         private bool _editorLeftIsReadOnly;
         public bool EditorLeftIsReadOnly
