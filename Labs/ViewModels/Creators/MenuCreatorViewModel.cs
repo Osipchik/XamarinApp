@@ -7,7 +7,7 @@ using Labs.Resources;
 using Labs.Views;
 using Xamarin.Forms;
 
-namespace Labs.ViewModels
+namespace Labs.ViewModels.Creators
 {
     public class MenuCreatorViewModel
     {

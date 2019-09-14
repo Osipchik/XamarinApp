@@ -1,6 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
+using System.IO;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Labs.Helpers;
@@ -8,7 +7,7 @@ using Labs.Models;
 using Labs.Resources;
 using Xamarin.Forms;
 
-namespace Labs.ViewModels
+namespace Labs.ViewModels.Creators
 {
     public class EntryTypeCreatorViewModel
     {
@@ -32,7 +31,7 @@ namespace Labs.ViewModels
         public ICommand SaveFileCommand { protected set; get; }
         private void SetCommands()
         {
-            DeleteCurrentFileCommand = new Command(() => PageHelper.DeleteCurrentFile(_path, _fileName, _page));
+            DeleteCurrentFileCommand = new Command(DeleteCurrentFile);
             SaveFileCommand = new Command(Save);
         }
 
@@ -55,9 +54,10 @@ namespace Labs.ViewModels
 
         private async void Save()
         {
-            if (await PageIsValid())
-            {
-                PageHelper.SaveCurrentFile(Constants.TestTypeEntry, _path, _fileName, _page, await GetStringsToSave());
+            if (await PageIsValid()) {
+                DirectoryHelper.SaveFile(Constants.TestTypeEntry, _path, _fileName, await GetStringsToSave());
+                MessagingCenter.Send<Page>(_page, Constants.CreatorListUpLoad);
+                await _page.Navigation.PopAsync(true);
             }
         }
         private async Task<List<string>> GetStringsToSave()
@@ -67,6 +67,14 @@ namespace Labs.ViewModels
             stringsToSave.Add(Answer);
 
             return stringsToSave;
+        }
+
+        private void DeleteCurrentFile()
+        {
+            if (!string.IsNullOrEmpty(_fileName)) {
+                DirectoryHelper.DeleteFileAsync(_page, Path.Combine(_path, _fileName));
+            }
+            _page.Navigation.PopAsync(true);
         }
 
         private async Task<bool> PageIsValid()

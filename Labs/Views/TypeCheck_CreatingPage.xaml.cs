@@ -1,6 +1,6 @@
 ﻿using System;
 using Labs.Helpers;
-using Labs.ViewModels;
+using Labs.ViewModels.Creators;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 

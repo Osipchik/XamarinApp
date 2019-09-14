@@ -55,7 +55,7 @@ namespace Labs.ViewModels
         private IEnumerable<string> GetSettings()
         {
             var settings = new List<string> {
-                PageHelper.NormalizeTime(SettingsModel.TimeSpan, SettingsModel.Seconds),
+                TimeHelper.NormalizeTime(SettingsModel.TimeSpan, SettingsModel.Seconds),
                 SettingsModel.Price,
                 SettingsModel.Question
             };
@@ -68,7 +68,7 @@ namespace Labs.ViewModels
             var settings = new List<string> {
                 SettingsModel.Name,
                 SettingsModel.Subject,
-                PageHelper.NormalizeTime(SettingsModel.TimeSpan, SettingsModel.Seconds),
+                TimeHelper.NormalizeTime(SettingsModel.TimeSpan, SettingsModel.Seconds),
                 SettingsModel.Price
             };
 
@@ -83,7 +83,7 @@ namespace Labs.ViewModels
         //string time, string price, string question, string name = "", string subject = ""
         public void SetPageSettingsModel(params string[] settings)
         {
-            PageHelper.GetTime(settings[0], out var timeSpan, out var seconds);
+            TimeHelper.GetTime(settings[0], out var timeSpan, out var seconds);
             SettingsModel.TimeSpan = timeSpan;
             SettingsModel.Seconds = seconds;
             SettingsModel.Price = settings[1];
@@ -94,7 +94,7 @@ namespace Labs.ViewModels
         {
             SettingsModel.Name = settings[0];
             SettingsModel.Subject = settings[1];
-            PageHelper.GetTime(settings[2], out var timeSpan, out var seconds);
+            TimeHelper.GetTime(settings[2], out var timeSpan, out var seconds);
             SettingsModel.TimeSpan = timeSpan;
             SettingsModel.Seconds = seconds;
             SettingsModel.Price = settings[3];

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -7,9 +8,9 @@ using Labs.Models;
 using Labs.Resources;
 using Xamarin.Forms;
 
-namespace Labs.ViewModels
+namespace Labs.ViewModels.Creators
 {
-    public class CheckTypeCreatorViewModel 
+    public class StackTypeCreatorViewModel
     {
         private readonly string _path;
         private readonly string _fileName;
@@ -30,8 +31,7 @@ namespace Labs.ViewModels
                 }
             }
         }
-
-        public CheckTypeCreatorViewModel(string path, string fileName, Page page, Grid gridButtons = null)
+        public StackTypeCreatorViewModel(string path, string fileName, Page page, Grid gridButtons = null)
         {
             Modificator = 0;
             _page = page;
@@ -40,6 +40,7 @@ namespace Labs.ViewModels
             _gridButtons = gridButtons;
             FrameViewModel = new FrameViewModel();
             _settingsViewModel = new PageSettingsViewModel();
+
             FileExist();
             SetCommands();
         }
@@ -52,7 +53,7 @@ namespace Labs.ViewModels
         private void SetCommands()
         {
             AddItemCommand = new Command(() => { FrameViewModel.AddNewModelAsync(); });
-            DeleteCurrentFileCommand = new Command(() => PageHelper.DeleteCurrentFile(_path, _fileName, _page));
+            DeleteCurrentFileCommand = new Command(DeleteCurrentFile);
             SaveFileCommand = new Command(Save);
             HideGridButtonsCommand = new Command(HideGridButtons);
             AcceptGridButtonCommand = new Command(AcceptGridButton);
@@ -60,7 +61,7 @@ namespace Labs.ViewModels
 
         private void FileExist()
         {
-            if (!string.IsNullOrEmpty(_fileName)){
+            if (!string.IsNullOrEmpty(_fileName)) {
                 ReadFileAsync(_path, _fileName);
             }
             else {
@@ -72,15 +73,14 @@ namespace Labs.ViewModels
             var strings = DirectoryHelper.ReadStringsFromFile(path, fileName);
             await Task.Run(() => {
                 _settingsViewModel.SetPageSettingsModel(strings[0], strings[1], strings[2]);
-                FillFramesAsync(strings, strings[3], 4);
+                FillFramesAsync(strings, 3);
             });
         }
-        private async void FillFramesAsync(IReadOnlyList<string> strings, string answers, int startIndex)
+        private async void FillFramesAsync(IReadOnlyList<string> strings, int startIndex)
         {
             await Task.Run(() => {
-                for (int i = startIndex; i < strings.Count; i++)
-                {
-                    FrameViewModel.AddModel(strings[i], answers[i - startIndex] == '0');
+                for (int i = startIndex; i < strings.Count; i++) {
+                    FrameViewModel.AddModel(strings[i], false, strings[++i]);
                 }
             });
         }
@@ -99,6 +99,7 @@ namespace Labs.ViewModels
                     await Task.Run(() => { FrameViewModel.RightItems(index); });
                     break;
                 default:
+                    // TODO: do anything with this
                     await Task.Run(() => { FrameViewModel.ItemIsWriteAble(index); });
                     break;
             }
@@ -107,7 +108,9 @@ namespace Labs.ViewModels
         private async void Save()
         {
             if (await PageIsValid()) {
-                PageHelper.SaveCurrentFile(Constants.TestTypeCheck, _path, _fileName, _page, await GetStringsToSave());
+                DirectoryHelper.SaveFile(Constants.TestTypeStack, _path, _fileName, await GetStringsToSave());
+                MessagingCenter.Send<Page>(_page, Constants.CreatorListUpLoad);
+                await _page.Navigation.PopAsync(true);
             }
         }
         private async Task<List<string>> GetStringsToSave()
@@ -120,25 +123,29 @@ namespace Labs.ViewModels
         }
         private List<string> GetFramesInfo()
         {
-            var answers = string.Empty;
             var textList = new List<string>();
-            foreach (var model in FrameViewModel.Models) {
-                answers += model.IsRight ? "0" : "1";
+            foreach (var model in FrameViewModel.Models)
+            {
                 textList.Add(model.ItemTextLeft);
+                textList.Add(model.ItemTextRight);
             }
 
-            var list = new List<string> { answers };
-            list.AddRange(textList);
+            return textList;
+        }
 
-            return list;
+        private void DeleteCurrentFile()
+        {
+            if (!string.IsNullOrEmpty(_fileName)) {
+                DirectoryHelper.DeleteFileAsync(_page, Path.Combine(_path, _fileName));
+            }
+            _page.Navigation.PopAsync(true);
         }
 
         private async Task<bool> PageIsValid()
         {
             var message = await Task.Run(GetMessage);
             var returnValue = string.IsNullOrEmpty(message);
-            if (!returnValue)
-            {
+            if (!returnValue) {
                 await _page.DisplayAlert(AppResources.Warning, message, AppResources.Cancel);
             }
 
@@ -153,10 +160,7 @@ namespace Labs.ViewModels
         private string CheckFrames()
         {
             var message = string.Empty;
-            message += FrameViewModel.Models.Count < 1 ? "Add frame" : "";
-            if (FrameViewModel.Models.Any(model => string.IsNullOrEmpty(model.ItemTextLeft))) {
-                message += AppResources.WarningAnswer;
-            }
+            message += FrameViewModel.Models.Count < 1 ? AppResources.WarningAnswer : "";
             message += CheckFramesText();
 
             return message;
@@ -164,12 +168,17 @@ namespace Labs.ViewModels
         private string CheckFramesText()
         {
             var message = string.Empty;
-            foreach (var model in FrameViewModel.Models) {
+            foreach (var model in FrameViewModel.Models)
+            {
                 if (!string.IsNullOrEmpty(model.ItemTextLeft)) {
                     model.ItemTextLeft = model.ItemTextLeft.Trim();
                 }
+                if (!string.IsNullOrEmpty(model.ItemTextLeft)) {
+                    model.ItemTextRight = model.ItemTextRight.Trim();
+                }
 
                 message += string.IsNullOrEmpty(model.ItemTextLeft) ? AppResources.WarningAnswer : string.Empty;
+                message += string.IsNullOrEmpty(model.ItemTextRight) ? AppResources.WarningAnswer : string.Empty;
             }
 
             return message;
@@ -181,10 +190,10 @@ namespace Labs.ViewModels
             FrameViewModel.DisableAllAsync();
             _gridButtons.IsVisible = false;
         }
-        private void AcceptGridButton()
+        private async void AcceptGridButton()
         {
             if (Modificator < 0) {
-                FrameViewModel.DeleteItemsAsync();
+                await Task.Run(() => FrameViewModel.DeleteItems());
             }
             HideGridButtons();
         }

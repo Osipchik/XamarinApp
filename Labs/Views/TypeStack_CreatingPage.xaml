@@ -9,55 +9,162 @@
              Title="{helpers:Translate TypeStackTitle}">
 
     <ContentPage.ToolbarItems>
-        <ToolbarItem x:Name="ItemSave"
-                     Text="{helpers:Translate Save}"
+        <ToolbarItem Text="{helpers:Translate Save}"
                      Order="Secondary"
-                     Clicked="SaveButton_OnClicked"/>
+                     Command="{Binding SaveFileCommand}"/>
+        <ToolbarItem Text="{helpers:Translate Delete}"
+                     Order="Secondary"
+                     Command="{Binding DeleteCurrentFileCommand}"/>
+        <ToolbarItem Text="Delete items"
+                     Order="Secondary"
+                     Clicked="ChooseItemsToDelete_OnClicked"/>
+        <ToolbarItem Text="Add"
+                     Order="Secondary"
+                     Command="{Binding AddItemCommand}"/>
+        <ToolbarItem Text="ChooseRight"
+                     Order="Secondary"
+                     Clicked="ChooseRightItems_OnClicked"/>
     </ContentPage.ToolbarItems>
 
     <ContentPage.Content>
-        <ScrollView x:Name="ContentScroll"
-                    VerticalOptions="StartAndExpand">
-            <StackLayout VerticalOptions="Start">
-                <ContentView Padding="0,0,0,5">
-                    <Frame Padding="5"
-                           BorderColor="#B0BEC5"
-                           CornerRadius="0">
-                        <StackLayout>
-                            <Editor x:Name="Question"
-                                    AutoSize="TextChanges"
-                                    HorizontalOptions="Center"
-                                    Placeholder="{helpers:Translate Question}"/>
+        <StackLayout Margin="12, 0, 12, 0">
+            <ContentView Padding="5">
+                <Frame Padding="10,5,10,5"
+                       BorderColor="#03A9F4"
+                       CornerRadius="10">
+                    <Frame.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="HideOrShowAsync_OnClicked"/>
+                    </Frame.GestureRecognizers>
+                    <StackLayout x:Name="SettingsLayout">
+                        <StackLayout Orientation="Horizontal"
+                                     HorizontalOptions="FillAndExpand"
+                                     Margin="0">
+                            <Label Text="{helpers:Translate TestSettingsTime}"
+                                   VerticalOptions="Center"
+                                   Margin="0"/>
+                            <TimePicker Format="hh:mm"
+                                        Time="{Binding TimeSpan}"
+                                        Margin="0"/>
+                            <Label Text=":"
+                                   FontSize="Medium"
+                                   TextColor="Black"
+                                   VerticalOptions="Center"
+                                   Margin="0"/>
+                            <Entry Text="{Binding Seconds}"
+                                   Margin="0"
+                                   Keyboard="Numeric"/>
+                            <Label Text="{helpers:Translate Price}"
+                                   HorizontalOptions="EndAndExpand"
+                                   HorizontalTextAlignment="End"
+                                   FontSize="16"
+                                   Margin="0"
+                                   VerticalOptions="Center"/>
+                            <Entry Text="{Binding Price}"
+                                   Margin="0"
+                                   Keyboard="Numeric"/>
                         </StackLayout>
-                    </Frame>
-                </ContentView>
-                <StackLayout x:Name="StackLayoutContent"
-                             Margin="12,0,0,0"/>
-                
-                <StackLayout Orientation="Horizontal"
-                             VerticalOptions="Start"
-                             HorizontalOptions="Fill">
-                    <Label Text="{helpers:Translate Price}"
-                           FontSize="16"
-                           VerticalOptions="Center"
-                           />
-                    <Entry x:Name="Coast"
-                           Text="0"
-                           WidthRequest="30"
-                           VerticalOptions="Center"
-                           Keyboard="Numeric"
-                           TextChanged="Coast_OnTextChanged"/>
-                </StackLayout>
-                <ImageButton Source="Plus.png"
-                             Aspect="AspectFit"
-                             WidthRequest="36"
-                             HeightRequest="36"
+                        <BoxView Margin="12,0,12,0"
+                                 HeightRequest="1"
+                                 Color="#BDBDBD"/>
+                        <Editor Margin="0"
+                                Text="{Binding Question}"
+                                AutoSize="TextChanges"
+                                HorizontalOptions="Center"
+                                Placeholder="{helpers:Translate Question}"/>
+                    </StackLayout>
+                </Frame>
+            </ContentView>
+            <Grid x:Name="GridButtons"
+                  HorizontalOptions="Center"
+                  IsVisible="False">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <ImageButton Aspect="AspectFit"
+                             WidthRequest="22"
+                             HeightRequest="22"
                              Opacity="0.3"
-                             HorizontalOptions="FillAndExpand"
-                             VerticalOptions="Center"
+                             Source="CrossBlack.png"
                              BackgroundColor="Transparent"
-                             Clicked="AddLine_Button_OnClicked"/>
-            </StackLayout>
-        </ScrollView>
+                             Command="{Binding HideGridButtonsCommand}"
+                             Grid.Row="0" Grid.Column="0"/>
+                <Label Text="{helpers:Translate Cancel}"
+                       Grid.Row="0" Grid.Column="1">
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding HideGridButtonsCommand}"/>
+                    </Label.GestureRecognizers>
+                </Label>
+                <BoxView WidthRequest="2"
+                         HeightRequest="3"
+                         Color="Brown"
+                         Grid.Row="0" Grid.Column="2"/>
+                <Label Text="{helpers:Translate Yes}"
+                       Grid.Row="0" Grid.Column="3">
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding AcceptGridButtonCommand}"/>
+                    </Label.GestureRecognizers>
+                </Label>
+                <ImageButton x:Name="ImageButtonAccept"
+                             Aspect="AspectFit"
+                             WidthRequest="22"
+                             HeightRequest="22"
+                             BackgroundColor="Transparent"
+                             Command="{Binding AcceptGridButtonCommand}"
+                             Grid.Row="0" Grid.Column="4"/>
+            </Grid>
+            <ListView x:Name="ListView"
+                      SeparatorVisibility="None"
+                      VerticalScrollBarVisibility="Never"
+                      HasUnevenRows="True"
+                      ItemSelected="ListView_OnItemSelected"
+                      ItemTapped="ListView_OnItemTapped"
+                      ItemsSource="{Binding Models}">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <ContentView Padding="5">
+                                <Frame BorderColor="{Binding BorderColor}"
+                                       CornerRadius="10"
+                                       Padding="10">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="0.495*" />
+                                            <ColumnDefinition Width="0.01*" />
+                                            <ColumnDefinition Width="0.495*" />
+                                        </Grid.ColumnDefinitions>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto"/>
+                                        </Grid.RowDefinitions>
+                                        <Editor Placeholder="{helpers:Translate Text}"
+                                                HorizontalOptions="FillAndExpand"
+                                                Text="{Binding ItemTextLeft}"
+                                                IsReadOnly="{Binding EditorLeftIsReadOnly}"
+                                                AutoSize="TextChanges"
+                                                Grid.Row="0" Grid.Column="0"/>
+                                        <BoxView WidthRequest="1"
+                                                 VerticalOptions="FillAndExpand"
+                                                 Color="{Binding BorderColor}"
+                                                 Grid.Row="0" Grid.Column="1"/>
+                                        <Editor Placeholder="{helpers:Translate Text}"
+                                                HorizontalOptions="FillAndExpand"
+                                                Text="{Binding ItemTextRight}"
+                                                IsReadOnly="{Binding EditorRightIsReadOnly}"
+                                                AutoSize="TextChanges"
+                                                Grid.Row="0" Grid.Column="2"/>
+                                    </Grid>
+                                </Frame>
+                            </ContentView>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </StackLayout>
     </ContentPage.Content>
 </ContentPage>

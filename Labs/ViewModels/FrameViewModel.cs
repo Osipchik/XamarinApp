@@ -37,18 +37,18 @@ namespace Labs.ViewModels
                 Models.Add(new FrameModel {
                     BorderColor = Constants.Colors.ColorMaterialGray,
                     ItemTextLeft = string.Empty,
-                    EditorLeftIsReadOnly = true,
+                    ItemTextRight = string.Empty,
                     IsRight = false
                 });
             });
         }
-        public void AddModel(string textLeft, bool isRight)
+        public void AddModel(string textLeft, bool isRight = false, string textRight = "")
         {
             Models.Add(new FrameModel
             {
                 BorderColor = GetColor(isRight),
                 ItemTextLeft = textLeft,
-                EditorLeftIsReadOnly = true,
+                ItemTextRight = textRight,
                 IsRight = isRight,
             });
         }
@@ -66,14 +66,14 @@ namespace Labs.ViewModels
         {
             DisableLastItem();
             _itemIndex = index;
-            Models[_itemIndex].EditorLeftIsReadOnly = false;
+            //Models[_itemIndex].EditorLeftIsReadOnly = false;
             Models[_itemIndex].BorderColor = Constants.Colors.ColorMaterialBlue;
         }
         public void DisableLastItem()
         {
             if (_itemIndex >= 0)
             {
-                Models[_itemIndex].EditorLeftIsReadOnly = true;
+                //Models[_itemIndex].EditorLeftIsReadOnly = true;
                 Models[_itemIndex].BorderColor = Models[_itemIndex].IsRight
                     ? Constants.Colors.ColorMaterialGreen
                     : Constants.Colors.ColorMaterialGray;
@@ -106,14 +106,11 @@ namespace Labs.ViewModels
                 Models[index].BorderColor = Constants.Colors.ColorMaterialRed;
             }
         }
-        public async void DeleteItemsAsync()
+        public void DeleteItems()
         {
-            await Task.Run(() =>
-            {
-                foreach (var model in GetItemsToDelete()) {
-                    Models.Remove(model);
-                }
-            });
+            foreach (var model in GetItemsToDelete()) {
+                Models.Remove(model);
+            }
         }
         private IEnumerable<FrameModel> GetItemsToDelete()
         {

@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Labs.ViewModels;
 using Xamarin.Forms;
 
 namespace Labs.Helpers
@@ -28,11 +26,6 @@ namespace Labs.Helpers
             }
 
             return fileName;
-        }
-
-        public static async Task<string> GetFileNameAsync(string savingType, string path, string fileName = "")
-        {
-            return await Task.Run(() => GetFileName(savingType, path, fileName));
         }
 
         public static void SaveFile(string savingType, string path, string fileName, IEnumerable<string> stringsToSave)

@@ -11,50 +11,41 @@ namespace Labs.Models
         public Color BorderColor
         {
             get => _borderColor;
-            set {
+            set
+            {
                 _borderColor = value;
                 OnPropertyChanged();
             }
         }
 
         public string ItemTextLeft { get; set; }
-
         public string ItemTextRight { get; set; }
 
-        private bool _editorLeftIsReadOnly;
-        public bool EditorLeftIsReadOnly
-        {
-            get => _editorLeftIsReadOnly;
-            set
-            {
-                _editorLeftIsReadOnly = value;
-                OnPropertyChanged();
-            }
-        }
+        //private bool _editorLeftIsReadOnly;
+        //public bool EditorLeftIsReadOnly
+        //{
+        //    get => _editorLeftIsReadOnly;
+        //    set
+        //    {
+        //        _editorLeftIsReadOnly = value;
+        //        OnPropertyChanged();
+        //    }
+        //}
 
-        private bool _editorRightIsReadOnly;
-        public bool EditorRightIsReadOnly
-        {
-            get => _editorRightIsReadOnly;
-            set
-            {
-                _editorRightIsReadOnly = value;
-                OnPropertyChanged();
-            }
-        }
+        //private bool _editorRightIsReadOnly;
+        //public bool EditorRightIsReadOnly
+        //{
+        //    get => _editorRightIsReadOnly;
+        //    set
+        //    {
+        //        _editorRightIsReadOnly = value;
+        //        OnPropertyChanged();
+        //    }
+        //}
 
         public bool IsRight { get; set; }
 
-        private string _rightString;
-        public string RightString
-        {
-            get => _rightString;
-            set
-            {
-                _rightString = value;
-                OnPropertyChanged();
-            }
-        }
+        public string RightString { get; set; }
 
 
         public event PropertyChangedEventHandler PropertyChanged;
