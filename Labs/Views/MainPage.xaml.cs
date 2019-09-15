@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.IO;
 using Labs.Helpers;
 using Labs.Models;
+using Labs.Views.Creators;
 using Xamarin.Forms;
 
 namespace Labs.Views
@@ -67,7 +68,7 @@ namespace Labs.Views
                     break;
                 case 1:
                     var path = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
-                    Detail = new NavigationPage(new CreatorPage(Path.Combine(path, Constants.TempFolder)));
+                    Detail = new NavigationPage(new CreatorMenuPage(Path.Combine(path, Constants.TempFolder)));
                     IsPresented = false;
                     break;
                 case 2:

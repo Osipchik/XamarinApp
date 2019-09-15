@@ -1,10 +1,9 @@
 ﻿using System;
 using Labs.Helpers;
-using Labs.ViewModels;
 using Labs.ViewModels.Creators;
 using Xamarin.Forms.Xaml;
 
-namespace Labs.Views
+namespace Labs.Views.Creators
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class TypeEntryCreatingPage

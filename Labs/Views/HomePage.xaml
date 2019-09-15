@@ -61,6 +61,7 @@
                 </Label>
             </Grid>
             <ListView x:Name="listView"
+                      CachingStrategy="RecycleElement"
                       SeparatorVisibility="None"
                       VerticalScrollBarVisibility="Never"
                       HasUnevenRows="True"

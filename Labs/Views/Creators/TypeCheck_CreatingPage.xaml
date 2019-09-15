@@ -5,7 +5,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:helpers="clr-namespace:Labs.Helpers;assembly=Labs"
              mc:Ignorable="d"
-             x:Class="Labs.Views.TypeCheckCreatingPage"
+             x:Class="Labs.Views.Creators.TypeCheckCreatingPage"
              Title="{helpers:Translate TypeCheckTitle}">
 
     <ContentPage.ToolbarItems>
@@ -120,6 +120,7 @@
                              Grid.Row="0" Grid.Column="4"/>
             </Grid>
             <ListView x:Name="ListView"
+                      CachingStrategy="RecycleElement"
                       SeparatorVisibility="None"
                       VerticalScrollBarVisibility="Never"
                       HasUnevenRows="True"

@@ -1,19 +1,19 @@
 ﻿using System;
 using Labs.Helpers;
-using Labs.ViewModels;
 using Labs.ViewModels.Creators;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
-namespace Labs.Views
+namespace Labs.Views.Creators
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class CreatorPage
+    public partial class CreatorMenuPage
     {
         private bool _tableVisible = true;
+        private uint _heightMax = 635;
         private readonly MenuCreatorViewModel _menuCreatorViewModel;
 
-        public CreatorPage(string path)
+        public CreatorMenuPage(string path)
         {
             InitializeComponent();
 
@@ -34,7 +34,10 @@ namespace Labs.Views
         {
             _tableVisible = !_tableVisible;
             FrameAnimation.RunShowOrHideButtonAnimation(ButtonSettings, 350, _tableVisible);
-            FrameAnimation.RunShowOrHideAnimation(SettingsTableView, 220, 0, _tableVisible);
+            if (_heightMax == 0) {
+                _heightMax = (uint) SettingsTableView.Height;
+            }
+            FrameAnimation.RunShowOrHideAnimation(SettingsTableView, _heightMax, 0, _tableVisible);
         }
 
         private void Subscribe()

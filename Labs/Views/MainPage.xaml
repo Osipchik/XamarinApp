@@ -14,6 +14,7 @@
             <ContentPage.Content>
                 <StackLayout Spacing="0">
                     <ListView x:Name="ListViewDetail"
+                              CachingStrategy="RecycleElement"
                               ItemTapped="ListViewDetail_OnItemTapped"
                               ItemSelected="ListViewDetail_OnItemSelected">
                        <ListView.ItemTemplate>
@@ -26,11 +27,11 @@
                                               WidthRequest="24"
                                               HeightRequest="24"
                                               Margin="0,0,24,0"/>
-                                       <Label Text="{Binding Text}"
-                                              VerticalOptions="Center"
-                                              HorizontalOptions="FillAndExpand"
-                                              FontSize="Medium"
-                                              TextColor="Black"/>
+                                        <Label Text="{Binding Text}"
+                                               VerticalOptions="Center"
+                                               HorizontalOptions="FillAndExpand"
+                                               FontSize="Medium"
+                                               TextColor="Black"/>
                                    </StackLayout>
                                </ViewCell>
                            </DataTemplate>

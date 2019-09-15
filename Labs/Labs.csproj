@@ -32,11 +32,17 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>AppResources.resx</DependentUpon>
     </Compile>
-    <Compile Update="Views\TypeEntry_CreatingPage.xaml.cs">
+    <Compile Update="Views\Creators\CreatorMenuPage.xaml.cs">
+      <DependentUpon>CreatorMenuPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\Creators\TypeEntry_CreatingPage.xaml.cs">
       <DependentUpon>TypeEntry_CreatingPage.xaml</DependentUpon>
     </Compile>
-    <Compile Update="Views\TypeCheck_CreatingPage.xaml.cs">
+    <Compile Update="Views\Creators\TypeCheck_CreatingPage.xaml.cs">
       <DependentUpon>TypeCheck_CreatingPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\TestPage111.xaml.cs">
+      <DependentUpon>TestPage111.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -46,10 +52,13 @@
     <EmbeddedResource Update="Views\TestPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Views\TypeCheck_CreatingPage.xaml">
+    <EmbeddedResource Update="Views\TestPage111.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Views\CreatorPage.xaml">
+    <EmbeddedResource Update="Views\Creators\TypeCheck_CreatingPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\Creators\CreatorMenuPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Views\HomePage.xaml">
@@ -65,7 +74,7 @@
     <EmbeddedResource Update="Type2_CreatingPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Views\TypeEntry_CreatingPage.xaml">
+    <EmbeddedResource Update="Views\Creators\TypeEntry_CreatingPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
   </ItemGroup>

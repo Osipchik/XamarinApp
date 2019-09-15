@@ -1,6 +1,7 @@
 ﻿using System.Windows.Input;
 using Labs.Helpers;
 using Labs.Views;
+using Labs.Views.Creators;
 using Xamarin.Forms;
 
 namespace Labs.ViewModels
@@ -35,7 +36,7 @@ namespace Labs.ViewModels
                 ChangeButtonStyle_OnClick(_changeButton);
                 if (_isClickAble) return;
                 _isClickAble = true;
-                await _page.Navigation.PushAsync(new CreatorPage(_path));
+                await _page.Navigation.PushAsync(new CreatorMenuPage(_path));
             });
 
             StartButtonCommand = new Command(async () =>
@@ -43,7 +44,8 @@ namespace Labs.ViewModels
                 ChangeButtonStyle_OnClick(_startButton);
                 if (_isClickAble) return;
                 _isClickAble = true;
-                await _page.Navigation.PushModalAsync(new TestPage(_path));
+                //await _page.Navigation.PushModalAsync(new TestPage111(_path));
+                await _page.Navigation.PushModalAsync(new TestPage());
             });
         }
         private void ReadSettings()

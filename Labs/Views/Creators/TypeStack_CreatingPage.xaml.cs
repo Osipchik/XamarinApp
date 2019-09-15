@@ -4,7 +4,7 @@ using Labs.ViewModels.Creators;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
-namespace Labs.Views
+namespace Labs.Views.Creators
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class TypeStackCreatingPage
