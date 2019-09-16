@@ -47,28 +47,13 @@ namespace Labs.ViewModels
             return Path.Combine(_path, InfoModels[index].Name);
         }
 
-        public async void GetFilesModelAsync()
-        {
-            await Task.Run(() =>
-            {
-                InfoModels.Clear();
-                foreach (var info in new DirectoryInfo(_path).GetFiles()) {
-                    if (info.Name == Constants.SettingsFileTxt) continue;
-                    InfoModels.Add(GetFileModel(info));
-                }
-            });
-        }
-
-        // TODO: add async
-        public ObservableCollection<InfoModel> GetFilesInfo()
+        public void GetFilesModel()
         {
             InfoModels.Clear();
             foreach (var info in new DirectoryInfo(_path).GetFiles()) {
                 if (info.Name == Constants.SettingsFileTxt) continue;
                 InfoModels.Add(GetFileModel(info));
             }
-
-            return InfoModels;
         }
 
         public async void SetDirectoriesInfoAsync()

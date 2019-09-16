@@ -62,12 +62,16 @@ namespace Labs.ViewModels
                 }
             });
         }
-        public void ItemIsWriteAble(int index)
+        public void SelectItem(int index, bool disablePrevious = true)
         {
-            DisableLastItem();
+            if (disablePrevious) {
+                DisableLastItem();
+            }
             _itemIndex = index;
-            //Models[_itemIndex].EditorLeftIsReadOnly = false;
-            Models[_itemIndex].BorderColor = Constants.Colors.ColorMaterialBlue;
+            var isTrue = Models[_itemIndex].BorderColor == Constants.Colors.ColorMaterialBlue;
+            Models[_itemIndex].BorderColor = isTrue 
+                ? Constants.Colors.ColorMaterialGray 
+                : Constants.Colors.ColorMaterialBlue;
         }
         public void DisableLastItem()
         {

@@ -6,12 +6,12 @@ using Labs.Resources;
 
 namespace Labs.ViewModels
 {
-    public class PageSettingsViewModel
+    public class SettingsViewModel
     {
-        public readonly PageSettingsModel SettingsModel;
-        public PageSettingsViewModel()
+        public readonly SettingsModel SettingsModel;
+        public SettingsViewModel()
         {
-            SettingsModel = new PageSettingsModel();
+            SettingsModel = new SettingsModel();
         }
 
         private string CheckTimeAndPrice()

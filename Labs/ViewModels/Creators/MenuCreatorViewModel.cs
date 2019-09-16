@@ -13,7 +13,7 @@ namespace Labs.ViewModels.Creators
     public class MenuCreatorViewModel
     {
         private readonly string _path;
-        private readonly PageSettingsViewModel _settingsViewModel;
+        private readonly SettingsViewModel _settingsViewModel;
         private readonly Page _page;
 
         public readonly InfoViewModel InfoViewModel;
@@ -22,11 +22,11 @@ namespace Labs.ViewModels.Creators
         {
             _path = path;
             _page = page;
-            _settingsViewModel = new PageSettingsViewModel();
+            _settingsViewModel = new SettingsViewModel();
             
             InfoViewModel = new InfoViewModel(path);
             ReadSettings();
-            GetFiles();
+            GetFilesAsync();
             CreateTempFolderAsync();
             SetCommands();
         }
@@ -64,12 +64,12 @@ namespace Labs.ViewModels.Creators
                 _settingsViewModel.SetMenuPageSettings(settings);
             }
         }
-        public PageSettingsModel GetSettingsModel => _settingsViewModel.SettingsModel;
+        public SettingsModel GetSettingsModel => _settingsViewModel.SettingsModel;
 
-        public void GetFiles()
+        public async void GetFilesAsync()
         {
             if (_page != null) {
-                InfoViewModel.GetFilesModelAsync();
+                await Task.Run(()=>InfoViewModel.GetFilesModel());
             }
         }
 
@@ -109,7 +109,7 @@ namespace Labs.ViewModels.Creators
             if (await PageIsValid()) {
                 DirectoryHelper.SaveTestAsync(_path, await _settingsViewModel.GetPageSettingsAsync(true));
                 MessagingCenter.Send<Page>(_page, Constants.HomeListUpload);
-                if (_path.Contains(Constants.TempFolder)) GetFiles();
+                if (_path.Contains(Constants.TempFolder)) GetFilesAsync();
                 else await _page.Navigation.PopToRootAsync(true);
             }
         }

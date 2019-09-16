@@ -15,7 +15,7 @@ namespace Labs.ViewModels.Creators
         private readonly string _path;
         private readonly string _fileName;
         public readonly FrameViewModel FrameViewModel;
-        private readonly PageSettingsViewModel _settingsViewModel;
+        private readonly SettingsViewModel _settingsViewModel;
         private readonly Page _page;
         private readonly Grid _gridButtons;
         private int _modificator;
@@ -39,7 +39,7 @@ namespace Labs.ViewModels.Creators
             _fileName = fileName;
             _gridButtons = gridButtons;
             FrameViewModel = new FrameViewModel();
-            _settingsViewModel = new PageSettingsViewModel();
+            _settingsViewModel = new SettingsViewModel();
 
             FileExist();
             SetCommands();
@@ -85,7 +85,7 @@ namespace Labs.ViewModels.Creators
             });
         }
 
-        public PageSettingsModel GetSettingsModel => _settingsViewModel.SettingsModel;
+        public SettingsModel GetSettingsModel => _settingsViewModel.SettingsModel;
 
         public async void TapEvent(int index)
         {
@@ -100,7 +100,7 @@ namespace Labs.ViewModels.Creators
                     break;
                 default:
                     // TODO: do anything with this
-                    await Task.Run(() => { FrameViewModel.ItemIsWriteAble(index); });
+                    await Task.Run(() => { FrameViewModel.SelectItem(index); });
                     break;
             }
         }

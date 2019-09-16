@@ -6,7 +6,7 @@ using Labs.ViewModels;
 
 namespace Labs.Models
 {
-    public class PageSettingsModel : INotifyPropertyChanged
+    public class SettingsModel : INotifyPropertyChanged
     {
         private TimeSpan _timeSpan;
         public TimeSpan TimeSpan
@@ -25,7 +25,7 @@ namespace Labs.Models
             get => _seconds ?? "00";
             set
             {
-                _seconds = PageSettingsViewModel.FixText(value, true);
+                _seconds = SettingsViewModel.FixText(value, true);
                 OnPropertyChanged();
             }
         }
@@ -38,7 +38,7 @@ namespace Labs.Models
             get => _price ?? "00";
             set
             {
-                _price = PageSettingsViewModel.FixText(value);
+                _price = SettingsViewModel.FixText(value);
                 OnPropertyChanged();
             }
         }

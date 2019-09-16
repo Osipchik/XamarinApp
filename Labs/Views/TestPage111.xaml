@@ -28,10 +28,10 @@
             <cv:CarouselViewControl x:Name="carousel"
                                     Orientation="Horizontal"
                                     InterPageSpacing="10" 
-                                    PositionSelected="Handle_PositionSelected"
                                     ItemsSource="{Binding ItemsSource}" 
                                     VerticalOptions="FillAndExpand" 
                                     HorizontalOptions="FillAndExpand">
+              <!-- PositionSelected="Handle_PositionSelected"-->
             </cv:CarouselViewControl>
 
             <Grid ColumnSpacing="0">
@@ -48,16 +48,16 @@
                         BorderWidth="1"
                         BackgroundColor="White"
                         HorizontalOptions="FillAndExpand"
-                        Clicked="Button_OnClicked"
                         Grid.Row="0" Grid.Column="0"/>
+              <!--Clicked="Button_OnClicked"-->
                 <Button Text="{helpers:Translate Check}"
                         TextColor="#039BE5"
                         BorderColor="#039BE5"
                         BorderWidth="1"
                         BackgroundColor="White"
                         HorizontalOptions="FillAndExpand"
-                        Clicked="ButtonCheck_OnClicked"
                         Grid.Row="0" Grid.Column="1"/>
+              <!--Clicked="ButtonCheck_OnClicked"-->
             </Grid>
 
         </StackLayout>

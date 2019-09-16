@@ -14,7 +14,7 @@ namespace Labs.ViewModels.Creators
         private readonly string _path;
         private readonly string _fileName;
         private readonly Page _page;
-        private readonly PageSettingsViewModel _settingsViewModel;
+        private readonly SettingsViewModel _settingsViewModel;
         public string Answer { get; set; }
 
         public EntryTypeCreatorViewModel(string path, string fileName, Page page)
@@ -22,7 +22,7 @@ namespace Labs.ViewModels.Creators
             _path = path;
             _fileName = fileName;
             _page = page;
-            _settingsViewModel = new PageSettingsViewModel();
+            _settingsViewModel = new SettingsViewModel();
             SetCommands();
             FileExist();
         }
@@ -35,7 +35,7 @@ namespace Labs.ViewModels.Creators
             SaveFileCommand = new Command(Save);
         }
 
-        public PageSettingsModel GetSettingsModel => _settingsViewModel.SettingsModel;
+        public SettingsModel GetSettingsModel => _settingsViewModel.SettingsModel;
 
         private void FileExist()
         {

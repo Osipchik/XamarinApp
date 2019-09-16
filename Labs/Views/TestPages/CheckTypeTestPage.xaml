@@ -1,0 +1,47 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:helpers="clr-namespace:Labs.Helpers;assembly=Labs"
+             mc:Ignorable="d"
+             x:Class="Labs.Views.TestPages.CheckTypeTestPage">
+    <ContentPage.Content>
+        <StackLayout>
+            <Label Margin="0"
+                   Text="{Binding Question}"
+                   HorizontalOptions="Center"/>
+            <BoxView HorizontalOptions="FillAndExpand"
+                     Margin="12,0,12,0"
+                     HeightRequest="1"
+                     Color="#BDBDBD"/>
+            <ListView x:Name="ListView"
+                      CachingStrategy="RecycleElement"
+                      SeparatorVisibility="None"
+                      VerticalScrollBarVisibility="Never"
+                      HasUnevenRows="True"
+                      ItemSelected="ListView_OnItemSelected"
+                      ItemTapped="ListView_OnItemTapped"
+                      ItemsSource="{Binding Models}">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <ContentView Padding="5">
+                                <Frame BorderColor="{Binding BorderColor}"
+                                       CornerRadius="10"
+                                       Padding="10">
+                                    <StackLayout HorizontalOptions="FillAndExpand"
+                                                 VerticalOptions="FillAndExpand">
+                                        <Label HorizontalOptions="Center"
+                                               VerticalOptions="Center"
+                                               Text="{Binding ItemTextLeft}"/>
+                                    </StackLayout>
+                                </Frame>
+                            </ContentView>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

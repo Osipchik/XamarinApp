@@ -2,6 +2,7 @@
 using Labs.Helpers;
 using Labs.Views;
 using Labs.Views.Creators;
+using Labs.Views.TestPages;
 using Xamarin.Forms;
 
 namespace Labs.ViewModels
@@ -13,7 +14,7 @@ namespace Labs.ViewModels
         private bool _isClickAble;
         private readonly Button _changeButton;
         private readonly Button _startButton;
-        public readonly PageSettingsViewModel SettingsViewModel;
+        public readonly SettingsViewModel SettingsViewModel;
 
         public StartViewModel(string path, Page page, Button changeButton, Button startButton)
         {
@@ -21,7 +22,7 @@ namespace Labs.ViewModels
             _page = page;
             _changeButton = changeButton;
             _startButton = startButton;
-            SettingsViewModel = new PageSettingsViewModel();
+            SettingsViewModel = new SettingsViewModel();
             ReadSettings();
             SetCommands();
         }
@@ -45,7 +46,7 @@ namespace Labs.ViewModels
                 if (_isClickAble) return;
                 _isClickAble = true;
                 //await _page.Navigation.PushModalAsync(new TestPage111(_path));
-                await _page.Navigation.PushModalAsync(new TestPage());
+                await _page.Navigation.PushModalAsync(new TestPage(_path));
             });
         }
         private void ReadSettings()

@@ -43,7 +43,7 @@ namespace Labs.Views.Creators
         private void Subscribe()
         {
             MessagingCenter.Subscribe<Page>(this, Constants.CreatorListUpLoad,
-                (sender) => { _menuCreatorViewModel.GetFiles(); });
+                (sender) => { _menuCreatorViewModel.GetFilesAsync(); });
         }
 
         private void ListViewFiles_OnItemTapped(object sender, ItemTappedEventArgs e)
