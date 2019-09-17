@@ -9,10 +9,12 @@ namespace Labs.Views.TestPages
     public partial class CheckTypeTestPage : ContentPage
     {
         private readonly CheckTypeTestViewModel _checkViewModel;
+        private readonly TimerViewModel _timerViewModel;
         public CheckTypeTestPage(string path, string fileName, TimerViewModel testTimerViewModel)
         {
             InitializeComponent();
-            
+
+            _timerViewModel = testTimerViewModel;
             _checkViewModel = new CheckTypeTestViewModel(path, fileName, testTimerViewModel);
             SetBindings();
         }
@@ -32,8 +34,10 @@ namespace Labs.Views.TestPages
         protected override void OnAppearing()
         {
             base.OnAppearing();
-            MessagingCenter.Send<Page>(this, Constants.StopAllTimers);
-            _checkViewModel.TimerViewModel.TimerRunAsync();
+            if (_timerViewModel == null) {
+                MessagingCenter.Send<Page>(this, Constants.StopAllTimers);
+                _checkViewModel.TimerViewModel.TimerRunAsync();
+            }
         }
     }
 }
