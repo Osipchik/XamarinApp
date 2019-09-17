@@ -20,11 +20,11 @@ namespace Labs.Views.TestPages
             FillPages(path);
         }
 
-        private void FillPages(string path)
+        private async void FillPages(string path)
         {
             var infos = new InfoViewModel(path);
             infos.GetFilesModel();
-            AddPages(infos.InfoModels, path);
+            await Device.InvokeOnMainThreadAsync(() => AddPages(infos.InfoModels, path));
         }
 
         private void AddPages(IEnumerable<InfoModel> infoModels, string path)
@@ -36,7 +36,7 @@ namespace Labs.Views.TestPages
                         Children.Add(new CheckTypeTestPage(path, model.Name, _timerViewModel));
                         break;
                     case Constants.TestTypeEntry:
-                        Children.Add(new EntryTypeTestPage(path, model.Name));
+                        Children.Add(new EntryTypeTestPage(path, model.Name, _timerViewModel));
                         break;
                     case Constants.TestTypeStack:
                         Children.Add(new StackTypeTestPage(path, model.Name));
@@ -46,7 +46,6 @@ namespace Labs.Views.TestPages
 
             _timerViewModel?.TimerRunAsync();
         }
-
 
         protected override void OnPagesChanged(NotifyCollectionChangedEventArgs e)
         {

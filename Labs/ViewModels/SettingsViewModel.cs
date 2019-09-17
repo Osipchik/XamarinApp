@@ -75,12 +75,8 @@ namespace Labs.ViewModels
             return settings;
         }
 
-        private string CheckText(string text)
-        {
-            return string.IsNullOrEmpty(text) ? null : text.Trim();
-        }
+        private string CheckText(string text) => string.IsNullOrEmpty(text) ? null : text.Trim();
 
-        //string time, string price, string question, string name = "", string subject = ""
         public void SetPageSettingsModel(params string[] settings)
         {
             TimeHelper.GetTime(settings[0], out var timeSpan, out var seconds);

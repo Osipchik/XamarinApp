@@ -16,19 +16,15 @@ namespace Labs.ViewModels.Creators
         private readonly SettingsViewModel _settingsViewModel;
         private readonly Page _page;
 
-        public readonly InfoViewModel InfoViewModel;
+        public InfoViewModel InfoViewModel;
 
         public MenuCreatorViewModel(string path, Page page = null)
         {
             _path = path;
             _page = page;
             _settingsViewModel = new SettingsViewModel();
-            
-            InfoViewModel = new InfoViewModel(path);
-            ReadSettings();
-            GetFilesAsync();
-            CreateTempFolderAsync();
-            SetCommands();
+
+            InitializeAsync(path);
         }
 
         public ICommand CreateCheckTypePageCommand { protected set; get; }
@@ -51,20 +47,36 @@ namespace Labs.ViewModels.Creators
             DeleteTestCommand = new Command(DeleteFolderAsync);
         }
 
-        private void ReadSettings()
+        private async void InitializeAsync(string path)
         {
-            var settings = DirectoryHelper.ReadStringsFromFile(_path, Constants.SettingsFileTxt);
-            if (settings != null) {
-                _settingsViewModel.SetMenuPageSettings(settings);
-            }
+            await Task.Run(() => {
+                InfoViewModel = new InfoViewModel(path);
+                ReadSettingsAsync();
+                GetFilesAsync();
+                CreateTempFolderAsync();
+                SetCommands();
+            });
+        }
+
+        private async void ReadSettingsAsync()
+        {
+            await Task.Run(() =>
+            {
+                var settings = DirectoryHelper.ReadStringsFromFile(_path, Constants.SettingsFileTxt);
+                if (settings != null) {
+                    _settingsViewModel.SetMenuPageSettings(settings);
+                }
+            });
         }
         public SettingsModel GetSettingsModel => _settingsViewModel.SettingsModel;
 
         public async void GetFilesAsync()
         {
-            if (_page != null) {
-                await Task.Run(()=>InfoViewModel.GetFilesModel());
-            }
+            await Task.Run(() => {
+                if (_page != null) {
+                    InfoViewModel.GetFilesModel();
+                }
+            });
         }
 
         public async void OpenCreatingPage(int index)
@@ -93,9 +105,11 @@ namespace Labs.ViewModels.Creators
 
         private async void CreateTempFolderAsync()
         {
-            if (!Directory.Exists(_path)) {
-                await Task.Run(() => Directory.CreateDirectory(_path));
-            }
+            await Task.Run(() => {
+                if (!Directory.Exists(_path)) {
+                    Directory.CreateDirectory(_path);
+                }
+            });
         }
 
         private async void Save()

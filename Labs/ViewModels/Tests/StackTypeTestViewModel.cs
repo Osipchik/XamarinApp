@@ -16,16 +16,14 @@ namespace Labs.ViewModels.Tests
             FrameViewModel = new FrameViewModel();
             _settingsViewModel = new SettingsViewModel();
 
-            ReadFileAsync(path, fileName);
+            Initialize(path, fileName);
         }
         public SettingsModel GetSettingsModel => _settingsViewModel.SettingsModel;
-        private async void ReadFileAsync(string path, string fileName)
+        private async void Initialize(string path, string fileName)
         {
             var strings = DirectoryHelper.ReadStringsFromFile(path, fileName);
-            await Task.Run(() => {
-                _settingsViewModel.SetPageSettingsModel(strings[0], strings[1], strings[2]);
-                FillFramesAsync(strings, 3);
-            });
+            await Task.Run(() => _settingsViewModel.SetPageSettingsModel(strings[0], strings[1], strings[2]));
+            FillFramesAsync(strings, 3);
         }
         private async void FillFramesAsync(IReadOnlyList<string> strings, int startIndex)
         {

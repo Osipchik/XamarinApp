@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -40,16 +41,14 @@ namespace Labs.ViewModels.Creators
         private void FileExist()
         {
             if (!string.IsNullOrEmpty(_fileName)) {
-                ReadFileAsync(_path, _fileName);
+                Initialize(_path, _fileName);
             }
         }
-        private async void ReadFileAsync(string path, string fileName)
+        private async void Initialize(string path, string fileName)
         {
             var strings = DirectoryHelper.ReadStringsFromFile(path, fileName);
-            await Task.Run(() => {
-                _settingsViewModel.SetPageSettingsModel(strings[0], strings[1], strings[2]);
-                Answer = strings[3];
-            });
+            await Task.Run(() => _settingsViewModel.SetPageSettingsModel(strings[0], strings[1], strings[2]));
+            Answer = strings[3];
         }
 
         private async void Save()
