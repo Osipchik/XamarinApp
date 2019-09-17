@@ -39,20 +39,14 @@ namespace Labs.ViewModels.Creators
         private void SetCommands()
         {
             CreateCheckTypePageCommand = new Command(async () =>
-            {
-                await _page.Navigation.PushAsync(new TypeCheckCreatingPage(_path));
-            });
+                await _page.Navigation.PushAsync(new TypeCheckCreatingPage(_path)));
 
             CreateEntryTypePageCommand = new Command(async () =>
-            {
-                await _page.Navigation.PushAsync(new TypeEntryCreatingPage(_path));
-            });
-
+                await _page.Navigation.PushAsync(new TypeEntryCreatingPage(_path)));
+            
             CreateStackTypePageCommand = new Command(async () =>
-            {
-                await _page.Navigation.PushAsync(new TypeStackCreatingPage(_path));
-            });
-
+                await _page.Navigation.PushAsync(new TypeStackCreatingPage(_path)));
+            
             SaveTestCommand = new Command(Save);
             DeleteTestCommand = new Command(DeleteFolderAsync);
         }
@@ -145,10 +139,8 @@ namespace Labs.ViewModels.Creators
 
         public bool OnBackButtonPressed()
         {
-            if (_path != Constants.TempFolder)
-            {
-                Device.BeginInvokeOnMainThread(async () =>
-                {
+            if (_path != Constants.TempFolder) {
+                Device.BeginInvokeOnMainThread(async () => {
                     var result = await _page.DisplayAlert(AppResources.Warning, AppResources.Escape, AppResources.Yes, AppResources.No);
                     if (!result) return;
                     MessagingCenter.Send<Page>(_page, Constants.StartPageCallBack);

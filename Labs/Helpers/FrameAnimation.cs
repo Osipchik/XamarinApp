@@ -5,10 +5,8 @@ namespace Labs.Helpers
 {
     public static class FrameAnimation
     {
-        public static void RunShowOrHideAnimation(View view, uint heightMax, uint heightMin, bool show)
-        {
-            RunSettingsViewAnimationAsync(view, show ? heightMax : heightMin);
-        }
+        public static void RunShowOrHideAnimation(View view, uint heightMax, uint heightMin, bool show) =>
+            RunSettingsViewAnimationAsync(view, show ? heightMax : heightMin); 
 
         public static void RunShowOrHideButtonAnimation(Button button, uint widthMax, bool show)
         {

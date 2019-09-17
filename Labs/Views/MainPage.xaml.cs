@@ -27,11 +27,8 @@ namespace Labs.Views
             MessagingCenter.Subscribe<Page>(this, Constants.UploadTitles, (sender) => UploadTitles());
         
 
-        private void UploadTitles()
-        {
-            //ListViewDetail.ItemsSource = null;
-            ListViewDetail.ItemsSource = MasterDetail.GetDetailItems();
-        }
+        private void UploadTitles() => ListViewDetail.ItemsSource = MasterDetail.GetDetailItems();
+        
 
         private string[] GetPaths()
         {

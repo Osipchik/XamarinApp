@@ -147,10 +147,8 @@ namespace Labs.ViewModels
                 model.DateColor = GetColor(filter, nameof(model.Date));
             });
         }
-        private Color GetColor(string filter, string propertyName)
-        {
-            return filter == propertyName ? Constants.Colors.ColorMaterialBlue : Constants.Colors.ColorMaterialGrayText;
-        }
+        private Color GetColor(string filter, string propertyName) =>
+            filter == propertyName ? Constants.Colors.ColorMaterialBlue : Constants.Colors.ColorMaterialGrayText;
 
         private async void DisableSearchModificationAsync()
         {
@@ -163,25 +161,19 @@ namespace Labs.ViewModels
             });
         }
 
-        public async void GoToStartTestPage(int index, Page page)
-        {
+        public async void GoToStartTestPage(int index, Page page) =>
             await page.Navigation.PushAsync(new StartTestPage(InfoViewModel.GetElementPath(index)));
-        }
 
         public event PropertyChangedEventHandler PropertyChanged;
 
         [NotifyPropertyChangedInvocator]
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null) =>
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
     }
 
     public static class Extensions
     {
-        public static ObservableCollection<T> ToObservableCollection<T>(this IEnumerable<T> collection)
-        {
-            return new ObservableCollection<T>(collection);
-        }
+        public static ObservableCollection<T> ToObservableCollection<T>(this IEnumerable<T> collection) =>
+            new ObservableCollection<T>(collection);
     }
 }

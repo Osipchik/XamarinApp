@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Labs.Helpers;
 using Labs.ViewModels.Tests;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -13,11 +9,11 @@ namespace Labs.Views.TestPages
     public partial class CheckTypeTestPage : ContentPage
     {
         private readonly CheckTypeTestViewModel _checkViewModel;
-        public CheckTypeTestPage(string path, string fileName)
+        public CheckTypeTestPage(string path, string fileName, TimerViewModel testTimerViewModel)
         {
             InitializeComponent();
-
-            _checkViewModel = new CheckTypeTestViewModel(path, fileName);
+            
+            _checkViewModel = new CheckTypeTestViewModel(path, fileName, testTimerViewModel);
             SetBindings();
         }
 
@@ -25,15 +21,19 @@ namespace Labs.Views.TestPages
         {
             BindingContext = _checkViewModel.GetSettingsModel;
             ListView.BindingContext = _checkViewModel.FrameViewModel;
+            GridProgress.BindingContext = _checkViewModel.TimerViewModel.TimerModel;
         }
 
-        private void ListView_OnItemSelected(object sender, SelectedItemChangedEventArgs e)
-        {
+        private void ListView_OnItemSelected(object sender, SelectedItemChangedEventArgs e) =>
             ((ListView)sender).SelectedItem = null;
-        }
-        private void ListView_OnItemTapped(object sender, ItemTappedEventArgs e)
+        
+        private void ListView_OnItemTapped(object sender, ItemTappedEventArgs e) => _checkViewModel.TapEvent(e.ItemIndex);
+        
+        protected override void OnAppearing()
         {
-            _checkViewModel.TapEvent(e.ItemIndex);
+            base.OnAppearing();
+            MessagingCenter.Send<Page>(this, Constants.StopAllTimers);
+            _checkViewModel.TimerViewModel.TimerRunAsync();
         }
     }
 }

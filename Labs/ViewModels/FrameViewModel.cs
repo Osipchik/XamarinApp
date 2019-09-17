@@ -77,7 +77,6 @@ namespace Labs.ViewModels
         {
             if (_itemIndex >= 0)
             {
-                //Models[_itemIndex].EditorLeftIsReadOnly = true;
                 Models[_itemIndex].BorderColor = Models[_itemIndex].IsRight
                     ? Constants.Colors.ColorMaterialGreen
                     : Constants.Colors.ColorMaterialGray;
@@ -91,12 +90,8 @@ namespace Labs.ViewModels
             Models[index].BorderColor = GetColor(Models[index].IsRight);
         }
 
-        private Color GetColor(bool isRight)
-        {
-            return isRight ? Constants.Colors.ColorMaterialGreen : Constants.Colors.ColorMaterialGray;
-        }
-
-
+        private Color GetColor(bool isRight) => isRight ? Constants.Colors.ColorMaterialGreen : Constants.Colors.ColorMaterialGray;
+        
         public void ItemToDelete(int index)
         {
             if (Models[index].BorderColor == Constants.Colors.ColorMaterialRed) {
@@ -132,9 +127,7 @@ namespace Labs.ViewModels
         public event PropertyChangedEventHandler PropertyChanged;
 
         [NotifyPropertyChangedInvocator]
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null) =>
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
     }
 }

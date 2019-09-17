@@ -9,15 +9,12 @@ namespace Labs.Helpers
 {
     public static class DirectoryHelper
     {
-        public static string GetTypeName(string directoryName)
-        {
-            return directoryName.TakeWhile(symbol => symbol != '_').Aggregate("", (current, symbol) => current + symbol);
-        }
-
-        private static string GetFileName(string savingType, string path, string fileName)
-        {
-            return !string.IsNullOrEmpty(fileName) ? Path.Combine(path, fileName) : GenerateFileName(path, savingType);
-        }
+        public static string GetTypeName(string directoryName) =>
+            directoryName.TakeWhile(symbol => symbol != '_').Aggregate("", (current, symbol) => current + symbol);
+        
+        private static string GetFileName(string savingType, string path, string fileName) =>
+            !string.IsNullOrEmpty(fileName) ? Path.Combine(path, fileName) : GenerateFileName(path, savingType);
+        
         private static string GenerateFileName(string path, string savingType)
         {
             var fileName = string.Empty;
@@ -28,10 +25,8 @@ namespace Labs.Helpers
             return fileName;
         }
 
-        public static void SaveFile(string savingType, string path, string fileName, IEnumerable<string> stringsToSave)
-        {
+        public static void SaveFile(string savingType, string path, string fileName, IEnumerable<string> stringsToSave) =>
             File.WriteAllLines(GetFileName(savingType, path, fileName), stringsToSave, Encoding.UTF8);
-        }
 
         public static string[] ReadStringsFromFile(string path, string fileName)
         {
@@ -58,8 +53,7 @@ namespace Labs.Helpers
         public static async void SaveTestAsync(string path, IEnumerable<string> settings)
         {
             File.WriteAllLines(Path.Combine(path, Constants.SettingsFileTxt), settings, Encoding.UTF8);
-            await Task.Run(() =>
-            {
+            await Task.Run(() => {
                 if (path.Contains(Constants.TempFolder)) {
                     MoveFiles(path);
                 }

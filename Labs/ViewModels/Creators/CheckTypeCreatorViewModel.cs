@@ -147,8 +147,7 @@ namespace Labs.ViewModels.Creators
         {
             var message = await Task.Run(GetMessage);
             var returnValue = string.IsNullOrEmpty(message);
-            if (!returnValue)
-            {
+            if (!returnValue) {
                 await _page.DisplayAlert(AppResources.Warning, message, AppResources.Cancel);
             }
 

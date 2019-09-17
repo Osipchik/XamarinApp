@@ -28,17 +28,9 @@ namespace Labs.Views
         private void PickerLanguagesOnSelectedIndexChanged(object sender, EventArgs e)
         {
             var language = Languages[PickerLanguages.SelectedIndex];
-
-            try
-            {
-                var culture = new CultureInfo(language.ShortName);
-                AppResources.Culture = culture;
-                CrossMultilingual.Current.CurrentCultureInfo = culture;
-            }
-            catch (Exception)
-            {
-                // ignored
-            }
+            var culture = new CultureInfo(language.ShortName);
+            AppResources.Culture = culture;
+            CrossMultilingual.Current.CurrentCultureInfo = culture;
 
             LabelLanguage.Text = AppResources.Labguage;
             LabelTheme.Text = AppResources.Theme;
@@ -50,10 +42,8 @@ namespace Labs.Views
 
         private void SetIndex()
         {
-            for (var i = 0; i < Languages.Count; i++)
-            {
-                if (AppResources.Culture.Equals(new CultureInfo(Languages[i].ShortName)))
-                {
+            for (var i = 0; i < Languages.Count; i++) {
+                if (AppResources.Culture.Equals(new CultureInfo(Languages[i].ShortName))) {
                     PickerLanguages.SelectedIndex = i;
                     break;
                 }
@@ -63,45 +53,34 @@ namespace Labs.Views
         private void SetPickerWidth()
         {
             var width = 0;
-
-            if (AppResources.Culture.Equals(new CultureInfo("ru-RU")))
-            {
+            if (AppResources.Culture.Equals(new CultureInfo("ru-RU"))) {
                 width = 155;
             }
-            else if (AppResources.Culture.Equals(new CultureInfo("de-DE")))
-            {
+            else if (AppResources.Culture.Equals(new CultureInfo("de-DE"))) {
                 width = 160;
             }
-            else if (AppResources.Culture.Equals(new CultureInfo("es-ES")))
-            {
+            else if (AppResources.Culture.Equals(new CultureInfo("es-ES"))) {
                 width = 150;
             }
-            else if (AppResources.Culture.Equals(new CultureInfo("fr")))
-            {
+            else if (AppResources.Culture.Equals(new CultureInfo("fr"))) {
                 width = 144;
             }
-            else if (AppResources.Culture.Equals(new CultureInfo("it")))
-            {
+            else if (AppResources.Culture.Equals(new CultureInfo("it"))) {
                 width = 130;
             }
-            else if (AppResources.Culture.Equals(new CultureInfo("ja")))
-            {
+            else if (AppResources.Culture.Equals(new CultureInfo("ja"))) {
                 width = 155;
             }
-            else if (AppResources.Culture.Equals(new CultureInfo("ko")))
-            {
+            else if (AppResources.Culture.Equals(new CultureInfo("ko"))) {
                 width = 127;
             }
-            else if (AppResources.Culture.Equals(new CultureInfo("zh-Hans")))
-            {
+            else if (AppResources.Culture.Equals(new CultureInfo("zh-Hans"))) {
                 width = 215;
             }
-            else if (AppResources.Culture.Equals(new CultureInfo("zh-Hant")))
-            {
+            else if (AppResources.Culture.Equals(new CultureInfo("zh-Hant"))) {
                 width = 170;
             }
-            else if (AppResources.Culture.Equals(new CultureInfo("en")))
-            {
+            else if (AppResources.Culture.Equals(new CultureInfo("en"))) {
                 width = 65;
             }
 

@@ -42,7 +42,7 @@
                             <Label Text="{helpers:Translate TestSettingsTime}"
                                    VerticalOptions="Center"
                                    Margin="0"/>
-                            <TimePicker Format="hh:mm"
+                            <TimePicker Format="HH:mm"
                                         Time="{Binding TimeSpan}"
                                         Margin="0"/>
                             <Label Text=":"

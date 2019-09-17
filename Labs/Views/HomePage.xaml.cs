@@ -26,13 +26,10 @@ namespace Labs.Views
                 (sender) => { _homeViewModel.RefreshModels(); });
         }
         
-        private void ListView_OnItemTapped(object sender, ItemTappedEventArgs e)
-        {
+        private void ListView_OnItemTapped(object sender, ItemTappedEventArgs e) =>
             _homeViewModel.GoToStartTestPage(e.ItemIndex, this);
-        }
-        private void ListView_OnItemSelected(object sender, SelectedItemChangedEventArgs e)
-        {
+        
+        private void ListView_OnItemSelected(object sender, SelectedItemChangedEventArgs e) =>
             ((ListView)sender).SelectedItem = null;
-        }
     }
 }

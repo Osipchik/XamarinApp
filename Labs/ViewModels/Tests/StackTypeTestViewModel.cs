@@ -36,9 +36,6 @@ namespace Labs.ViewModels.Tests
             });
         }
 
-        public async void TapEvent(int index)
-        {
-            await Task.Run(() => { FrameViewModel.SelectItem(index, false); });
-        }
+        public async void TapEvent(int index) => await Task.Run(() => { FrameViewModel.SelectItem(index, false); });
     }
 }

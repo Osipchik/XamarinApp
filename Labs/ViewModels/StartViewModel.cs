@@ -45,8 +45,7 @@ namespace Labs.ViewModels
                 ChangeButtonStyle_OnClick(_startButton);
                 if (_isClickAble) return;
                 _isClickAble = true;
-                //await _page.Navigation.PushModalAsync(new TestPage111(_path));
-                await _page.Navigation.PushModalAsync(new TestPage(_path));
+                await _page.Navigation.PushModalAsync(new TestPage(_path, SettingsViewModel.SettingsModel.Time));
             });
         }
         private void ReadSettings()

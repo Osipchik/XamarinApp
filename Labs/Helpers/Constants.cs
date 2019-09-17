@@ -19,6 +19,8 @@ namespace Labs.Helpers
         public const uint AnimationRate = 16;
         public const uint AnimationLength = 700;
 
+        public const string StopAllTimers = "stopAllTimers";
+        public const string TimeZero = "00:00:00";
         public static class Colors
         {
             public static readonly Color ColorMaterialBlue = Color.FromHex("#03A9F4");

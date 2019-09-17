@@ -41,9 +41,6 @@
     <Compile Update="Views\Creators\TypeCheck_CreatingPage.xaml.cs">
       <DependentUpon>TypeCheck_CreatingPage.xaml</DependentUpon>
     </Compile>
-    <Compile Update="Views\TestPage111.xaml.cs">
-      <DependentUpon>TestPage111.xaml</DependentUpon>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Update="Views\StartTestPage.xaml">
@@ -53,9 +50,6 @@
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Views\TestPages\TestPage.xaml">
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Views\TestPage111.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Views\Creators\TypeCheck_CreatingPage.xaml">

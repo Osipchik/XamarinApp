@@ -4,10 +4,9 @@ namespace Labs.Helpers
 {
     static class TimeHelper
     {
-        public static string NormalizeTime(TimeSpan timeSpan, string seconds)
-        {
-            return timeSpan.ToString().Remove(6) + (seconds.Length < 2 ? "00" : seconds);
-        }
+        public static string NormalizeTime(TimeSpan timeSpan, string seconds) =>
+            timeSpan.ToString().Remove(6) + (seconds.Length < 2 ? "00" : seconds);
+    
         private static void SplitUpTimeLine(string time, out TimeSpan timeSpan, out string seconds)
         {
             var timeStrings = time.Split(':');
@@ -16,13 +15,11 @@ namespace Labs.Helpers
         }
         public static void GetTime(string time, out TimeSpan timeSpan, out string seconds)
         {
-            if (string.IsNullOrEmpty(time))
-            {
+            if (string.IsNullOrEmpty(time)) {
                 timeSpan = TimeSpan.Zero;
                 seconds = "00";
             }
-            else
-            {
+            else {
                 SplitUpTimeLine(time, out var _timeSpan, out var _seconds);
                 timeSpan = _timeSpan;
                 seconds = _seconds;

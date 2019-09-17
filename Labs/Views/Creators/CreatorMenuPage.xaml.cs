@@ -46,18 +46,12 @@ namespace Labs.Views.Creators
                 (sender) => { _menuCreatorViewModel.GetFilesAsync(); });
         }
 
-        private void ListViewFiles_OnItemTapped(object sender, ItemTappedEventArgs e)
-        {
+        private void ListViewFiles_OnItemTapped(object sender, ItemTappedEventArgs e) =>
             _menuCreatorViewModel.OpenCreatingPage(e.ItemIndex);
-        }
-        private void ListViewFiles_OnItemSelected(object sender, SelectedItemChangedEventArgs e)
-        {
+        
+        private void ListViewFiles_OnItemSelected(object sender, SelectedItemChangedEventArgs e) =>
             ((ListView)sender).SelectedItem = null;
-        }
 
-        protected override bool OnBackButtonPressed()
-        {
-            return _menuCreatorViewModel.OnBackButtonPressed();
-        }
+        protected override bool OnBackButtonPressed() => _menuCreatorViewModel.OnBackButtonPressed();
     }
 }
