@@ -51,9 +51,9 @@ namespace Labs.ViewModels.Creators
         {
             await Task.Run(() => {
                 InfoViewModel = new InfoViewModel(path);
+                CreateTempFolderAsync();
                 ReadSettingsAsync();
                 GetFilesAsync();
-                CreateTempFolderAsync();
                 SetCommands();
             });
         }
@@ -99,6 +99,7 @@ namespace Labs.ViewModels.Creators
         private async void DeleteFolderAsync()
         {
             await Task.Run(() => { Directory.Delete(_path, true); });
+            CreateTempFolderAsync();
             await Task.Run(() => MessagingCenter.Send<Page>(_page, Constants.HomeListUpload));
             await _page.Navigation.PopToRootAsync(true);
         }

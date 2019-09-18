@@ -137,12 +137,13 @@ namespace Labs.ViewModels.Creators
             return list;
         }
 
-        private void DeleteCurrentFile()
+        private async void DeleteCurrentFile()
         {
             if (!string.IsNullOrEmpty(_fileName)) {
-                DirectoryHelper.DeleteFileAsync(_page, Path.Combine(_path, _fileName));
+                File.Delete(Path.Combine(_path, _fileName));
+                await Task.Run(() => MessagingCenter.Send<Page>(_page, Constants.CreatorListUpLoad));
             }
-            _page.Navigation.PopAsync(true);
+            await _page.Navigation.PopAsync(true);
         }
 
         private async Task<bool> PageIsValid()

@@ -34,12 +34,6 @@ namespace Labs.Helpers
             return File.Exists(filePath) ? File.ReadAllLines(filePath) : null;
         }
 
-        public static async void DeleteFileAsync(Page sender, string path)
-        {
-            File.Delete(path);
-            await Task.Run(() => MessagingCenter.Send<Page>(sender, Constants.CreatorListUpLoad));
-        }
-
         private static string GenerateTestPath(string path)
         {
             var testPath = string.Empty;

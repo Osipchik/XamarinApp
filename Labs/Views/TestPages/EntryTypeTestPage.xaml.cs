@@ -1,4 +1,5 @@
-﻿using Labs.Helpers;
+﻿using System;
+using Labs.Helpers;
 using Labs.ViewModels.Tests;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -21,8 +22,8 @@ namespace Labs.Views.TestPages
 
         private void SetBindings()
         {
+            Editor.BindingContext = _entryViewModel;
             BindingContext = _entryViewModel.GetSettingsModel;
-            Editor.BindingContext = _entryViewModel.Answer;
             GridProgress.BindingContext = _entryViewModel.TimerViewModel.TimerModel;
         }
 
