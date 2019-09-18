@@ -4,7 +4,6 @@ using System.Windows.Input;
 using Labs.Helpers;
 using Labs.Models;
 using Labs.Resources;
-using Labs.Views;
 using Labs.Views.Creators;
 using Xamarin.Forms;
 
@@ -24,7 +23,11 @@ namespace Labs.ViewModels.Creators
             _page = page;
             _settingsViewModel = new SettingsViewModel();
 
-            InitializeAsync(path);
+            InfoViewModel = new InfoViewModel(path);
+            CreateTempFolderAsync();
+            ReadSettingsAsync();
+            GetFilesAsync();
+            SetCommands();
         }
 
         public ICommand CreateCheckTypePageCommand { protected set; get; }
@@ -45,17 +48,6 @@ namespace Labs.ViewModels.Creators
             
             SaveTestCommand = new Command(Save);
             DeleteTestCommand = new Command(DeleteFolderAsync);
-        }
-
-        private async void InitializeAsync(string path)
-        {
-            await Task.Run(() => {
-                InfoViewModel = new InfoViewModel(path);
-                CreateTempFolderAsync();
-                ReadSettingsAsync();
-                GetFilesAsync();
-                SetCommands();
-            });
         }
 
         private async void ReadSettingsAsync()
@@ -149,7 +141,6 @@ namespace Labs.ViewModels.Creators
 
             return totalPrice.ToString();
         }
-
 
 
         public bool OnBackButtonPressed()

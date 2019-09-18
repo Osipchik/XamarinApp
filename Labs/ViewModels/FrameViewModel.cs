@@ -42,11 +42,11 @@ namespace Labs.ViewModels
                 });
             });
         }
-        public void AddModel(string textLeft, bool isRight = false, string textRight = "")
+        public void AddModel(string textLeft, bool isRight = false, string textRight = "", bool withColor = false)
         {
             Models.Add(new FrameModel
             {
-                BorderColor = GetColor(isRight),
+                BorderColor = GetColor(isRight && withColor),
                 ItemTextLeft = textLeft,
                 ItemTextRight = textRight,
                 IsRight = isRight,
@@ -121,7 +121,6 @@ namespace Labs.ViewModels
 
             return list;
         }
-
 
 
         public event PropertyChangedEventHandler PropertyChanged;

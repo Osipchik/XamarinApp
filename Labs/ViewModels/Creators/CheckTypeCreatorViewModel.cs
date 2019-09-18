@@ -82,7 +82,7 @@ namespace Labs.ViewModels.Creators
         {
             await Task.Run(() => {
                 for (int i = startIndex; i < strings.Count; i++) {
-                    FrameViewModel.AddModel(strings[i], answers[i - startIndex] == '0');
+                    FrameViewModel.AddModel(strings[i], answers[i - startIndex] == '0', "", true);
                 }
             });
         }

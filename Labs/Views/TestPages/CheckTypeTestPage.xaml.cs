@@ -17,6 +17,7 @@ namespace Labs.Views.TestPages
             _timerViewModel = testTimerViewModel;
             _checkViewModel = new CheckTypeTestViewModel(path, fileName, testTimerViewModel);
             SetBindings();
+            Subscribe();
         }
 
         private void SetBindings()
@@ -38,6 +39,12 @@ namespace Labs.Views.TestPages
                 MessagingCenter.Send<Page>(this, Constants.StopAllTimers);
                 _checkViewModel.TimerViewModel.TimerRunAsync();
             }
+        }
+
+        private void Subscribe()
+        {
+            MessagingCenter.Subscribe<Page>(this, "runFirstTimer", 
+                (sender)=>{ _checkViewModel.TimerViewModel.TimerRunAsync(); });
         }
     }
 }

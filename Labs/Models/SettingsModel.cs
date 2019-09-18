@@ -30,7 +30,16 @@ namespace Labs.Models
             }
         }
 
-        public string Time { get; set; }
+        private string _time;
+        public string Time
+        {
+            get => _time;
+            set
+            {
+                _time = value;
+                OnPropertyChanged();
+            }
+        }
 
         private string _price;
         public string Price

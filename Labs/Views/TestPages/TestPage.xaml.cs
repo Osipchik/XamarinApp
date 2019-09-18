@@ -12,10 +12,13 @@ namespace Labs.Views.TestPages
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class TestPage : TabbedPage
     {
+        private readonly TestViewModel _testViewModel;
         private readonly TimerViewModel _timerViewModel; 
         public TestPage(string path, string testTime)
         {
             InitializeComponent();
+
+            _testViewModel = new TestViewModel(this);
             _timerViewModel = testTime != Constants.TimeZero ? new TimerViewModel(testTime) : null;
             FillPages(path);
         }
@@ -39,7 +42,7 @@ namespace Labs.Views.TestPages
                         Children.Add(new EntryTypeTestPage(path, model.Name, _timerViewModel));
                         break;
                     case Constants.TestTypeStack:
-                        Children.Add(new StackTypeTestPage(path, model.Name));
+                        Children.Add(new StackTypeTestPage(path, model.Name, _timerViewModel));
                         break;
                 }
             }
@@ -50,7 +53,11 @@ namespace Labs.Views.TestPages
         protected override void OnPagesChanged(NotifyCollectionChangedEventArgs e)
         {
             base.OnPagesChanged(e);
-            MessagingCenter.Send<Page>(this, Constants.StopAllTimers);
+            if (Children.Count > 1) {
+                MessagingCenter.Send<Page>(this, Constants.StopAllTimers);
+            }
         }
+
+        protected override bool OnBackButtonPressed() => _testViewModel.OnBackButtonPressed();
     }
 }

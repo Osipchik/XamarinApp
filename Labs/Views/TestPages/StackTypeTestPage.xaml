@@ -8,6 +8,28 @@
              x:Class="Labs.Views.TestPages.StackTypeTestPage">
     <ContentPage.Content>
         <StackLayout>
+            <Grid x:Name="GridProgress"
+                  HorizontalOptions="FillAndExpand"
+                  ColumnSpacing="0"
+                  RowSpacing="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <ProgressBar Progress="{Binding Progress}"
+                             HorizontalOptions="FillAndExpand"
+                             Margin="0"
+                             IsVisible="{Binding TimerIsVisible}"
+                             Grid.Row="0" Grid.Column="0"/>
+                <Label Text="{Binding Time}"
+                       HorizontalOptions="Center"
+                       Margin="0"
+                       IsVisible="{Binding TimerIsVisible}"
+                       Grid.Row="1" Grid.Column="0"/>
+            </Grid>
             <Label Margin="0"
                    Text="{Binding Question}"
                    HorizontalOptions="Center"/>

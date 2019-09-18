@@ -1,4 +1,5 @@
-﻿using System.Windows.Input;
+﻿using System.Threading.Tasks;
+using System.Windows.Input;
 using Labs.Helpers;
 using Labs.Views;
 using Labs.Views.Creators;
@@ -9,7 +10,6 @@ namespace Labs.ViewModels
 {
     public class StartViewModel
     {
-        private readonly string _path;
         private readonly Page _page;
         private bool _isClickAble;
         private readonly Button _changeButton;
@@ -18,42 +18,42 @@ namespace Labs.ViewModels
 
         public StartViewModel(string path, Page page, Button changeButton, Button startButton)
         {
-            _path = path;
             _page = page;
             _changeButton = changeButton;
             _startButton = startButton;
             SettingsViewModel = new SettingsViewModel();
-            ReadSettings();
-            SetCommands();
+            ReadSettingsAsync(path);
+            SetCommands(path);
         }
 
         public ICommand ChangeButtonCommand { protected set; get; }
         public ICommand StartButtonCommand { protected set; get; }
 
-        private void SetCommands()
+        private void SetCommands(string path)
         {
             ChangeButtonCommand = new Command(async () =>
             {
                 ChangeButtonStyle_OnClick(_changeButton);
                 if (_isClickAble) return;
                 _isClickAble = true;
-                await _page.Navigation.PushAsync(new CreatorMenuPage(_path));
+                await _page.Navigation.PushAsync(new CreatorMenuPage(path));
             });
-
             StartButtonCommand = new Command(async () =>
             {
                 ChangeButtonStyle_OnClick(_startButton);
                 if (_isClickAble) return;
                 _isClickAble = true;
-                await _page.Navigation.PushModalAsync(new TestPage(_path, SettingsViewModel.SettingsModel.Time));
+                await _page.Navigation.PushModalAsync(new TestPage(path, SettingsViewModel.SettingsModel.Time));
             });
         }
-        private void ReadSettings()
+        private async void ReadSettingsAsync(string path)
         {
-            var settings = DirectoryHelper.ReadStringsFromFile(_path, Constants.SettingsFileTxt);
-            if (settings != null) {
-                SettingsViewModel.SetStartPageSettings(settings);
-            }
+            await Task.Run(() => {
+                var settings = DirectoryHelper.ReadStringsFromFile(path, Constants.SettingsFileTxt);
+                if (settings != null) {
+                    SettingsViewModel.SetStartPageSettings(settings);
+                }
+            });
         }
 
         public void StartPageCallBack()

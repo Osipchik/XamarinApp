@@ -1,39 +1,35 @@
-﻿using System.ComponentModel;
-using Xamarin.Forms;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Text;
 using Labs.Annotations;
 
 namespace Labs.Models
 {
-    public class FrameModel : INotifyPropertyChanged
+    public class TestModel : INotifyPropertyChanged
     {
-        private Color _borderColor;
-        public Color BorderColor
+        private string _index;
+        public string Title
         {
-            get => _borderColor;
+            get => $"page {_index}";
             set
             {
-                _borderColor = value;
+                _index = value;
                 OnPropertyChanged();
             }
         }
 
-        public string ItemTextLeft { get; set; }
-        private string _itemTextRight;
-
-        public string ItemTextRight
+        private bool _timerIsFinish;
+        public bool TimerIsFinish
         {
-            get => _itemTextRight;
+            get => _timerIsFinish;
             set
             {
-                _itemTextRight = value;
+                _timerIsFinish = value;
                 OnPropertyChanged();
             }
         }
-
-        public bool IsRight { get; set; }
-
-        public string RightString { get; set; }
 
 
         public event PropertyChangedEventHandler PropertyChanged;

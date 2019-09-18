@@ -39,6 +39,7 @@ namespace Labs.Models
             }
         }
 
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         [NotifyPropertyChangedInvocator]

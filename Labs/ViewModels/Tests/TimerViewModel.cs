@@ -9,10 +9,10 @@ namespace Labs.ViewModels.Tests
     {
         public readonly TimerModel TimerModel;
         private double _time;
-        private const double UpdateRate = 1000 / 60f;
         private double _step;
         private bool _timerIsAlive;
 
+        private const double UpdateRate = 1000 / 60f;
         private const double Hours = 3_600_000;
         private const double Minutes = 60_000;
         private const double Seconds = 1_000;
@@ -25,16 +25,21 @@ namespace Labs.ViewModels.Tests
 
         private void SetTime(string timePage)
         {
-            var page = GetMilliseconds(timePage);
-            if (page > 0) {
-                _time = page;
-                _step = 1 / (_time / UpdateRate);
-                TimerModel.TimerIsVisible = true;
+            var time = GetMilliseconds(timePage);
+            if (time > 0) {
+                InitializeTimer(time);
             }
             else {
                 _time = 0;
                 TimerModel.TimerIsVisible = false;
             }
+        }
+
+        private void InitializeTimer(double time)
+        {
+            _time = time;
+            _step = 1 / (_time / UpdateRate);
+            TimerModel.TimerIsVisible = true;
         }
 
         private double GetMilliseconds(string time)
@@ -56,36 +61,36 @@ namespace Labs.ViewModels.Tests
             }
         }
 
-        public void TimerStop() => _timerIsAlive = false;
-
         private bool TimerOnTick()
         {
-            if (TimerModel.Progress < 1)
-            {
+            if (TimerModel.Progress < 1) {
                 TimerModel.Progress += _step;
                 _time -= UpdateRate;
-                var timeSpan = TimeSpan.FromMilliseconds(_time);
-
-                if (_time >= Hours) {
-                    TimerModel.Time = $"{timeSpan.Hours:00;00}:{timeSpan.Minutes:00;00}:{timeSpan.Seconds:00;00}";
-                }
-                else if (_time > Minutes) {
-                    TimerModel.Time = $"{timeSpan.Minutes:00;00}:{timeSpan.Seconds:00;00}";
-                }
-                else {
-                    TimerModel.Time = $"{timeSpan.Seconds:00;00}";
-                }
-
+                FormatTime();
                 return _timerIsAlive;
             }
 
             return false;
         }
 
+        private void FormatTime()
+        {
+            var timeSpan = TimeSpan.FromMilliseconds(_time);
+            if (_time >= Hours) {
+                TimerModel.Time = $"{timeSpan.Hours:00;00}:{timeSpan.Minutes:00;00}:{timeSpan.Seconds:00;00}";
+            }
+            else if (_time > Minutes) {
+                TimerModel.Time = $"{timeSpan.Minutes:00;00}:{timeSpan.Seconds:00;00}";
+            }
+            else {
+                TimerModel.Time = $"{timeSpan.Seconds:00;00}";
+            }
+        }
+
         private void Subscribe()
         {
             MessagingCenter.Subscribe<Page>(this, Constants.StopAllTimers,
-                (sender) => { TimerStop(); });
+                (sender) => { _timerIsAlive = false; });
         }
     }
 }

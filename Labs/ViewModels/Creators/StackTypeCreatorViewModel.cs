@@ -79,7 +79,7 @@ namespace Labs.ViewModels.Creators
         {
             await Task.Run(() => {
                 for (int i = startIndex; i < strings.Count; i++) {
-                    FrameViewModel.AddModel(strings[i], false, strings[++i]);
+                    FrameViewModel.AddModel(strings[i], false, strings[++i], true);
                 }
             });
         }
