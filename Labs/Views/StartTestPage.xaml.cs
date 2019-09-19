@@ -8,23 +8,22 @@ namespace Labs.Views
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class StartTestPage
     {
-        private readonly StartViewModel _startViewModel;
-
+        public StartViewModel StartViewModel { get; }
         public StartTestPage(string path)
         {
             InitializeComponent();
 
-            _startViewModel = new StartViewModel(path, this, ChangeButton, StartButton);
-            BindingContext = _startViewModel.SettingsViewModel.SettingsModel;
-            ChangeButton.BindingContext = _startViewModel;
-            StartButton.BindingContext = _startViewModel;
+            StartViewModel = new StartViewModel(path, this, ChangeButton, StartButton);
+            ChangeButton.BindingContext = StartViewModel;
+            StartButton.BindingContext = StartViewModel;
+            BindingContext = this;
             Subscribe();
         }
 
         private void Subscribe()
         {
             MessagingCenter.Subscribe<Page>(this, Constants.StartPageCallBack,
-                (sender) => { _startViewModel.StartPageCallBack(); });
+                (sender) => { StartViewModel.StartPageCallBack(); });
         }
     }
 }

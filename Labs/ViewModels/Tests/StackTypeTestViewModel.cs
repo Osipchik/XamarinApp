@@ -45,6 +45,7 @@ namespace Labs.ViewModels.Tests
                     });
                 }
             });
+            await Task.Run(FrameViewModel.Models.Shuffle);
         }
 
         public async void TapEvent(int index) => await Task.Run(() => { FrameViewModel.SelectItem(index, false); });
@@ -68,7 +69,16 @@ namespace Labs.ViewModels.Tests
                 }
             });
 
-            TimerViewModel = await TimerViewModel.DisableTimerAsync(TimerViewModel) as TimerViewModel;
+            await Task.Run(DeleteTimer);
+        }
+
+        private void DeleteTimer()
+        {
+            if (TimerViewModel != null) {
+                TimerViewModel.DisableTimerAsync(TimerViewModel);
+                TimerViewModel = null;
+            }
         }
     }
+
 }

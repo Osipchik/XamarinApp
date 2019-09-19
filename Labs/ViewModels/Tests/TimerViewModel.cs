@@ -96,7 +96,7 @@ namespace Labs.ViewModels.Tests
                 (sender) => { TimerStop(); });
         }
 
-        public static async Task<object> DisableTimerAsync(TimerViewModel timerViewModel)
+        public static async void DisableTimerAsync(TimerViewModel timerViewModel)
         {
             await Task.Run(() => {
                 if (timerViewModel != null) {
@@ -104,8 +104,6 @@ namespace Labs.ViewModels.Tests
                     timerViewModel.TimerModel.TimerIsVisible = false;
                 }
             });
-
-            return null;
         }
     }
 }

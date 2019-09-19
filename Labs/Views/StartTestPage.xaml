@@ -25,8 +25,9 @@
 
     <ContentPage.Content>
         <StackLayout>
-            <ScrollView>
-                <StackLayout Margin="12">
+            <ScrollView BindingContext="{Binding StartViewModel}">
+                <StackLayout Margin="12"
+                             BindingContext="{Binding GetSettingsModel}">
                     <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"/>

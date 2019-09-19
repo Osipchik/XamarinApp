@@ -16,14 +16,8 @@ namespace Labs.Views.TestPages
 
             _timerViewModel = testTimerViewModel;
             _entryViewModel = new EntryTypeTestViewModel(path, fileName, testTimerViewModel);
-            SetBindings();
-            Subscribe();
-        }
-
-        private void SetBindings()
-        {
             BindingContext = _entryViewModel;
-            //GridProgress.BindingContext = _entryViewModel.TimerViewModel.TimerModel;
+            Subscribe();
         }
 
         protected override void OnAppearing()
@@ -40,10 +34,7 @@ namespace Labs.Views.TestPages
             MessagingCenter.Subscribe<Page>(this, "runFirstTimer",
                 (sender) => { _entryViewModel.TimerViewModel.TimerRunAsync(); });
             MessagingCenter.Subscribe<Page>(this, Constants.Check,
-                (sender) =>
-                {
-                    _entryViewModel.CheckPageAsync();
-                });
+                (sender) => { _entryViewModel.CheckPageAsync(); });
         }
     }
 }

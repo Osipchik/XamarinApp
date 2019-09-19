@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Drawing;
+using System.Threading.Tasks;
 using Labs.Helpers;
 using Labs.Models;
 
@@ -33,9 +34,20 @@ namespace Labs.ViewModels.Tests
 
         public async void CheckPageAsync()
         {
-            var asd = EntryModel.Answer == EntryModel.RightAnswer;
-
-            TimerViewModel = await TimerViewModel.DisableTimerAsync(TimerViewModel) as TimerViewModel;
+            EntryModel.IsReadOnly = true;
+            EntryModel.BorderColor = GetColor(EntryModel.Answer == EntryModel.RightAnswer);
+            await Task.Run(DeleteTimer);
         }
+
+        private void DeleteTimer()
+        {
+            if (TimerViewModel != null) {
+                TimerViewModel.DisableTimerAsync(TimerViewModel);
+                TimerViewModel = null;
+            }
+        }
+
+        private Color GetColor(bool isRight) =>
+            isRight ? Constants.Colors.ColorMaterialGreen : Constants.Colors.ColorMaterialRed;
     }
 }

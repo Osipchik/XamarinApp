@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using Labs.Helpers;
@@ -41,6 +43,7 @@ namespace Labs.ViewModels.Tests
                     });
                 }
             });
+            await Task.Run(() => { FrameViewModel.Models.Shuffle(); });
         }
 
         public SettingsModel GetSettingsModel => _settingsViewModel.SettingsModel;
@@ -58,8 +61,15 @@ namespace Labs.ViewModels.Tests
                         : Constants.Colors.ColorMaterialRed;
                 }
             });
+            await Task.Run(DeleteTimer);
+        }
 
-            TimerViewModel = await TimerViewModel.DisableTimerAsync(TimerViewModel) as TimerViewModel;
+        private void DeleteTimer()
+        {
+            if (TimerViewModel != null) {
+                TimerViewModel.DisableTimerAsync(TimerViewModel);
+                TimerViewModel = null;
+            }
         }
     }
 }

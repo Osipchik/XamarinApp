@@ -9,8 +9,7 @@
              Title="Entry Type">
     <ContentPage.Content>
         <StackLayout>
-            <Grid x:Name="GridProgress"
-                  BindingContext="{Binding GeTimerModel}"
+            <Grid BindingContext="{Binding GeTimerModel}"
                   HorizontalOptions="FillAndExpand"
                   ColumnSpacing="0"
                   RowSpacing="0">

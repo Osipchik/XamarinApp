@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using System.Windows.Input;
 using Labs.Helpers;
+using Labs.Models;
 using Labs.Views;
 using Labs.Views.Creators;
 using Labs.Views.TestPages;
@@ -55,6 +56,8 @@ namespace Labs.ViewModels
                 }
             });
         }
+
+        public SettingsModel GetSettingsModel => SettingsViewModel.SettingsModel;
 
         public void StartPageCallBack()
         {
