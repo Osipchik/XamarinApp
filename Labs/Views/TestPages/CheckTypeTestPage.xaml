@@ -8,7 +8,7 @@
              Title="Check Type">
     <ContentPage.Content>
         <StackLayout>
-            <Grid x:Name="GridProgress"
+            <Grid BindingContext="{Binding GeTimerModel}"
                   HorizontalOptions="FillAndExpand"
                   ColumnSpacing="0"
                   RowSpacing="0">
@@ -31,20 +31,20 @@
                        Grid.Row="1" Grid.Column="0"/>
             </Grid>
             <Label Margin="0"
+                   BindingContext="{Binding GetSettingsModel}"
                    Text="{Binding Question}"
                    HorizontalOptions="Center"/>
             <BoxView HorizontalOptions="FillAndExpand"
                      Margin="12,0,12,0"
                      HeightRequest="1"
                      Color="#BDBDBD"/>
-            <ListView x:Name="ListView"
-                      CachingStrategy="RecycleElement"
+            <ListView CachingStrategy="RecycleElement"
                       SeparatorVisibility="None"
                       VerticalScrollBarVisibility="Never"
                       HasUnevenRows="True"
                       ItemSelected="ListView_OnItemSelected"
                       ItemTapped="ListView_OnItemTapped"
-                      ItemsSource="{Binding Models}">
+                      ItemsSource="{Binding GetFrameModel}">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <ViewCell>

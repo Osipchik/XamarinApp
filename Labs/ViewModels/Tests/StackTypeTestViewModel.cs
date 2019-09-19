@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using Labs.Helpers;
 using Labs.Models;
@@ -17,7 +18,11 @@ namespace Labs.ViewModels.Tests
 
             Initialize(path, fileName, testTimeViewModel);
         }
+
         public SettingsModel GetSettingsModel => _settingsViewModel.SettingsModel;
+        public ObservableCollection<FrameModel> GetFrameModel => FrameViewModel.Models;
+        public TimerModel GeTimerModel => TimerViewModel.TimerModel;
+
         private async void Initialize(string path, string fileName, TimerViewModel testTimeViewModel)
         {
             var strings = DirectoryHelper.ReadStringsFromFile(path, fileName);
@@ -31,7 +36,13 @@ namespace Labs.ViewModels.Tests
         {
             await Task.Run(() => {
                 for (int i = startIndex; i < strings.Count; i++) {
-                    FrameViewModel.AddModel(strings[i], false, strings[++i]);
+                    FrameViewModel.Models.Add(new FrameModel
+                    {
+                        ItemTextLeft = strings[i],
+                        ItemTextRight = strings[++i],
+                        RightString = strings[i],
+                        BorderColor = FrameViewModel.GetColor(false)
+                    });
                 }
             });
         }
@@ -44,6 +55,20 @@ namespace Labs.ViewModels.Tests
             FrameViewModel.Models[firstIndex].ItemTextRight = FrameViewModel.Models[secondIndex].ItemTextRight;
             FrameViewModel.Models[secondIndex].ItemTextRight = a;
             FrameViewModel.DisableAllAsync();
+        }
+
+        public async void CheckPageAsync()
+        {
+            await Task.Run(() => {
+                foreach (var model in FrameViewModel.Models)
+                {
+                    model.BorderColor = model.ItemTextRight == model.RightString
+                        ? Constants.Colors.ColorMaterialGreen
+                        : Constants.Colors.ColorMaterialRed;
+                }
+            });
+
+            TimerViewModel = await TimerViewModel.DisableTimerAsync(TimerViewModel) as TimerViewModel;
         }
     }
 }

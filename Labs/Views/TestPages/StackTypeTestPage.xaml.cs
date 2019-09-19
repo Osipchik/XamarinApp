@@ -1,5 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Labs.Helpers;
 using Labs.ViewModels.Tests;
 using Xamarin.Forms;
@@ -12,20 +11,16 @@ namespace Labs.Views.TestPages
     {
         private readonly StackTypeTestViewModel _stackViewModel;
         private readonly TimerViewModel _timerViewModel;
-        private int? lineToSwapFirst;
+        private int? _lineToSwapFirst;
+        private bool _isClickAble = true;
         public StackTypeTestPage(string path, string fileName, TimerViewModel testTimerViewModel)
         {
             InitializeComponent();
 
             _timerViewModel = testTimerViewModel;
             _stackViewModel = new StackTypeTestViewModel(path, fileName, testTimerViewModel);
-            SetBindings();
-        }
-        private void SetBindings()
-        {
-            BindingContext = _stackViewModel.GetSettingsModel;
-            ListView.BindingContext = _stackViewModel.FrameViewModel;
-            GridProgress.BindingContext = _stackViewModel.TimerViewModel.TimerModel;
+            BindingContext = _stackViewModel;
+            Subscribe();
         }
 
         private void ListView_OnItemSelected(object sender, SelectedItemChangedEventArgs e)
@@ -34,28 +29,42 @@ namespace Labs.Views.TestPages
         }
         private void ListView_OnItemTapped(object sender, ItemTappedEventArgs e)
         {
-            _stackViewModel.TapEvent(e.ItemIndex);
-            SwapAsync(e.ItemIndex);
+            if (_isClickAble) {
+                _stackViewModel.TapEvent(e.ItemIndex);
+                SwapAsync(e.ItemIndex);
+            }
         }
 
         private async void SwapAsync(int index)
         {
-            if (lineToSwapFirst == null) {
-                lineToSwapFirst = index;
+            if (_lineToSwapFirst == null) {
+                _lineToSwapFirst = index;
             }
-            else if (index != lineToSwapFirst) {
-                await Task.Run(() => _stackViewModel.Swap(lineToSwapFirst.Value, index));
-                lineToSwapFirst = null;
+            else if (index != _lineToSwapFirst) {
+                await Task.Run(() => _stackViewModel.Swap(_lineToSwapFirst.Value, index));
+                _lineToSwapFirst = null;
             }
         }
 
         protected override void OnAppearing()
         {
             base.OnAppearing();
-            if (_timerViewModel == null) {
+            if (_timerViewModel == null && _stackViewModel.TimerViewModel != null) {
                 MessagingCenter.Send<Page>(this, Constants.StopAllTimers);
                 _stackViewModel.TimerViewModel.TimerRunAsync();
             }
+        }
+
+        private void Subscribe()
+        {
+            MessagingCenter.Subscribe<Page>(this, "runFirstTimer",
+                (sender) => { _stackViewModel.TimerViewModel.TimerRunAsync(); });
+            MessagingCenter.Subscribe<Page>(this, Constants.Check,
+                (sender) =>
+                {
+                    _stackViewModel.CheckPageAsync();
+                    _isClickAble = false;
+                });
         }
     }
 }

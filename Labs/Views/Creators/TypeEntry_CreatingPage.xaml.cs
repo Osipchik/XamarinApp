@@ -15,9 +15,7 @@ namespace Labs.Views.Creators
             InitializeComponent();
 
             var entryViewModel = new EntryTypeCreatorViewModel(path, fileName, this);
-
             BindingContext = entryViewModel;
-            SettingsLayout.BindingContext = entryViewModel.GetSettingsModel;
         }
 
         private void HideOrShowAsync_OnClicked(object sender, EventArgs e)

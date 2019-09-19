@@ -7,13 +7,13 @@ namespace Labs.ViewModels.Tests
     public class EntryTypeTestViewModel
     {
         private readonly SettingsViewModel _settingsViewModel;
-        private string _rightAnswer;
-        public  TimerViewModel TimerViewModel;
-        public string Answer { get; set; }
+        public TimerViewModel TimerViewModel;
+        public EntryTestModel EntryModel { get; }
 
         public EntryTypeTestViewModel(string path, string fileName, TimerViewModel testTimeViewModel)
         {
             _settingsViewModel = new SettingsViewModel();
+            EntryModel = new EntryTestModel();
             Initialize(path, fileName, testTimeViewModel);
         }
 
@@ -23,10 +23,19 @@ namespace Labs.ViewModels.Tests
             TimerViewModel = testTimeViewModel ?? new TimerViewModel(strings[0]);
             await Task.Run(() => {
                 _settingsViewModel.SetPageSettingsModel(strings[0], strings[1], strings[2]);
-                _rightAnswer = strings[3];
+                EntryModel.RightAnswer = strings[3];
+                EntryModel.BorderColor = Constants.Colors.ColorMaterialBlue;
             });
         }
 
         public SettingsModel GetSettingsModel => _settingsViewModel.SettingsModel;
+        public TimerModel GeTimerModel => TimerViewModel.TimerModel;
+
+        public async void CheckPageAsync()
+        {
+            var asd = EntryModel.Answer == EntryModel.RightAnswer;
+
+            TimerViewModel = await TimerViewModel.DisableTimerAsync(TimerViewModel) as TimerViewModel;
+        }
     }
 }

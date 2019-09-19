@@ -27,7 +27,8 @@
                         <Frame.GestureRecognizers>
                             <TapGestureRecognizer Tapped="HideOrShowAsync_OnClicked"/>
                         </Frame.GestureRecognizers>
-                        <StackLayout x:Name="SettingsLayout">
+                        <StackLayout x:Name="SettingsLayout"
+                                     BindingContext="{Binding GetSettingsModel}">
                             <StackLayout Orientation="Horizontal"
                                      HorizontalOptions="FillAndExpand"
                                      Margin="0">

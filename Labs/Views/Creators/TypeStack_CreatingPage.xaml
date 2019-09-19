@@ -35,7 +35,8 @@
                     <Frame.GestureRecognizers>
                         <TapGestureRecognizer Tapped="HideOrShowAsync_OnClicked"/>
                     </Frame.GestureRecognizers>
-                    <StackLayout x:Name="SettingsLayout">
+                    <StackLayout x:Name="SettingsLayout"
+                                 BindingContext="{Binding GetSettingsModel}">
                         <StackLayout Orientation="Horizontal"
                                      HorizontalOptions="FillAndExpand"
                                      Margin="0">
@@ -126,7 +127,7 @@
                       HasUnevenRows="True"
                       ItemSelected="ListView_OnItemSelected"
                       ItemTapped="ListView_OnItemTapped"
-                      ItemsSource="{Binding Models}">
+                      ItemsSource="{Binding GetFrameModels}">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <ViewCell>

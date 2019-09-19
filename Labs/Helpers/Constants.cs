@@ -21,6 +21,8 @@ namespace Labs.Helpers
 
         public const string StopAllTimers = "stopAllTimers";
         public const string TimeZero = "00:00:00";
+
+        public const string Check = "check";
         public static class Colors
         {
             public static readonly Color ColorMaterialBlue = Color.FromHex("#03A9F4");

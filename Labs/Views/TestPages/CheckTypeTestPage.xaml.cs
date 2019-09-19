@@ -10,32 +10,29 @@ namespace Labs.Views.TestPages
     {
         private readonly CheckTypeTestViewModel _checkViewModel;
         private readonly TimerViewModel _timerViewModel;
+        private bool _isClickAble = true;
         public CheckTypeTestPage(string path, string fileName, TimerViewModel testTimerViewModel)
         {
             InitializeComponent();
 
             _timerViewModel = testTimerViewModel;
             _checkViewModel = new CheckTypeTestViewModel(path, fileName, testTimerViewModel);
-            SetBindings();
+            BindingContext = _checkViewModel;
             Subscribe();
-        }
-
-        private void SetBindings()
-        {
-            BindingContext = _checkViewModel.GetSettingsModel;
-            ListView.BindingContext = _checkViewModel.FrameViewModel;
-            GridProgress.BindingContext = _checkViewModel.TimerViewModel.TimerModel;
         }
 
         private void ListView_OnItemSelected(object sender, SelectedItemChangedEventArgs e) => 
             ((ListView)sender).SelectedItem = null;
-        
-        private void ListView_OnItemTapped(object sender, ItemTappedEventArgs e) => _checkViewModel.TapEvent(e.ItemIndex);
+
+        private void ListView_OnItemTapped(object sender, ItemTappedEventArgs e)
+        {
+            if(_isClickAble) _checkViewModel.TapEvent(e.ItemIndex);
+        }
         
         protected override void OnAppearing()
         {
             base.OnAppearing();
-            if (_timerViewModel == null) {
+            if (_timerViewModel == null && _checkViewModel.TimerViewModel != null) {
                 MessagingCenter.Send<Page>(this, Constants.StopAllTimers);
                 _checkViewModel.TimerViewModel.TimerRunAsync();
             }
@@ -45,6 +42,12 @@ namespace Labs.Views.TestPages
         {
             MessagingCenter.Subscribe<Page>(this, "runFirstTimer", 
                 (sender)=>{ _checkViewModel.TimerViewModel.TimerRunAsync(); });
+            MessagingCenter.Subscribe<Page>(this, Constants.Check,
+                (sender) =>
+                {
+                    _checkViewModel.CheckPageAsync();
+                    _isClickAble = false;
+                });
         }
     }
 }

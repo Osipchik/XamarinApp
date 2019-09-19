@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.Collections.ObjectModel;
+using System.IO;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Labs.Helpers;
@@ -60,7 +61,9 @@ namespace Labs.ViewModels.Creators
                 }
             });
         }
+
         public SettingsModel GetSettingsModel => _settingsViewModel.SettingsModel;
+        public ObservableCollection<InfoModel> GetInfoModels => InfoViewModel.InfoModels;
 
         public async void GetFilesAsync()
         {

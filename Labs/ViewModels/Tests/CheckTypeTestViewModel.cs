@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using Labs.Helpers;
 using Labs.Models;
@@ -33,13 +34,32 @@ namespace Labs.ViewModels.Tests
         {
             await Task.Run(() => {
                 for (int i = startIndex; i < strings.Count; i++) {
-                    FrameViewModel.AddModel(strings[i], answers[i - startIndex] == '0');
+                    FrameViewModel.Models.Add(new FrameModel {
+                        ItemTextLeft = strings[i],
+                        IsRight = answers[i - startIndex] == '0',
+                        BorderColor = FrameViewModel.GetColor(false)
+                    });
                 }
             });
         }
 
         public SettingsModel GetSettingsModel => _settingsViewModel.SettingsModel;
+        public ObservableCollection<FrameModel> GetFrameModel => FrameViewModel.Models;
+        public TimerModel GeTimerModel => TimerViewModel.TimerModel;
 
         public async void TapEvent(int index) => await Task.Run(() => { FrameViewModel.SelectItem(index, false); });
+
+        public async void CheckPageAsync()
+        {
+            await Task.Run(() => {
+                foreach (var model in FrameViewModel.Models) {
+                    model.BorderColor = model.BorderColor == Constants.Colors.ColorMaterialBlue == model.IsRight 
+                        ? Constants.Colors.ColorMaterialGreen 
+                        : Constants.Colors.ColorMaterialRed;
+                }
+            });
+
+            TimerViewModel = await TimerViewModel.DisableTimerAsync(TimerViewModel) as TimerViewModel;
+        }
     }
 }

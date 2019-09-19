@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Labs.Helpers;
 using Labs.Models;
 using Xamarin.Forms;
@@ -87,10 +88,24 @@ namespace Labs.ViewModels.Tests
             }
         }
 
+        public void TimerStop() => _timerIsAlive = false;
+
         private void Subscribe()
         {
             MessagingCenter.Subscribe<Page>(this, Constants.StopAllTimers,
-                (sender) => { _timerIsAlive = false; });
+                (sender) => { TimerStop(); });
+        }
+
+        public static async Task<object> DisableTimerAsync(TimerViewModel timerViewModel)
+        {
+            await Task.Run(() => {
+                if (timerViewModel != null) {
+                    timerViewModel.TimerStop();
+                    timerViewModel.TimerModel.TimerIsVisible = false;
+                }
+            });
+
+            return null;
         }
     }
 }

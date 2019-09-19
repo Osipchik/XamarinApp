@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Labs.Annotations;
 using Labs.Helpers;
 using Labs.Models;
 using Labs.Resources;
@@ -10,13 +13,29 @@ using Xamarin.Forms;
 
 namespace Labs.ViewModels.Creators
 {
-    public class EntryTypeCreatorViewModel
+    public class EntryTypeCreatorViewModel : INotifyPropertyChanged
     {
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        [NotifyPropertyChangedInvocator]
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null) =>
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+
         private readonly string _path;
         private readonly string _fileName;
         private readonly Page _page;
         private readonly SettingsViewModel _settingsViewModel;
-        public string Answer { get; set; }
+
+        private string _answer;
+        public string Answer
+        {
+            get => _answer;
+            set
+            {
+                _answer = value;
+                OnPropertyChanged();
+            }
+        }
 
         public EntryTypeCreatorViewModel(string path, string fileName, Page page)
         {

@@ -42,16 +42,6 @@ namespace Labs.ViewModels
                 });
             });
         }
-        public void AddModel(string textLeft, bool isRight = false, string textRight = "", bool withColor = false)
-        {
-            Models.Add(new FrameModel
-            {
-                BorderColor = GetColor(isRight && withColor),
-                ItemTextLeft = textLeft,
-                ItemTextRight = textRight,
-                IsRight = isRight,
-            });
-        }
 
         public async void DisableAllAsync()
         {
@@ -90,7 +80,10 @@ namespace Labs.ViewModels
             Models[index].BorderColor = GetColor(Models[index].IsRight);
         }
 
-        private Color GetColor(bool isRight) => isRight ? Constants.Colors.ColorMaterialGreen : Constants.Colors.ColorMaterialGray;
+        public static Color GetColor(bool isRight)
+        {
+            return isRight ? Constants.Colors.ColorMaterialGreen : Constants.Colors.ColorMaterialGray;
+        }
         
         public void ItemToDelete(int index)
         {

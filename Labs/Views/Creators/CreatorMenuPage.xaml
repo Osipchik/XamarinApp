@@ -8,6 +8,17 @@
              x:Class="Labs.Views.Creators.CreatorMenuPage"
              Title="{helpers:Translate CreatorTitle}">
 
+    <ContentPage.Resources>
+        <Style x:Key="ImageButtonStyle" TargetType="ImageButton">
+            <Setter Property="Aspect" Value="AspectFit"/>
+            <Setter Property="WidthRequest" Value="36"/>
+            <Setter Property="HeightRequest" Value="36"/>
+            <Setter Property="Opacity" Value="0.3"/>
+            <Setter Property="Margin" Value="0,0,0,6"/>
+            <Setter Property="BackgroundColor" Value="Transparent"/>
+        </Style>
+    </ContentPage.Resources>
+
     <ContentPage.ToolbarItems>
         <ToolbarItem Text="{helpers:Translate Save}"
                      Order="Secondary"
@@ -36,7 +47,8 @@
                                 Margin="12,10,12,0"/>
                         <TableView x:Name="SettingsTableView"
                                    Intent="Settings"
-                                   HeightRequest="635">
+                                   HeightRequest="635"
+                                   BindingContext="{Binding GetSettingsModel}">
                         <TableRoot>
                             <TableSection Title="{helpers:Translate TestSettingsInfo}">
                                 <EntryCell Text="{Binding Name}"
@@ -84,14 +96,13 @@
                     </StackLayout>
                 </Frame>
               </ContentView>
-                <ListView x:Name="ListViewFiles"
-                          CachingStrategy="RecycleElement"
-                                SeparatorVisibility="None"
-                                VerticalScrollBarVisibility="Never"
-                                HasUnevenRows="True"
-                                ItemSelected="ListViewFiles_OnItemSelected"
-                                ItemTapped="ListViewFiles_OnItemTapped"
-                                ItemsSource="{Binding InfoModels}">
+                <ListView CachingStrategy="RecycleElement"
+                          SeparatorVisibility="None"
+                          VerticalScrollBarVisibility="Never"
+                          HasUnevenRows="True"
+                          ItemSelected="ListViewFiles_OnItemSelected"
+                          ItemTapped="ListViewFiles_OnItemTapped"
+                          ItemsSource="{Binding GetInfoModels}">
                     <ListView.ItemTemplate>
                         <DataTemplate>
                             <ViewCell>
@@ -125,8 +136,7 @@
               </ListView>
 
           
-            <Grid x:Name="GridButtons"
-                  BackgroundColor="Transparent">
+            <Grid BackgroundColor="Transparent">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
@@ -142,30 +152,15 @@
                          Grid.ColumnSpan="3"
                          Grid.Row="0" Grid.Column="0"/>
                 <ImageButton Source="Exam.png"
-                             Aspect="AspectFit"
-                             WidthRequest="36"
-                             HeightRequest="36"
-                             Opacity="0.3"
-                             Margin="0,0,0,6"
-                             BackgroundColor="Transparent"
+                             Style="{StaticResource ImageButtonStyle}"
                              Command="{Binding CreateCheckTypePageCommand}"
                              Grid.Column="0" Grid.Row="1"/>
                 <ImageButton Source="Contract.png"
-                             Aspect="AspectFit"
-                             WidthRequest="36"
-                             HeightRequest="36"
-                             Opacity="0.3"
-                             Margin="0,0,0,6"
-                             BackgroundColor="Transparent"
+                             Style="{StaticResource ImageButtonStyle}"
                              Command="{Binding CreateEntryTypePageCommand}"
                              Grid.Column="1" Grid.Row="1"/>
                 <ImageButton Source="Table.png"
-                             Aspect="AspectFit"
-                             WidthRequest="36"
-                             HeightRequest="36"
-                             Opacity="0.3"
-                             Margin="0,0,0,6"
-                             BackgroundColor="Transparent"
+                             Style="{StaticResource ImageButtonStyle}"
                              Command="{Binding CreateStackTypePageCommand}"
                              Grid.Column="2" Grid.Row="1"/>
             </Grid>

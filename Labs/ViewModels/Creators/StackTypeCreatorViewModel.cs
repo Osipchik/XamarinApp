@@ -1,7 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Labs.Helpers;
@@ -79,12 +78,18 @@ namespace Labs.ViewModels.Creators
         {
             await Task.Run(() => {
                 for (int i = startIndex; i < strings.Count; i++) {
-                    FrameViewModel.AddModel(strings[i], false, strings[++i], true);
+                    FrameViewModel.Models.Add(new FrameModel {
+                        ItemTextLeft = strings[i],
+                        ItemTextRight = strings[++i],
+                        BorderColor = FrameViewModel.GetColor(false)
+                    });
                 }
             });
         }
 
         public SettingsModel GetSettingsModel => _settingsViewModel.SettingsModel;
+        public ObservableCollection<FrameModel> GetFrameModels => FrameViewModel.Models;
+
 
         public async void TapEvent(int index)
         {

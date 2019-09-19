@@ -17,14 +17,7 @@ namespace Labs.Views.Creators
             InitializeComponent();
 
             _viewModel = new CheckTypeCreatorViewModel(path, fileName, this, GridButtons);
-            SetBindings();
-        }
-
-        private void SetBindings()
-        {
             BindingContext = _viewModel;
-            ListView.BindingContext = _viewModel.FrameViewModel;
-            SettingsLayout.BindingContext = _viewModel.GetSettingsModel;
         }
 
         private void ListView_OnItemSelected(object sender, SelectedItemChangedEventArgs e) =>

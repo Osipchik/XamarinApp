@@ -35,7 +35,8 @@
                     <Frame.GestureRecognizers>
                         <TapGestureRecognizer Tapped="HideOrShowAsync_OnClicked"/>
                     </Frame.GestureRecognizers>
-                    <StackLayout x:Name="SettingsLayout">
+                    <StackLayout x:Name="SettingsLayout"
+                                 BindingContext="{Binding GetSettingsModel}">
                         <StackLayout Orientation="Horizontal"
                                      HorizontalOptions="FillAndExpand"
                                      Margin="0">
@@ -119,14 +120,13 @@
                              Command="{Binding AcceptGridButtonCommand}"
                              Grid.Row="0" Grid.Column="4"/>
             </Grid>
-            <ListView x:Name="ListView"
-                      CachingStrategy="RecycleElement"
+            <ListView CachingStrategy="RecycleElement"
                       SeparatorVisibility="None"
                       VerticalScrollBarVisibility="Never"
                       HasUnevenRows="True"
                       ItemSelected="ListView_OnItemSelected"
                       ItemTapped="ListView_OnItemTapped"
-                      ItemsSource="{Binding Models}">
+                      ItemsSource="{Binding GetFrameModels}">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <ViewCell>

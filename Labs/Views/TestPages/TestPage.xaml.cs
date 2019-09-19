@@ -46,6 +46,7 @@ namespace Labs.Views.TestPages
                         break;
                 }
             }
+            Children.Add(new ResultPage());
 
             _timerViewModel?.TimerRunAsync();
         }

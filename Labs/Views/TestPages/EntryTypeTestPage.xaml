@@ -10,6 +10,7 @@
     <ContentPage.Content>
         <StackLayout>
             <Grid x:Name="GridProgress"
+                  BindingContext="{Binding GeTimerModel}"
                   HorizontalOptions="FillAndExpand"
                   ColumnSpacing="0"
                   RowSpacing="0">
@@ -32,6 +33,7 @@
                        Grid.Row="1" Grid.Column="0"/>
             </Grid>
             <Label Margin="0"
+                   BindingContext="{Binding GetSettingsModel}"
                    Text="{Binding Question}"
                    HorizontalOptions="Center"/>
             <BoxView HorizontalOptions="FillAndExpand"
@@ -40,12 +42,13 @@
                      Color="#BDBDBD"/>
             <ContentView Padding="5">
                 <Frame Padding="10,5,10,5"
-                       BorderColor="#03A9F4"
+                       BindingContext="{Binding EntryModel}"
+                       BorderColor="{Binding BorderColor}"
                        CornerRadius="10">
-                    <Editor x:Name="Editor"
-                            AutoSize="TextChanges"
+                    <Editor AutoSize="TextChanges"
                             HorizontalOptions="Center"
                             Text="{Binding Answer}"
+                            IsReadOnly="{Binding IsReadOnly}"
                             Placeholder="{helpers:Translate Answer}"/>
                 </Frame>
             </ContentView>

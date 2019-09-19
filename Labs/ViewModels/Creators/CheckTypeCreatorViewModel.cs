@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -82,12 +83,18 @@ namespace Labs.ViewModels.Creators
         {
             await Task.Run(() => {
                 for (int i = startIndex; i < strings.Count; i++) {
-                    FrameViewModel.AddModel(strings[i], answers[i - startIndex] == '0', "", true);
+                    var isRight = answers[i - startIndex] == '0';
+                    FrameViewModel.Models.Add(new FrameModel {
+                        ItemTextLeft = strings[i],
+                        IsRight = isRight,
+                        BorderColor = FrameViewModel.GetColor(isRight)
+                    });
                 }
             });
         }
 
         public SettingsModel GetSettingsModel => _settingsViewModel.SettingsModel;
+        public ObservableCollection<FrameModel> GetFrameModels => FrameViewModel.Models;
 
         public async void TapEvent(int index)
         {

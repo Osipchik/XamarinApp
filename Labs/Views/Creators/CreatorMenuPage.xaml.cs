@@ -18,16 +18,8 @@ namespace Labs.Views.Creators
             InitializeComponent();
 
             _menuCreatorViewModel = new MenuCreatorViewModel(path, this);
-            SetBindings();
-            Subscribe();
-        }
-
-        private void SetBindings()
-        {
             BindingContext = _menuCreatorViewModel;
-            GridButtons.BindingContext = _menuCreatorViewModel;
-            ListViewFiles.BindingContext = _menuCreatorViewModel.InfoViewModel;
-            SettingsTableView.BindingContext = _menuCreatorViewModel.GetSettingsModel;
+            Subscribe();
         }
 
         private void SettingsButton_OnClickedAsync(object sender, EventArgs e)
