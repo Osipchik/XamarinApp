@@ -24,7 +24,6 @@ namespace Labs.ViewModels
             }
         }
 
-
         private int _itemIndex = -1;
         private readonly List<int> _itemIndexToDeleteList;
         public FrameViewModel()

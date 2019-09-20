@@ -14,17 +14,15 @@ namespace Labs.Views.TestPages
     {
         private readonly TestViewModel _testViewModel;
         private readonly TimerViewModel _timerViewModel;
-
-        public TestModel TestModel;
+        private readonly TestModel _testModel;
         public TestPage(string path, string testTime)
         {
             InitializeComponent();
             _testViewModel = new TestViewModel(this);
             _timerViewModel = testTime != Constants.TimeZero ? new TimerViewModel(testTime) : null;
             FillPages(path);
-            _timerViewModel?.TimerRunAsync();
 
-            TestModel = new TestModel();
+            _testModel = new TestModel();
         }
 
         private async void FillPages(string path)
@@ -40,17 +38,18 @@ namespace Labs.Views.TestPages
                 switch (DirectoryHelper.GetTypeName(model.Name))
                 {
                     case Constants.TestTypeCheck:
-                        Children.Add(new CheckTypeTestPage(path, model.Name, _timerViewModel, TestModel));
+                        Children.Add(new CheckTypeTestPage(path, model.Name, _timerViewModel, _testModel));
                         break;
                     case Constants.TestTypeEntry:
-                        Children.Add(new EntryTypeTestPage(path, model.Name, _timerViewModel, TestModel));
+                        Children.Add(new EntryTypeTestPage(path, model.Name, _timerViewModel, _testModel));
                         break;
                     case Constants.TestTypeStack:
-                        Children.Add(new StackTypeTestPage(path, model.Name, _timerViewModel, TestModel));
+                        Children.Add(new StackTypeTestPage(path, model.Name, _timerViewModel, _testModel));
                         break;
                 }
             }
-            Children.Add(new ResultPage(TestModel));
+            Children.Add(new ResultPage(_testModel));
+            _timerViewModel?.TimerRunAsync();
         }
 
         protected override void OnPagesChanged(NotifyCollectionChangedEventArgs e)

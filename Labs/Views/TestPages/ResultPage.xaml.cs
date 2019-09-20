@@ -13,19 +13,23 @@ namespace Labs.Views.TestPages
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class ResultPage : ContentPage
     {
-        private bool isClickAble = true;
-            public ResultPage(TestModel testModel)
+        private bool _isClickAble = true;
+        private readonly TestModel _model;
+        public ResultPage(TestModel testModel)
         {
             InitializeComponent();
-            BindingContext = testModel;
+            _model = testModel;
+            BindingContext = _model;
         }
 
         private void Button_OnClicked(object sender, EventArgs e)
         {
-            if (isClickAble)
+            if (_isClickAble)
             {
+                _model.Price = 0;
+                _model.RightAnswers = 0;
                 MessagingCenter.Send<Page>(this, Constants.Check);
-                isClickAble = false;
+                _isClickAble = false;
             }
         }
     }

@@ -11,7 +11,6 @@ namespace Labs.Views.TestPages
     {
         private readonly CheckTypeTestViewModel _checkViewModel;
         private readonly TimerViewModel _timerViewModel;
-        private bool _isClickAble = true;
         private readonly TestModel _testModel;
 
         public CheckTypeTestPage(string path, string fileName, TimerViewModel testTimerViewModel, TestModel model = null)
@@ -28,10 +27,7 @@ namespace Labs.Views.TestPages
         private void ListView_OnItemSelected(object sender, SelectedItemChangedEventArgs e) => 
             ((ListView)sender).SelectedItem = null;
 
-        private void ListView_OnItemTapped(object sender, ItemTappedEventArgs e)
-        {
-            if(_isClickAble) _checkViewModel.TapEvent(e.ItemIndex);
-        }
+        private void ListView_OnItemTapped(object sender, ItemTappedEventArgs e) => _checkViewModel.TapEvent(e.ItemIndex);
         
         protected override void OnAppearing()
         {
@@ -47,11 +43,7 @@ namespace Labs.Views.TestPages
             MessagingCenter.Subscribe<Page>(this, "runFirstTimer", 
                 (sender)=>{ _checkViewModel.TimerViewModel.TimerRunAsync(); });
             MessagingCenter.Subscribe<Page>(this, Constants.Check,
-                (sender) =>
-                {
-                    _checkViewModel.CheckPageAsync(_testModel);
-                    _isClickAble = false;
-                });
+                (sender) => { _checkViewModel.CheckPageAsync(_testModel); });
         }
     }
 }

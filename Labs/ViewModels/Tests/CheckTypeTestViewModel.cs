@@ -11,7 +11,7 @@ namespace Labs.ViewModels.Tests
         public readonly FrameViewModel FrameViewModel;
         private readonly SettingsViewModel _settingsViewModel;
         public TimerViewModel TimerViewModel;
-
+        private bool _isChickAble = true;
         public CheckTypeTestViewModel(string path, string fileName, TimerViewModel testTimeViewModel)
         {
             FrameViewModel = new FrameViewModel();
@@ -48,7 +48,12 @@ namespace Labs.ViewModels.Tests
         public ObservableCollection<FrameModel> GetFrameModel => FrameViewModel.Models;
         public TimerModel GeTimerModel => TimerViewModel.TimerModel;
 
-        public async void TapEvent(int index) => await Task.Run(() => { FrameViewModel.SelectItem(index, false); });
+        public async void TapEvent(int index)
+        {
+            if (_isChickAble) {
+                await Task.Run(() => { FrameViewModel.SelectItem(index, false); });
+            }
+        }
 
         public async void CheckPageAsync(TestModel testModel)
         {
@@ -58,7 +63,7 @@ namespace Labs.ViewModels.Tests
                 testModel.Price += int.Parse(GetSettingsModel.Price);
                 testModel.RightAnswers++;
             });
-            
+            _isChickAble = false;
             await Task.Run(() => TimerViewModel.DisableTimerAsync());
         }
 

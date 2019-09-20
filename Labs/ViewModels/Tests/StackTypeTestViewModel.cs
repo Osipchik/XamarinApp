@@ -11,6 +11,9 @@ namespace Labs.ViewModels.Tests
         public readonly FrameViewModel FrameViewModel;
         private readonly SettingsViewModel _settingsViewModel;
         public TimerViewModel TimerViewModel;
+        private bool _isClickAble = true;
+        private int? _lineToSwap;
+        
         public StackTypeTestViewModel(string path, string fileName, TimerViewModel testTimeViewModel)
         {
             FrameViewModel = new FrameViewModel();
@@ -48,14 +51,34 @@ namespace Labs.ViewModels.Tests
             });
         }
 
-        public async void TapEvent(int index) => await Task.Run(() => { FrameViewModel.SelectItem(index, false); });
-
-        public void Swap(int firstIndex, int secondIndex)
+        public async void TapEvent(int index)
         {
-            var a = FrameViewModel.Models[firstIndex].ItemTextRight;
-            FrameViewModel.Models[firstIndex].ItemTextRight = FrameViewModel.Models[secondIndex].ItemTextRight;
-            FrameViewModel.Models[secondIndex].ItemTextRight = a;
-            FrameViewModel.DisableAllAsync();
+            if (_isClickAble)
+            {
+                await Task.Run(() => { FrameViewModel.SelectItem(index, false); });
+                await Task.Run(() => { CanSwap(index); });
+            }
+        }
+
+        private void CanSwap(int index)
+        {
+            if (_lineToSwap == null) {
+                _lineToSwap = index;
+            }
+            else if (index != _lineToSwap) {
+                SwapAsync(_lineToSwap.Value, index);
+                _lineToSwap = null;
+            }
+        }
+
+        private async void SwapAsync(int firstIndex, int secondIndex)
+        {
+            await Task.Run(() => {
+                var a = FrameViewModel.Models[firstIndex].ItemTextRight;
+                FrameViewModel.Models[firstIndex].ItemTextRight = FrameViewModel.Models[secondIndex].ItemTextRight;
+                FrameViewModel.Models[secondIndex].ItemTextRight = a;
+                FrameViewModel.DisableAllAsync();
+            });
         }
 
         public async void CheckPageAsync(TestModel testModel)
@@ -66,7 +89,7 @@ namespace Labs.ViewModels.Tests
                 testModel.Price += int.Parse(GetSettingsModel.Price);
                 testModel.RightAnswers++;
             });
-
+            _isClickAble = false;
             await Task.Run(() => TimerViewModel.DisableTimerAsync());
         }
 
