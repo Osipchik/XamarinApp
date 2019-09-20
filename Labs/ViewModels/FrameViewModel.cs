@@ -81,11 +81,13 @@ namespace Labs.ViewModels
             Models[index].BorderColor = GetColor(Models[index].IsRight);
         }
 
-        public static Color GetColor(bool isRight)
-        {
-            return isRight ? Constants.Colors.ColorMaterialGreen : Constants.Colors.ColorMaterialGray;
-        }
+        public static Color GetColor(bool isRight) =>
+            isRight ? Constants.Colors.ColorMaterialGreen : Constants.Colors.ColorMaterialGray;
+
+        public static Color GetColorOnCheck(bool isRight) =>
+            isRight ? Constants.Colors.ColorMaterialGreen : Constants.Colors.ColorMaterialRed;
         
+
         public void ItemToDelete(int index)
         {
             if (Models[index].BorderColor == Constants.Colors.ColorMaterialRed) {

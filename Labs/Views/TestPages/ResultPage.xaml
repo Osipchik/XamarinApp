@@ -7,9 +7,8 @@
              x:Class="Labs.Views.TestPages.ResultPage">
     <ContentPage.Content>
         <StackLayout>
-            <Label Text="Welcome to Xamarin.Forms!"
-                VerticalOptions="CenterAndExpand" 
-                HorizontalOptions="CenterAndExpand" />
+            <Label Text="{Binding Price}"/>
+            <Label Text="{Binding RightAnswers}"/>
             <Button Text="check"
                     Clicked="Button_OnClicked"
                     HorizontalOptions="Center"

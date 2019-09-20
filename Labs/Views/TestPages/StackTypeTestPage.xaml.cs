@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Labs.Helpers;
+using Labs.Models;
 using Labs.ViewModels.Tests;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -13,13 +14,15 @@ namespace Labs.Views.TestPages
         private readonly TimerViewModel _timerViewModel;
         private int? _lineToSwapFirst;
         private bool _isClickAble = true;
-        public StackTypeTestPage(string path, string fileName, TimerViewModel testTimerViewModel)
+        private readonly TestModel _testModel;
+        public StackTypeTestPage(string path, string fileName, TimerViewModel testTimerViewModel, TestModel model = null)
         {
             InitializeComponent();
 
             _timerViewModel = testTimerViewModel;
             _stackViewModel = new StackTypeTestViewModel(path, fileName, testTimerViewModel);
             BindingContext = _stackViewModel;
+            _testModel = model;
             Subscribe();
         }
 
@@ -62,7 +65,7 @@ namespace Labs.Views.TestPages
             MessagingCenter.Subscribe<Page>(this, Constants.Check,
                 (sender) =>
                 {
-                    _stackViewModel.CheckPageAsync();
+                    _stackViewModel.CheckPageAsync(_testModel);
                     _isClickAble = false;
                 });
         }

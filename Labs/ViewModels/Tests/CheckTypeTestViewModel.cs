@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using Labs.Helpers;
@@ -52,24 +50,28 @@ namespace Labs.ViewModels.Tests
 
         public async void TapEvent(int index) => await Task.Run(() => { FrameViewModel.SelectItem(index, false); });
 
-        public async void CheckPageAsync()
+        public async void CheckPageAsync(TestModel testModel)
         {
             await Task.Run(() => {
-                foreach (var model in FrameViewModel.Models) {
-                    model.BorderColor = model.BorderColor == Constants.Colors.ColorMaterialBlue == model.IsRight 
-                        ? Constants.Colors.ColorMaterialGreen 
-                        : Constants.Colors.ColorMaterialRed;
-                }
+                if (!CheckModel()) return;
+                if (testModel == null) return;
+                testModel.Price += int.Parse(GetSettingsModel.Price);
+                testModel.RightAnswers++;
             });
-            await Task.Run(DeleteTimer);
+            
+            await Task.Run(() => TimerViewModel.DisableTimerAsync());
         }
 
-        private void DeleteTimer()
+        private bool CheckModel()
         {
-            if (TimerViewModel != null) {
-                TimerViewModel.DisableTimerAsync(TimerViewModel);
-                TimerViewModel = null;
+            var pageIsRight = true;
+            foreach (var model in FrameViewModel.Models) {
+                var isRight = model.BorderColor == Constants.Colors.ColorMaterialBlue == model.IsRight;
+                model.BorderColor = FrameViewModel.GetColorOnCheck(isRight);
+                pageIsRight = pageIsRight && isRight;
             }
+
+            return pageIsRight;
         }
     }
 }

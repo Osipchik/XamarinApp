@@ -88,7 +88,7 @@ namespace Labs.ViewModels.Tests
             }
         }
 
-        public void TimerStop() => _timerIsAlive = false;
+        private void TimerStop() => _timerIsAlive = false;
 
         private void Subscribe()
         {
@@ -96,12 +96,13 @@ namespace Labs.ViewModels.Tests
                 (sender) => { TimerStop(); });
         }
 
-        public static async void DisableTimerAsync(TimerViewModel timerViewModel)
+        public async void DisableTimerAsync()
         {
             await Task.Run(() => {
-                if (timerViewModel != null) {
-                    timerViewModel.TimerStop();
-                    timerViewModel.TimerModel.TimerIsVisible = false;
+                if (TimerModel.TimerIsVisible) {
+                    TimerStop();
+                    TimerModel.TimerIsVisible = false;
+                    TimerModel.Time = null;
                 }
             });
         }

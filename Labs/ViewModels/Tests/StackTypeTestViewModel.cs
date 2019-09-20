@@ -29,8 +29,9 @@ namespace Labs.ViewModels.Tests
             TimerViewModel = testTimeViewModel ?? new TimerViewModel(strings[0]);
             await Task.Run(() => {
                 _settingsViewModel.SetPageSettingsModel(strings[0], strings[1], strings[2]);
-                FillFramesAsync(strings, 3);
             });
+            FillFramesAsync(strings, 3);
+            await Task.Run(FrameViewModel.Models.Shuffle);
         }
         private async void FillFramesAsync(IReadOnlyList<string> strings, int startIndex)
         {
@@ -45,7 +46,6 @@ namespace Labs.ViewModels.Tests
                     });
                 }
             });
-            await Task.Run(FrameViewModel.Models.Shuffle);
         }
 
         public async void TapEvent(int index) => await Task.Run(() => { FrameViewModel.SelectItem(index, false); });
@@ -58,26 +58,28 @@ namespace Labs.ViewModels.Tests
             FrameViewModel.DisableAllAsync();
         }
 
-        public async void CheckPageAsync()
+        public async void CheckPageAsync(TestModel testModel)
         {
             await Task.Run(() => {
-                foreach (var model in FrameViewModel.Models)
-                {
-                    model.BorderColor = model.ItemTextRight == model.RightString
-                        ? Constants.Colors.ColorMaterialGreen
-                        : Constants.Colors.ColorMaterialRed;
-                }
+                if (!CheckModel()) return;
+                if (testModel == null) return;
+                testModel.Price += int.Parse(GetSettingsModel.Price);
+                testModel.RightAnswers++;
             });
 
-            await Task.Run(DeleteTimer);
+            await Task.Run(() => TimerViewModel.DisableTimerAsync());
         }
 
-        private void DeleteTimer()
+        private bool CheckModel()
         {
-            if (TimerViewModel != null) {
-                TimerViewModel.DisableTimerAsync(TimerViewModel);
-                TimerViewModel = null;
+            var pageIsRight = true;
+            foreach (var model in FrameViewModel.Models) {
+                var isRight = model.ItemTextRight == model.RightString;
+                model.BorderColor = FrameViewModel.GetColorOnCheck(isRight);
+                pageIsRight = pageIsRight && isRight;
             }
+
+            return pageIsRight;
         }
     }
 

@@ -1,4 +1,5 @@
 ﻿using Labs.Helpers;
+using Labs.Models;
 using Labs.ViewModels.Tests;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -11,13 +12,16 @@ namespace Labs.Views.TestPages
         private readonly CheckTypeTestViewModel _checkViewModel;
         private readonly TimerViewModel _timerViewModel;
         private bool _isClickAble = true;
-        public CheckTypeTestPage(string path, string fileName, TimerViewModel testTimerViewModel)
+        private readonly TestModel _testModel;
+
+        public CheckTypeTestPage(string path, string fileName, TimerViewModel testTimerViewModel, TestModel model = null)
         {
             InitializeComponent();
 
             _timerViewModel = testTimerViewModel;
             _checkViewModel = new CheckTypeTestViewModel(path, fileName, testTimerViewModel);
             BindingContext = _checkViewModel;
+            _testModel = model;
             Subscribe();
         }
 
@@ -45,7 +49,7 @@ namespace Labs.Views.TestPages
             MessagingCenter.Subscribe<Page>(this, Constants.Check,
                 (sender) =>
                 {
-                    _checkViewModel.CheckPageAsync();
+                    _checkViewModel.CheckPageAsync(_testModel);
                     _isClickAble = false;
                 });
         }

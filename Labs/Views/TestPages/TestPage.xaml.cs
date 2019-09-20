@@ -13,14 +13,18 @@ namespace Labs.Views.TestPages
     public partial class TestPage : TabbedPage
     {
         private readonly TestViewModel _testViewModel;
-        private readonly TimerViewModel _timerViewModel; 
+        private readonly TimerViewModel _timerViewModel;
+
+        public TestModel TestModel;
         public TestPage(string path, string testTime)
         {
             InitializeComponent();
-
             _testViewModel = new TestViewModel(this);
             _timerViewModel = testTime != Constants.TimeZero ? new TimerViewModel(testTime) : null;
             FillPages(path);
+            _timerViewModel?.TimerRunAsync();
+
+            TestModel = new TestModel();
         }
 
         private async void FillPages(string path)
@@ -36,19 +40,17 @@ namespace Labs.Views.TestPages
                 switch (DirectoryHelper.GetTypeName(model.Name))
                 {
                     case Constants.TestTypeCheck:
-                        Children.Add(new CheckTypeTestPage(path, model.Name, _timerViewModel));
+                        Children.Add(new CheckTypeTestPage(path, model.Name, _timerViewModel, TestModel));
                         break;
                     case Constants.TestTypeEntry:
-                        Children.Add(new EntryTypeTestPage(path, model.Name, _timerViewModel));
+                        Children.Add(new EntryTypeTestPage(path, model.Name, _timerViewModel, TestModel));
                         break;
                     case Constants.TestTypeStack:
-                        Children.Add(new StackTypeTestPage(path, model.Name, _timerViewModel));
+                        Children.Add(new StackTypeTestPage(path, model.Name, _timerViewModel, TestModel));
                         break;
                 }
             }
-            Children.Add(new ResultPage());
-
-            _timerViewModel?.TimerRunAsync();
+            Children.Add(new ResultPage(TestModel));
         }
 
         protected override void OnPagesChanged(NotifyCollectionChangedEventArgs e)

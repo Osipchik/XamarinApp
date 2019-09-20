@@ -1,36 +1,32 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using System.Text;
 using Labs.Annotations;
 
 namespace Labs.Models
 {
     public class TestModel : INotifyPropertyChanged
     {
-        private string _index;
-        public string Title
+        private int _price;
+        public int Price
         {
-            get => $"page {_index}";
+            get => _price;
             set
             {
-                _index = value;
+                _price = value;
                 OnPropertyChanged();
             }
         }
 
-        private bool _timerIsFinish;
-        public bool TimerIsFinish
+        private int _rightAnswers;
+        public int RightAnswers
         {
-            get => _timerIsFinish;
+            get => _rightAnswers;
             set
             {
-                _timerIsFinish = value;
+                _rightAnswers = value;
                 OnPropertyChanged();
             }
         }
-
 
         public event PropertyChangedEventHandler PropertyChanged;
 

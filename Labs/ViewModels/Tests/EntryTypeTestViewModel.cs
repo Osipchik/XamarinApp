@@ -32,19 +32,20 @@ namespace Labs.ViewModels.Tests
         public SettingsModel GetSettingsModel => _settingsViewModel.SettingsModel;
         public TimerModel GeTimerModel => TimerViewModel.TimerModel;
 
-        public async void CheckPageAsync()
+        public async void CheckPageAsync(TestModel testModel)
         {
             EntryModel.IsReadOnly = true;
-            EntryModel.BorderColor = GetColor(EntryModel.Answer == EntryModel.RightAnswer);
-            await Task.Run(DeleteTimer);
-        }
+            await Task.Run(() => {
+                if (EntryModel.Answer == EntryModel.RightAnswer) {
+                    EntryModel.BorderColor = GetColor(true);
+                    if (testModel == null) return;
+                    testModel.Price += int.Parse(GetSettingsModel.Price);
+                    testModel.RightAnswers++;
+                }
+                else EntryModel.BorderColor = GetColor(false);
+            });
 
-        private void DeleteTimer()
-        {
-            if (TimerViewModel != null) {
-                TimerViewModel.DisableTimerAsync(TimerViewModel);
-                TimerViewModel = null;
-            }
+            await Task.Run(() => TimerViewModel.DisableTimerAsync());
         }
 
         private Color GetColor(bool isRight) =>
