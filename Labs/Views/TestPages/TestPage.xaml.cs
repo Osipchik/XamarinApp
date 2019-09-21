@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Threading.Tasks;
 using Labs.Helpers;
 using Labs.Models;
 using Labs.ViewModels;
@@ -25,31 +26,39 @@ namespace Labs.Views.TestPages
             _testModel = new TestModel();
         }
 
-        private async void FillPages(string path)
+        private void FillPages(string path)
         {
             var infos = new InfoViewModel(path);
             infos.GetFilesModel();
-            await Device.InvokeOnMainThreadAsync(() => AddPages(infos.InfoModels, path));
+            AddPagesAsync(infos.InfoModels, path);
         }
 
-        private void AddPages(IEnumerable<InfoModel> infoModels, string path)
+        private async void AddPagesAsync(IEnumerable<InfoModel> infoModels, string path)
+        {
+            await Task.Run(() => { AddTestPages(infoModels, path); });
+            await Task.Run(()=> { _timerViewModel?.TimerRunAsync(); });
+        }
+
+        private async void AddTestPages(IEnumerable<InfoModel> infoModels, string path)
         {
             foreach (var model in infoModels) {
-                switch (DirectoryHelper.GetTypeName(model.Name))
-                {
-                    case Constants.TestTypeCheck:
-                        Children.Add(new CheckTypeTestPage(path, model.Name, _timerViewModel, _testModel));
-                        break;
-                    case Constants.TestTypeEntry:
-                        Children.Add(new EntryTypeTestPage(path, model.Name, _timerViewModel, _testModel));
-                        break;
-                    case Constants.TestTypeStack:
-                        Children.Add(new StackTypeTestPage(path, model.Name, _timerViewModel, _testModel));
-                        break;
-                }
+                await Device.InvokeOnMainThreadAsync(() => {
+                    switch (DirectoryHelper.GetTypeName(model.Name))
+                    {
+                        case Constants.TestTypeCheck:
+                            Children.Add(new CheckTypeTestPage(path, model.Name, _timerViewModel, _testModel,
+                                Children.Count + 1));
+                            break;
+                        case Constants.TestTypeEntry:
+                            Children.Add(new EntryTypeTestPage(path, model.Name, _timerViewModel, _testModel));
+                            break;
+                        case Constants.TestTypeStack:
+                            Children.Add(new StackTypeTestPage(path, model.Name, _timerViewModel, _testModel));
+                            break;
+                    }
+                });
             }
-            Children.Add(new ResultPage(_testModel));
-            _timerViewModel?.TimerRunAsync();
+            await Device.InvokeOnMainThreadAsync(() => Children.Add(new ResultPage(_testModel)));
         }
 
         protected override void OnPagesChanged(NotifyCollectionChangedEventArgs e)

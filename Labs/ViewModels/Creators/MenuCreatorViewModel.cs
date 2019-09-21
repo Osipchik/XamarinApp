@@ -16,7 +16,7 @@ namespace Labs.ViewModels.Creators
         private readonly SettingsViewModel _settingsViewModel;
         private readonly Page _page;
 
-        public InfoViewModel InfoViewModel;
+        private readonly InfoViewModel _infoViewModel;
 
         public MenuCreatorViewModel(string path, Page page = null)
         {
@@ -24,7 +24,7 @@ namespace Labs.ViewModels.Creators
             _page = page;
             _settingsViewModel = new SettingsViewModel();
 
-            InfoViewModel = new InfoViewModel(path);
+            _infoViewModel = new InfoViewModel(path);
             CreateTempFolderAsync();
             ReadSettingsAsync();
             GetFilesAsync();
@@ -53,8 +53,7 @@ namespace Labs.ViewModels.Creators
 
         private async void ReadSettingsAsync()
         {
-            await Task.Run(() =>
-            {
+            await Task.Run(() => {
                 var settings = DirectoryHelper.ReadStringsFromFile(_path, Constants.SettingsFileTxt);
                 if (settings != null) {
                     _settingsViewModel.SetMenuPageSettings(settings);
@@ -63,30 +62,30 @@ namespace Labs.ViewModels.Creators
         }
 
         public SettingsModel GetSettingsModel => _settingsViewModel.SettingsModel;
-        public ObservableCollection<InfoModel> GetInfoModels => InfoViewModel.InfoModels;
+        public ObservableCollection<InfoModel> GetInfoModels => _infoViewModel.InfoModels;
 
         public async void GetFilesAsync()
         {
             await Task.Run(() => {
                 if (_page != null) {
-                    InfoViewModel.GetFilesModel();
+                    _infoViewModel.GetFilesModel();
                 }
             });
         }
 
         public async void OpenCreatingPage(int index)
         {
-            switch (DirectoryHelper.GetTypeName(InfoViewModel.InfoModels[index].Name))
+            switch (DirectoryHelper.GetTypeName(_infoViewModel.InfoModels[index].Name))
             {
                 case Constants.TestTypeCheck:
-                    await _page.Navigation.PushAsync(new TypeCheckCreatingPage(_path, InfoViewModel.InfoModels[index].Name));
+                    await _page.Navigation.PushAsync(new TypeCheckCreatingPage(_path, _infoViewModel.InfoModels[index].Name));
                     break;
                 case Constants.TestTypeStack:
-                    await _page.Navigation.PushAsync(new TypeStackCreatingPage(_path, InfoViewModel.InfoModels[index].Name));
+                    await _page.Navigation.PushAsync(new TypeStackCreatingPage(_path, _infoViewModel.InfoModels[index].Name));
                     break;
 
                 case Constants.TestTypeEntry:
-                    await _page.Navigation.PushAsync(new TypeEntryCreatingPage(_path, InfoViewModel.InfoModels[index].Name));
+                    await _page.Navigation.PushAsync(new TypeEntryCreatingPage(_path, _infoViewModel.InfoModels[index].Name));
                     break;
             }
         }
@@ -131,14 +130,14 @@ namespace Labs.ViewModels.Creators
         private string GetMessage()
         {
             var message = _settingsViewModel.CheckCreatorMenuPageSettings();
-            message += InfoViewModel.InfoModels.Count < 1 ? "asd" : string.Empty;
+            message += _infoViewModel.InfoModels.Count < 1 ? "asd" : string.Empty;
             return message;
         }
 
         private string GetTotalPrice()
         {
             var totalPrice = 0;
-            foreach (var price in InfoViewModel.InfoModels) {
+            foreach (var price in _infoViewModel.InfoModels) {
                 totalPrice += int.Parse(price.Detail);
             }
 

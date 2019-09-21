@@ -13,14 +13,15 @@ namespace Labs.Views.TestPages
         private readonly TimerViewModel _timerViewModel;
         private readonly TestModel _testModel;
 
-        public CheckTypeTestPage(string path, string fileName, TimerViewModel testTimerViewModel, TestModel model = null)
+        public CheckTypeTestPage(string path, string fileName, TimerViewModel timerViewModel, TestModel model = null, int? num=null)
         {
             InitializeComponent();
 
-            _timerViewModel = testTimerViewModel;
-            _checkViewModel = new CheckTypeTestViewModel(path, fileName, testTimerViewModel);
+            _timerViewModel = timerViewModel;
+            _checkViewModel = new CheckTypeTestViewModel(path, fileName, timerViewModel);
             BindingContext = _checkViewModel;
             _testModel = model;
+            Title = num.ToString();
             Subscribe();
         }
 

@@ -67,7 +67,7 @@
                       HasUnevenRows="True"
                       ItemSelected="ListView_OnItemSelected"
                       ItemTapped="ListView_OnItemTapped"
-                      ItemsSource="{Binding InfoModels}">
+                      ItemsSource="{Binding GetInfoModels}">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <ViewCell>

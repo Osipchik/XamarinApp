@@ -19,7 +19,7 @@ namespace Labs.ViewModels
     {
         private readonly Grid _grid;
         private readonly Label[] _labels;
-        public readonly InfoViewModel InfoViewModel;
+        private readonly InfoViewModel _infoViewModel;
         private IEnumerable<InfoModel> _infoModels;
 
         private string _searchBarText;
@@ -29,7 +29,7 @@ namespace Labs.ViewModels
             set
             {
                 _searchBarText = value;
-                InfoViewModel.InfoModels = Search(SearchBarText).ToObservableCollection();
+                _infoViewModel.InfoModels = Search(SearchBarText).ToObservableCollection();
                 OnPropertyChanged();
             }
         }
@@ -38,15 +38,19 @@ namespace Labs.ViewModels
         {
             _grid = grid;
             _labels = labels;
-            InfoViewModel = new InfoViewModel(GetMainTestFolderPath());
-            RefreshModels();
+            _infoViewModel = new InfoViewModel(GetMainTestFolderPath());
+            RefreshModelsAsync();
             SetCommands();
         }
 
-        public void RefreshModels()
+        public ObservableCollection<InfoModel> GetInfoModels => _infoViewModel.InfoModels;
+
+        public async void RefreshModelsAsync()
         {
-            InfoViewModel.SetDirectoriesInfoAsync();
-            _infoModels = InfoViewModel.InfoModels;
+            await Task.Run(() => {
+                _infoViewModel.SetDirectoriesInfoAsync();
+                _infoModels = _infoViewModel.InfoModels;
+            });
         }
 
         public ICommand NameLabelTapCommand { protected set; get; }
@@ -61,9 +65,10 @@ namespace Labs.ViewModels
         }
         private void SetLabelTapCommand(int index)
         {
+            DisableSearchModificationAsync();
             ActiveSearchLabelStyle(_labels[index]);
             DisableSearchLabelStyle(_labels[index]);
-            InfoViewModel.InfoModels = Search(SearchBarText).ToList().ToObservableCollection();
+            _infoViewModel.InfoModels = Search(SearchBarText).ToList().ToObservableCollection();
         }
 
         private string GetMainTestFolderPath()
@@ -92,7 +97,7 @@ namespace Labs.ViewModels
             var filter = string.Empty;
             for (var i = 0; i < _labels.Length; i++) {
                 if (_labels[i].TextColor == Constants.Colors.ColorMaterialBlue) {
-                    filter = InfoViewModel.GetNameOfPropertyInModel(i);
+                    filter = _infoViewModel.GetNameOfPropertyInModel(i);
                     break;
                 }
             }
@@ -162,7 +167,7 @@ namespace Labs.ViewModels
         }
 
         public async void GoToStartTestPage(int index, Page page) =>
-            await page.Navigation.PushAsync(new StartTestPage(InfoViewModel.GetElementPath(index)));
+            await page.Navigation.PushAsync(new StartTestPage(_infoViewModel.GetElementPath(index)));
 
         public event PropertyChangedEventHandler PropertyChanged;
 

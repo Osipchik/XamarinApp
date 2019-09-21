@@ -15,7 +15,6 @@ namespace Labs.Views
             InitializeComponent();
 
             _homeViewModel = new HomeViewModel(GridButtons, LabelName, LabelSubject, LabelDate);
-            listView.BindingContext = _homeViewModel.InfoViewModel;
             BindingContext = _homeViewModel;
             Subscribe();
         }
@@ -23,7 +22,7 @@ namespace Labs.Views
         private void Subscribe()
         {
             MessagingCenter.Subscribe<Page>(this, Constants.HomeListUpload, 
-                (sender) => { _homeViewModel.RefreshModels(); });
+                (sender) => { _homeViewModel.RefreshModelsAsync(); });
         }
         
         private void ListView_OnItemTapped(object sender, ItemTappedEventArgs e) =>
