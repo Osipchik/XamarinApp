@@ -1,6 +1,4 @@
-﻿using Labs.Helpers;
-using Labs.ViewModels;
-using Xamarin.Forms;
+﻿using Labs.ViewModels;
 using Xamarin.Forms.Xaml;
 
 namespace Labs.Views
@@ -17,13 +15,12 @@ namespace Labs.Views
             ChangeButton.BindingContext = StartViewModel;
             StartButton.BindingContext = StartViewModel;
             BindingContext = this;
-            Subscribe();
         }
 
-        private void Subscribe()
+        protected override void OnAppearing()
         {
-            MessagingCenter.Subscribe<Page>(this, Constants.StartPageCallBack,
-                (sender) => { StartViewModel.StartPageCallBack(); });
+            base.OnAppearing();
+            StartViewModel.StartPageCallBack();
         }
     }
 }

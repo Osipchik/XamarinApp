@@ -44,14 +44,12 @@ namespace Labs.Helpers
             return testPath;
         }
 
-        public static async void SaveTestAsync(string path, IEnumerable<string> settings)
+        public static void SaveTest(string path, IEnumerable<string> settings)
         {
             File.WriteAllLines(Path.Combine(path, Constants.SettingsFileTxt), settings, Encoding.UTF8);
-            await Task.Run(() => {
-                if (path.Contains(Constants.TempFolder)) {
-                    MoveFiles(path);
-                }
-            });
+            if (path.Contains(Constants.TempFolder)) {
+                MoveFiles(path);
+            }
         }
 
         private static void MoveFiles(string sourcePath)

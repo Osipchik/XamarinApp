@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
 using System.Reflection;
 using System.Runtime.CompilerServices;
-using System.Threading.Tasks;
 using Labs.Annotations;
 using Labs.Helpers;
 using Labs.Models;
@@ -56,26 +54,34 @@ namespace Labs.ViewModels
             }
         }
 
-        public async void SetDirectoriesInfoAsync()
+        public void SetDirectoriesInfo()
         {
-            await Task.Run(() =>
-            {
-                InfoModels.Clear();
-                foreach (var dirInfo in new DirectoryInfo(_path).GetDirectories()) {
-                    InfoModels.Add(GetDirectoryModel(dirInfo));
+            InfoModels.Clear();
+            foreach (var dirInfo in new DirectoryInfo(_path).GetDirectories()) {
+                if (Directory.Exists(dirInfo.FullName))
+                {
+                    var model = GetDirectoryModel(dirInfo);
+                    if(model != null) InfoModels.Add(model);
                 }
-            });
+            }
         }
 
         private InfoModel GetDirectoryModel(DirectoryInfo dirInfo)
         {
-            ReadSettings(out string title, out string detail, Path.Combine(dirInfo.FullName, Constants.SettingsFileTxt));
-            return new InfoModel {
-                Name = dirInfo.Name,
-                Title = title,
-                Detail = detail,
-                Date = dirInfo.CreationTime.ToShortDateString()
-            };
+            string path = Path.Combine(dirInfo.FullName, Constants.SettingsFileTxt);
+            InfoModel model = null;
+            var asd = Directory.GetFiles(dirInfo.FullName);
+            if (File.Exists(path)) {
+                ReadSettings(out string title, out string detail, path);
+                model = new InfoModel {
+                    Name = dirInfo.Name,
+                    Title = title,
+                    Detail = detail,
+                    Date = dirInfo.CreationTime.ToShortDateString()
+                };
+            }
+
+            return model;
         }
 
         private InfoModel GetFileModel(FileInfo fileInfo)

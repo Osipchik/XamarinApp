@@ -36,7 +36,7 @@ namespace Labs.Views.TestPages
         private async void AddPagesAsync(IEnumerable<InfoModel> infoModels, string path)
         {
             await Task.Run(() => { AddTestPages(infoModels, path); });
-            await Task.Run(()=> { _timerViewModel?.TimerRunAsync(); });
+            await Task.Run(() => { _timerViewModel?.TimerRunAsync(); });
         }
 
         private async void AddTestPages(IEnumerable<InfoModel> infoModels, string path)
@@ -59,12 +59,15 @@ namespace Labs.Views.TestPages
                 });
             }
             await Device.InvokeOnMainThreadAsync(() => Children.Add(new ResultPage(_testModel)));
+            if (_timerViewModel == null) {
+                MessagingCenter.Send<Page>(this, Constants.RunFirstTimer);
+            }
         }
 
         protected override void OnPagesChanged(NotifyCollectionChangedEventArgs e)
         {
             base.OnPagesChanged(e);
-            if (Children.Count > 1) {
+            if (Children.Count > 1 && _timerViewModel == null) {
                 MessagingCenter.Send<Page>(this, Constants.StopAllTimers);
             }
         }

@@ -9,10 +9,8 @@
              x:Class="Labs.Views.HomePage">
 
     <ContentPage.Content>
-        <StackLayout x:Name="stackLayout"
-                     Margin="12,0,12,0">
-            <SearchBar x:Name="searchBar" 
-                       Placeholder="{helpers:Translate SearchBarPlaceHolder}"
+        <StackLayout Margin="12,0,12,0">
+            <SearchBar Placeholder="{helpers:Translate SearchBarPlaceHolder}"
                        HorizontalOptions="Center"
                        Text="{Binding SearchBarText}"/>
             <Grid x:Name="GridButtons"
@@ -60,8 +58,7 @@
                     </Label.GestureRecognizers>
                 </Label>
             </Grid>
-            <ListView x:Name="listView"
-                      CachingStrategy="RecycleElement"
+            <ListView CachingStrategy="RecycleElement"
                       SeparatorVisibility="None"
                       VerticalScrollBarVisibility="Never"
                       HasUnevenRows="True"

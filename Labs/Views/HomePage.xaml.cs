@@ -16,19 +16,18 @@ namespace Labs.Views
 
             _homeViewModel = new HomeViewModel(GridButtons, LabelName, LabelSubject, LabelDate);
             BindingContext = _homeViewModel;
-            Subscribe();
         }
 
-        private void Subscribe()
-        {
-            MessagingCenter.Subscribe<Page>(this, Constants.HomeListUpload, 
-                (sender) => { _homeViewModel.RefreshModelsAsync(); });
-        }
-        
         private void ListView_OnItemTapped(object sender, ItemTappedEventArgs e) =>
             _homeViewModel.GoToStartTestPage(e.ItemIndex, this);
         
         private void ListView_OnItemSelected(object sender, SelectedItemChangedEventArgs e) =>
             ((ListView)sender).SelectedItem = null;
+
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
+            _homeViewModel.RefreshModelsAsync();
+        }
     }
 }

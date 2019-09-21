@@ -19,7 +19,6 @@ namespace Labs.Views.Creators
 
             _menuCreatorViewModel = new MenuCreatorViewModel(path, this);
             BindingContext = _menuCreatorViewModel;
-            Subscribe();
         }
 
         private void SettingsButton_OnClickedAsync(object sender, EventArgs e)
@@ -32,12 +31,6 @@ namespace Labs.Views.Creators
             FrameAnimation.RunShowOrHideAnimation(SettingsTableView, _heightMax, 0, _tableVisible);
         }
 
-        private void Subscribe()
-        {
-            MessagingCenter.Subscribe<Page>(this, Constants.CreatorListUpLoad,
-                (sender) => { _menuCreatorViewModel.GetFilesAsync(); });
-        }
-
         private void ListViewFiles_OnItemTapped(object sender, ItemTappedEventArgs e) =>
             _menuCreatorViewModel.OpenCreatingPage(e.ItemIndex);
         
@@ -45,5 +38,11 @@ namespace Labs.Views.Creators
             ((ListView)sender).SelectedItem = null;
 
         protected override bool OnBackButtonPressed() => _menuCreatorViewModel.OnBackButtonPressed();
+
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
+            _menuCreatorViewModel.GetFilesAsync();
+        }
     }
 }

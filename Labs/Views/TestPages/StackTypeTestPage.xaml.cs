@@ -1,5 +1,4 @@
-﻿using System.Threading.Tasks;
-using Labs.Helpers;
+﻿using Labs.Helpers;
 using Labs.Models;
 using Labs.ViewModels.Tests;
 using Xamarin.Forms;
@@ -12,17 +11,16 @@ namespace Labs.Views.TestPages
     {
         private readonly StackTypeTestViewModel _stackViewModel;
         private readonly TimerViewModel _timerViewModel;
-        private int? _lineToSwapFirst;
         private readonly TestModel _testModel;
-        public StackTypeTestPage(string path, string fileName, TimerViewModel testTimerViewModel, TestModel model = null)
+        public StackTypeTestPage(string path, string fileName, TimerViewModel timerViewModel, TestModel model = null, int? num = null)
         {
             InitializeComponent();
 
-            _timerViewModel = testTimerViewModel;
-            _stackViewModel = new StackTypeTestViewModel(path, fileName, testTimerViewModel);
+            _timerViewModel = timerViewModel;
+            _stackViewModel = new StackTypeTestViewModel(path, fileName, timerViewModel);
             BindingContext = _stackViewModel;
             _testModel = model;
-            Subscribe();
+            Subscribe(num);
         }
 
         private void ListView_OnItemSelected(object sender, SelectedItemChangedEventArgs e) => 
@@ -39,10 +37,12 @@ namespace Labs.Views.TestPages
             }
         }
 
-        private void Subscribe()
+        private void Subscribe(int? num)
         {
-            MessagingCenter.Subscribe<Page>(this, "runFirstTimer",
-                (sender) => { _stackViewModel.TimerViewModel.TimerRunAsync(); });
+            if (num != null && num.Value == 1) {
+                MessagingCenter.Subscribe<Page>(this, Constants.RunFirstTimer,
+                    (sender) => { OnAppearing(); });
+            }
             MessagingCenter.Subscribe<Page>(this, Constants.Check,
                 (sender) => { _stackViewModel.CheckPageAsync(_testModel); });
         }

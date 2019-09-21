@@ -20,7 +20,7 @@ namespace Labs.ViewModels
         private readonly Grid _grid;
         private readonly Label[] _labels;
         private readonly InfoViewModel _infoViewModel;
-        private IEnumerable<InfoModel> _infoModels;
+        private ObservableCollection<InfoModel> _infoModels;
 
         private string _searchBarText;
         public string SearchBarText
@@ -39,7 +39,6 @@ namespace Labs.ViewModels
             _grid = grid;
             _labels = labels;
             _infoViewModel = new InfoViewModel(GetMainTestFolderPath());
-            RefreshModelsAsync();
             SetCommands();
         }
 
@@ -47,10 +46,12 @@ namespace Labs.ViewModels
 
         public async void RefreshModelsAsync()
         {
-            await Task.Run(() => {
-                _infoViewModel.SetDirectoriesInfoAsync();
-                _infoModels = _infoViewModel.InfoModels;
-            });
+            //await Device.InvokeOnMainThreadAsync(() => {
+            //    _infoViewModel.SetDirectoriesInfo();
+            //    _infoModels = _infoViewModel.InfoModels;
+            //});
+            _infoViewModel.SetDirectoriesInfo();
+            _infoModels = _infoViewModel.InfoModels;
         }
 
         public ICommand NameLabelTapCommand { protected set; get; }
@@ -63,6 +64,7 @@ namespace Labs.ViewModels
             SubjectLabelTapCommand = new Command(() => { SetLabelTapCommand(1); });
             DateLabelTapCommand = new Command(() => { SetLabelTapCommand(2); });
         }
+
         private void SetLabelTapCommand(int index)
         {
             DisableSearchModificationAsync();

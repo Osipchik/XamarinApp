@@ -22,7 +22,7 @@ namespace Labs.Views.TestPages
             BindingContext = _checkViewModel;
             _testModel = model;
             Title = num.ToString();
-            Subscribe();
+            Subscribe(num);
         }
 
         private void ListView_OnItemSelected(object sender, SelectedItemChangedEventArgs e) => 
@@ -39,10 +39,12 @@ namespace Labs.Views.TestPages
             }
         }
 
-        private void Subscribe()
+        private void Subscribe(int? num)
         {
-            MessagingCenter.Subscribe<Page>(this, "runFirstTimer", 
-                (sender)=>{ _checkViewModel.TimerViewModel.TimerRunAsync(); });
+            if (num != null && num.Value == 1) {
+                MessagingCenter.Subscribe<Page>(this, Constants.RunFirstTimer,
+                    (sender) => { OnAppearing(); });
+            }
             MessagingCenter.Subscribe<Page>(this, Constants.Check,
                 (sender) => { _checkViewModel.CheckPageAsync(_testModel); });
         }

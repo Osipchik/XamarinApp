@@ -12,15 +12,15 @@ namespace Labs.Views.TestPages
         private readonly EntryTypeTestViewModel _entryViewModel;
         private readonly TimerViewModel _timerViewModel;
         private readonly TestModel _testModel;
-        public EntryTypeTestPage(string path, string fileName, TimerViewModel testTimerViewModel, TestModel model = null)
+        public EntryTypeTestPage(string path, string fileName, TimerViewModel timerViewModel, TestModel model = null, int? num = null)
         {
             InitializeComponent();
 
-            _timerViewModel = testTimerViewModel;
-            _entryViewModel = new EntryTypeTestViewModel(path, fileName, testTimerViewModel);
+            _timerViewModel = timerViewModel;
+            _entryViewModel = new EntryTypeTestViewModel(path, fileName, timerViewModel);
             BindingContext = _entryViewModel;
             _testModel = model;
-            Subscribe();
+            Subscribe(num);
         }
 
         protected override void OnAppearing()
@@ -32,10 +32,12 @@ namespace Labs.Views.TestPages
             }
         }
 
-        private void Subscribe()
+        private void Subscribe(int? num)
         {
-            MessagingCenter.Subscribe<Page>(this, "runFirstTimer",
-                (sender) => { _entryViewModel.TimerViewModel.TimerRunAsync(); });
+            if (num != null && num.Value == 1) {
+                MessagingCenter.Subscribe<Page>(this, Constants.RunFirstTimer,
+                    (sender) => { OnAppearing(); });
+            }
             MessagingCenter.Subscribe<Page>(this, Constants.Check,
                 (sender) => { _entryViewModel.CheckPageAsync(_testModel); });
         }

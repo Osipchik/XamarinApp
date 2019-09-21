@@ -66,11 +66,10 @@ namespace Labs.ViewModels.Creators
 
         public async void GetFilesAsync()
         {
-            await Task.Run(() => {
-                if (_page != null) {
-                    _infoViewModel.GetFilesModel();
-                }
-            });
+            if (_page != null)
+            {
+                _infoViewModel.GetFilesModel();
+            }
         }
 
         public async void OpenCreatingPage(int index)
@@ -92,10 +91,12 @@ namespace Labs.ViewModels.Creators
 
         private async void DeleteFolderAsync()
         {
-            await Task.Run(() => { Directory.Delete(_path, true); });
+            if (Directory.Exists(_path)){
+                Directory.Delete(_path, true);
+            }
             CreateTempFolderAsync();
-            await Task.Run(() => MessagingCenter.Send<Page>(_page, Constants.HomeListUpload));
-            await _page.Navigation.PopToRootAsync(true);
+            await Device.InvokeOnMainThreadAsync(async ()=> 
+                await _page.Navigation.PopToRootAsync(true));
         }
 
         private async void CreateTempFolderAsync()
@@ -109,12 +110,17 @@ namespace Labs.ViewModels.Creators
 
         private async void Save()
         {
-            if (await PageIsValid()) {
-                DirectoryHelper.SaveTestAsync(_path, await _settingsViewModel.GetPageSettingsAsync(true));
-                MessagingCenter.Send<Page>(_page, Constants.HomeListUpload);
-                if (_path.Contains(Constants.TempFolder)) GetFilesAsync();
-                else await _page.Navigation.PopToRootAsync(true);
-            }
+            await Task.Run(async () =>
+            {
+                if (await PageIsValid()) {
+                    DirectoryHelper.SaveTest(_path, await _settingsViewModel.GetPageSettingsAsync(true));
+                    if (_path.Contains(Constants.TempFolder)) GetFilesAsync();
+                    else {
+                        await Device.InvokeOnMainThreadAsync(async ()=>
+                            await _page.Navigation.PopToRootAsync(true));
+                    }
+                }
+            });
         }
 
         private async Task<bool> PageIsValid()
@@ -122,7 +128,8 @@ namespace Labs.ViewModels.Creators
             var message = await Task.Run(GetMessage);
             var returnValue = string.IsNullOrEmpty(message);
             if (!returnValue) {
-                await _page.DisplayAlert(AppResources.Warning, message, AppResources.Cancel);
+                await Device.InvokeOnMainThreadAsync(()=>
+                    _page.DisplayAlert(AppResources.Warning, message, AppResources.Cancel));
             }
 
             return returnValue;

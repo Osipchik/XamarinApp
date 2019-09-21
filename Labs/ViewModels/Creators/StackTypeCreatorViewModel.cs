@@ -113,7 +113,6 @@ namespace Labs.ViewModels.Creators
         {
             if (await PageIsValid()) {
                 DirectoryHelper.SaveFile(Constants.TestTypeStack, _path, _fileName, await GetStringsToSave());
-                MessagingCenter.Send<Page>(_page, Constants.CreatorListUpLoad);
                 await _page.Navigation.PopAsync(true);
             }
         }
@@ -141,7 +140,6 @@ namespace Labs.ViewModels.Creators
         {
             if (!string.IsNullOrEmpty(_fileName)) {
                 File.Delete(Path.Combine(_path, _fileName));
-                await Task.Run(() => MessagingCenter.Send<Page>(_page, Constants.CreatorListUpLoad));
             }
             await _page.Navigation.PopAsync(true);
         }

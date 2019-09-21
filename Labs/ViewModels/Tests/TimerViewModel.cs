@@ -55,11 +55,14 @@ namespace Labs.ViewModels.Tests
 
         public async void TimerRunAsync()
         {
-            if (_time > 0) {
-                _timerIsAlive = true;
-                await Device.InvokeOnMainThreadAsync(() =>
-                    Device.StartTimer(TimeSpan.FromMilliseconds(UpdateRate), TimerOnTick));
-            }
+            await Task.Run(() => {
+                if (_time > 0 && _timerIsAlive == false)
+                {
+                    _timerIsAlive = true;
+                    Device.InvokeOnMainThreadAsync(() =>
+                        Device.StartTimer(TimeSpan.FromMilliseconds(UpdateRate), TimerOnTick));
+                }
+            });
         }
 
         private bool TimerOnTick()
@@ -88,7 +91,7 @@ namespace Labs.ViewModels.Tests
             }
         }
 
-        private void TimerStop() => _timerIsAlive = false;
+        public void TimerStop() => _timerIsAlive = false;
 
         private void Subscribe()
         {

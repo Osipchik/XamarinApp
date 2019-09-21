@@ -2,7 +2,6 @@
 using System.Windows.Input;
 using Labs.Helpers;
 using Labs.Models;
-using Labs.Views;
 using Labs.Views.Creators;
 using Labs.Views.TestPages;
 using Xamarin.Forms;
@@ -64,7 +63,6 @@ namespace Labs.ViewModels
             _isClickAble = false;
             ChangeButtonStyle_OnCallBack(_changeButton);
             ChangeButtonStyle_OnCallBack(_startButton);
-            MessagingCenter.Send<Page>(_page, Constants.HomeListUpload);
         }
 
         private void ChangeButtonStyle_OnClick(Button button)
