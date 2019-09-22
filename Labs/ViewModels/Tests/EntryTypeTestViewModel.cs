@@ -45,7 +45,15 @@ namespace Labs.ViewModels.Tests
                 else EntryModel.BorderColor = GetColor(false);
             });
 
-            await Task.Run(() => TimerViewModel.DisableTimerAsync());
+            await Task.Run(DisableTimer);
+        }
+        private void DisableTimer()
+        {
+            if (TimerViewModel != null) {
+                TimerViewModel.TimerModel.TimerIsVisible = false;
+                TimerViewModel.Index = null;
+                TimerViewModel = null;
+            }
         }
 
         private Color GetColor(bool isRight) =>

@@ -17,6 +17,7 @@ namespace Labs.Views.TestPages
             InitializeComponent();
 
             _timerViewModel = timerViewModel;
+            Title = num.ToString();
             _stackViewModel = new StackTypeTestViewModel(path, fileName, timerViewModel);
             BindingContext = _stackViewModel;
             _testModel = model;

@@ -21,9 +21,6 @@
         <ToolbarItem Text="Add"
                      Order="Secondary"
                      Command="{Binding AddItemCommand}"/>
-        <ToolbarItem Text="ChooseRight"
-                     Order="Secondary"
-                     Clicked="ChooseRightItems_OnClicked"/>
     </ContentPage.ToolbarItems>
 
     <ContentPage.Content>

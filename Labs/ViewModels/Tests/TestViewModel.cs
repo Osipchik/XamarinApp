@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Labs.Helpers;
-using Labs.Resources;
+﻿using Labs.Resources;
 using Xamarin.Forms;
 
 namespace Labs.ViewModels.Tests
@@ -21,7 +17,6 @@ namespace Labs.ViewModels.Tests
             Device.BeginInvokeOnMainThread(async () => {
                 var result = await _page.DisplayAlert(AppResources.Warning, AppResources.Escape, AppResources.Yes, AppResources.No);
                 if (!result) return;
-                MessagingCenter.Send<Page>(_page, Constants.StartPageCallBack);
                 await _page.Navigation.PopModalAsync(true);
             });
 

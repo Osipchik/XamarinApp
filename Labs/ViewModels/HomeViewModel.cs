@@ -44,12 +44,8 @@ namespace Labs.ViewModels
 
         public ObservableCollection<InfoModel> GetInfoModels => _infoViewModel.InfoModels;
 
-        public async void RefreshModelsAsync()
+        public void RefreshModels()
         {
-            //await Device.InvokeOnMainThreadAsync(() => {
-            //    _infoViewModel.SetDirectoriesInfo();
-            //    _infoModels = _infoViewModel.InfoModels;
-            //});
             _infoViewModel.SetDirectoriesInfo();
             _infoModels = _infoViewModel.InfoModels;
         }

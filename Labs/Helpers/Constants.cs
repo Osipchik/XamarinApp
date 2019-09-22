@@ -13,9 +13,10 @@ namespace Labs.Helpers
         public const string SettingsFileTxt = "settings.txt";
 
         public const string UploadTitles = "UploadTitles";
-        public const string StartPageCallBack = "StartPageCallBack";
         public const string RunFirstTimer = "RunFirstTimer";
         public const string StopAllTimers = "StopAllTimers";
+        public const string TimerIsEnd = "TimerIsEnd";
+        public const string ReturnPages = "ReturnPages";
         public const string TimeZero = "00:00:00";
 
         public const int SymbolLength = 11;

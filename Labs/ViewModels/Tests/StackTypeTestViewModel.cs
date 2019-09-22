@@ -13,7 +13,7 @@ namespace Labs.ViewModels.Tests
         public TimerViewModel TimerViewModel;
         private bool _isClickAble = true;
         private int? _lineToSwap;
-        
+
         public StackTypeTestViewModel(string path, string fileName, TimerViewModel testTimeViewModel)
         {
             FrameViewModel = new FrameViewModel();
@@ -30,31 +30,41 @@ namespace Labs.ViewModels.Tests
         {
             var strings = DirectoryHelper.ReadStringsFromFile(path, fileName);
             TimerViewModel = testTimeViewModel ?? new TimerViewModel(strings[0]);
-            await Task.Run(() => {
-                _settingsViewModel.SetPageSettingsModel(strings[0], strings[1], strings[2]);
-            });
+            await Task.Run(() => { _settingsViewModel.SetPageSettingsModel(strings[0], strings[1], strings[2]); });
             FillFramesAsync(strings, 3);
             await Task.Run(FrameViewModel.Models.Shuffle);
         }
+
         private async void FillFramesAsync(IReadOnlyList<string> strings, int startIndex)
         {
+            var textRightList = new List<string>();
             await Task.Run(() => {
                 for (int i = startIndex; i < strings.Count; i++) {
-                    FrameViewModel.Models.Add(new FrameModel
-                    {
+                    FrameViewModel.Models.Add(new FrameModel {
                         ItemTextLeft = strings[i],
-                        ItemTextRight = strings[++i],
-                        RightString = strings[i],
+                        RightString = strings[++i],
                         BorderColor = FrameViewModel.GetColor(false)
                     });
+                    textRightList.Add(strings[i]);
+                }
+
+                FillRightTextItemsAsync(textRightList);
+            });
+        }
+
+        private async void FillRightTextItemsAsync(IList<string> strings)
+        {
+            await Task.Run(() => {
+                strings.Shuffle();
+                for (int i = 0; i < strings.Count; i++) {
+                    FrameViewModel.Models[i].ItemTextRight = strings[i];
                 }
             });
         }
 
         public async void TapEvent(int index)
         {
-            if (_isClickAble)
-            {
+            if (_isClickAble) {
                 await Task.Run(() => { FrameViewModel.SelectItem(index, false); });
                 await Task.Run(() => { CanSwap(index); });
             }
@@ -84,13 +94,22 @@ namespace Labs.ViewModels.Tests
         public async void CheckPageAsync(TestModel testModel)
         {
             await Task.Run(() => {
-                if (!CheckModel()) return;
-                if (testModel == null) return;
-                testModel.Price += int.Parse(GetSettingsModel.Price);
-                testModel.RightAnswers++;
+                if (CheckModel() && testModel != null) {
+                    testModel.Price += int.Parse(GetSettingsModel.Price);
+                    testModel.RightAnswers++;
+                }
             });
             _isClickAble = false;
-            await Task.Run(() => TimerViewModel.DisableTimerAsync());
+            await Task.Run(DisableTimer);
+        }
+
+        private void DisableTimer()
+        {
+            if (TimerViewModel != null) {
+                TimerViewModel.TimerModel.TimerIsVisible = false;
+                TimerViewModel.Index = null;
+                TimerViewModel = null;
+            }
         }
 
         private bool CheckModel()

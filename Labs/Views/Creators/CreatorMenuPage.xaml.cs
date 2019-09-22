@@ -21,14 +21,19 @@ namespace Labs.Views.Creators
             BindingContext = _menuCreatorViewModel;
         }
 
-        private void SettingsButton_OnClickedAsync(object sender, EventArgs e)
+        private async void SettingsButton_OnClickedAsync(object sender, EventArgs e)
         {
-            _tableVisible = !_tableVisible;
-            FrameAnimation.RunShowOrHideButtonAnimation(ButtonSettings, 350, _tableVisible);
-            if (_heightMax == 0) {
-                _heightMax = (uint) SettingsTableView.Height;
-            }
-            FrameAnimation.RunShowOrHideAnimation(SettingsTableView, _heightMax, 0, _tableVisible);
+            await Device.InvokeOnMainThreadAsync(() =>
+            {
+                _tableVisible = !_tableVisible;
+                FrameAnimation.RunShowOrHideButtonAnimation(ButtonSettings, 350, _tableVisible);
+                if (_heightMax == 0)
+                {
+                    _heightMax = (uint) SettingsTableView.Height;
+                }
+
+                FrameAnimation.RunShowOrHideAnimation(SettingsTableView, _heightMax, 0, _tableVisible);
+            });
         }
 
         private void ListViewFiles_OnItemTapped(object sender, ItemTappedEventArgs e) =>

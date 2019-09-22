@@ -22,6 +22,7 @@ namespace Labs.Views.Creators
 
         private void ListView_OnItemSelected(object sender, SelectedItemChangedEventArgs e) =>
             ((ListView)sender).SelectedItem = null;
+
         private void ListView_OnItemTapped(object sender, ItemTappedEventArgs e) => _viewModel.TapEvent(e.ItemIndex);
         
         private void HideOrShowAsync_OnClicked(object sender, EventArgs eventArgs)
@@ -32,7 +33,7 @@ namespace Labs.Views.Creators
         }
 
         private void ChooseItemsToDelete_OnClicked(object sender, EventArgs e) => ChooseItems(-1);
-        private void ChooseRightItems_OnClicked(object sender, EventArgs e) => ChooseItems(1);
+
         private void ChooseItems(int modificator)
         {
             HideOrShowAsync_OnClicked(this, EventArgs.Empty);
@@ -44,13 +45,11 @@ namespace Labs.Views.Creators
         {
             _viewModel.Modificator = modificator;
             _viewModel.FrameViewModel.DisableAllAsync();
-            if (modificator < 0)
-            {
+            if (modificator < 0) {
                 accept.Opacity = 1;
                 accept.Source = "CheckedRed.png";
             }
-            else
-            {
+            else {
                 accept.Opacity = 0.3;
                 accept.Source = "CheckedBlack.png";
             }

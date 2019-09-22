@@ -17,6 +17,7 @@ namespace Labs.Views.TestPages
             InitializeComponent();
 
             _timerViewModel = timerViewModel;
+            Title = num.ToString();
             _entryViewModel = new EntryTypeTestViewModel(path, fileName, timerViewModel);
             BindingContext = _entryViewModel;
             _testModel = model;

@@ -66,10 +66,11 @@ namespace Labs.ViewModels.Creators
 
         public async void GetFilesAsync()
         {
-            if (_page != null)
-            {
-                _infoViewModel.GetFilesModel();
-            }
+            await Task.Run(() => {
+                if (_page != null) {
+                    _infoViewModel.GetFilesModel();
+                }
+            });
         }
 
         public async void OpenCreatingPage(int index)
@@ -110,8 +111,7 @@ namespace Labs.ViewModels.Creators
 
         private async void Save()
         {
-            await Task.Run(async () =>
-            {
+            await Task.Run(async () => {
                 if (await PageIsValid()) {
                     DirectoryHelper.SaveTest(_path, await _settingsViewModel.GetPageSettingsAsync(true));
                     if (_path.Contains(Constants.TempFolder)) GetFilesAsync();
@@ -134,6 +134,7 @@ namespace Labs.ViewModels.Creators
 
             return returnValue;
         }
+
         private string GetMessage()
         {
             var message = _settingsViewModel.CheckCreatorMenuPageSettings();
@@ -151,14 +152,12 @@ namespace Labs.ViewModels.Creators
             return totalPrice.ToString();
         }
 
-
         public bool OnBackButtonPressed()
         {
             if (_path != Constants.TempFolder) {
                 Device.BeginInvokeOnMainThread(async () => {
                     var result = await _page.DisplayAlert(AppResources.Warning, AppResources.Escape, AppResources.Yes, AppResources.No);
                     if (!result) return;
-                    MessagingCenter.Send<Page>(_page, Constants.StartPageCallBack);
                     await _page.Navigation.PopAsync(true);
                 });
             }

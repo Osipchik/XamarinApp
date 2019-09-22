@@ -117,13 +117,13 @@ namespace Labs.ViewModels
             return list;
         }
 
-
         public event PropertyChangedEventHandler PropertyChanged;
 
         [NotifyPropertyChangedInvocator]
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null) =>
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
+
     internal static class ListExtensions
     {
         public static void Shuffle<T>(this IList<T> list)

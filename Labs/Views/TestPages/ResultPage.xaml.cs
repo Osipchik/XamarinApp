@@ -29,6 +29,7 @@ namespace Labs.Views.TestPages
                 _model.Price = 0;
                 _model.RightAnswers = 0;
                 MessagingCenter.Send<Page>(this, Constants.Check);
+                MessagingCenter.Send<object>(this, Constants.ReturnPages);
                 _isClickAble = false;
             }
         }

@@ -113,7 +113,6 @@ namespace Labs.ViewModels
             return text;
         }
 
-        // TODO: add async
         private void ReadSettings(out string title, out string detail, string path)
         {
             using (var reader = new StreamReader(path)) {

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Linq;
 using System.Threading.Tasks;
 using Labs.Helpers;
 using Labs.Models;
@@ -16,14 +17,18 @@ namespace Labs.Views.TestPages
         private readonly TestViewModel _testViewModel;
         private readonly TimerViewModel _timerViewModel;
         private readonly TestModel _testModel;
+        private readonly List<Page> _pages;
+        private bool _isAble = true;
+
         public TestPage(string path, string testTime)
         {
             InitializeComponent();
             _testViewModel = new TestViewModel(this);
-            _timerViewModel = testTime != Constants.TimeZero ? new TimerViewModel(testTime) : null;
-            FillPages(path);
-
+            _timerViewModel = testTime != Constants.TimeZero ? new TimerViewModel(testTime, -1) : null;
             _testModel = new TestModel();
+            _pages = new List<Page>();
+            FillPages(path);
+            Subscribe();
         }
 
         private void FillPages(string path)
@@ -43,19 +48,8 @@ namespace Labs.Views.TestPages
         {
             foreach (var model in infoModels) {
                 await Device.InvokeOnMainThreadAsync(() => {
-                    switch (DirectoryHelper.GetTypeName(model.Name))
-                    {
-                        case Constants.TestTypeCheck:
-                            Children.Add(new CheckTypeTestPage(path, model.Name, _timerViewModel, _testModel,
-                                Children.Count + 1));
-                            break;
-                        case Constants.TestTypeEntry:
-                            Children.Add(new EntryTypeTestPage(path, model.Name, _timerViewModel, _testModel));
-                            break;
-                        case Constants.TestTypeStack:
-                            Children.Add(new StackTypeTestPage(path, model.Name, _timerViewModel, _testModel));
-                            break;
-                    }
+                    _pages.Add(AddTestPage(path, model));
+                    Children.Add(_pages.Last());
                 });
             }
             await Device.InvokeOnMainThreadAsync(() => Children.Add(new ResultPage(_testModel)));
@@ -64,14 +58,77 @@ namespace Labs.Views.TestPages
             }
         }
 
+        private Page AddTestPage(string path, InfoModel model)
+        {
+            Page page = null;
+            switch (DirectoryHelper.GetTypeName(model.Name))
+            {
+                case Constants.TestTypeCheck:
+                    page = new CheckTypeTestPage(path, model.Name, _timerViewModel, _testModel, Children.Count + 1);
+                    break;
+                case Constants.TestTypeEntry:
+                    page = new EntryTypeTestPage(path, model.Name, _timerViewModel, _testModel, Children.Count + 1);
+                    break;
+                case Constants.TestTypeStack:
+                    page = new StackTypeTestPage(path, model.Name, _timerViewModel, _testModel, Children.Count + 1);
+                    break;
+            }
+
+            return page;
+        }
+
         protected override void OnPagesChanged(NotifyCollectionChangedEventArgs e)
         {
             base.OnPagesChanged(e);
-            if (Children.Count > 1 && _timerViewModel == null) {
+            if (Children.Count > 1 && _timerViewModel == null && _isAble) {
                 MessagingCenter.Send<Page>(this, Constants.StopAllTimers);
             }
         }
-
+        
         protected override bool OnBackButtonPressed() => _testViewModel.OnBackButtonPressed();
+
+        private void Subscribe()
+        {
+            MessagingCenter.Subscribe<object>(this, Constants.TimerIsEnd, GoToNextPage);
+            MessagingCenter.Subscribe<object>(this, Constants.ReturnPages, ReturnPagesAsync);
+        }
+
+        private void GoToNextPage(object sender)
+        {
+            var timer = (TimerViewModel)sender;
+            if (timer.Index != null) {
+                if (timer.Index < 0) {
+                    while (Children.Count != 1) {
+                        Children.RemoveAt(0);
+                    }
+                }
+                else {
+                    _isAble = false;
+                    CurrentPage = GetNextPage((int)timer.Index);
+                    Children.Remove(_pages[(int)timer.Index - 1]);
+                }
+            }
+        }
+
+        private Page GetNextPage(int index)
+        {
+            Page page;
+            if (Children.Count == 2) page = Children.Last();
+            else if (index == _pages.Count) page = _pages.First();
+            else page = _pages[index];
+
+            return page;
+        }
+
+        private async void ReturnPagesAsync(object sender)
+        {
+            await Device.InvokeOnMainThreadAsync(() => {
+                for (int i = 0; i < _pages.Count; i++) {
+                    if (Children[i] != _pages[i]) {
+                        Children.Insert(i, _pages[i]);
+                    }
+                }
+            });
+        }
     }
 }

@@ -13,16 +13,16 @@ namespace Labs.Views.TestPages
         private readonly TimerViewModel _timerViewModel;
         private readonly TestModel _testModel;
 
-        public CheckTypeTestPage(string path, string fileName, TimerViewModel timerViewModel, TestModel model = null, int? num=null)
+        public CheckTypeTestPage(string path, string fileName, TimerViewModel timer, TestModel model = null, int? index = null)
         {
             InitializeComponent();
 
-            _timerViewModel = timerViewModel;
-            _checkViewModel = new CheckTypeTestViewModel(path, fileName, timerViewModel);
+            _timerViewModel = timer;
+            _checkViewModel = new CheckTypeTestViewModel(path, fileName, timer, index);
             BindingContext = _checkViewModel;
             _testModel = model;
-            Title = num.ToString();
-            Subscribe(num);
+            Title = index.ToString();
+            Subscribe(index);
         }
 
         private void ListView_OnItemSelected(object sender, SelectedItemChangedEventArgs e) => 

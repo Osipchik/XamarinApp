@@ -8,20 +8,23 @@ namespace Labs.ViewModels.Tests
 {
     public class TimerViewModel
     {
-        public readonly TimerModel TimerModel;
         private double _time;
         private double _step;
         private bool _timerIsAlive;
+        public readonly TimerModel TimerModel;
+        public int? Index;
 
         private const double UpdateRate = 1000 / 60f;
         private const double Hours = 3_600_000;
         private const double Minutes = 60_000;
         private const double Seconds = 1_000;
-        public TimerViewModel(string time)
+
+        public TimerViewModel(string time, int? index = null)
         {
             TimerModel = new TimerModel();
             SetTime(time);
             Subscribe();
+            Index = index;
         }
 
         private void SetTime(string timePage)
@@ -56,8 +59,7 @@ namespace Labs.ViewModels.Tests
         public async void TimerRunAsync()
         {
             await Task.Run(() => {
-                if (_time > 0 && _timerIsAlive == false)
-                {
+                if (_time > 0 && _timerIsAlive == false) {
                     _timerIsAlive = true;
                     Device.InvokeOnMainThreadAsync(() =>
                         Device.StartTimer(TimeSpan.FromMilliseconds(UpdateRate), TimerOnTick));
@@ -74,6 +76,7 @@ namespace Labs.ViewModels.Tests
                 return _timerIsAlive;
             }
 
+            MessagingCenter.Send<object>(this, Constants.TimerIsEnd);
             return false;
         }
 
@@ -97,17 +100,6 @@ namespace Labs.ViewModels.Tests
         {
             MessagingCenter.Subscribe<Page>(this, Constants.StopAllTimers,
                 (sender) => { TimerStop(); });
-        }
-
-        public async void DisableTimerAsync()
-        {
-            await Task.Run(() => {
-                if (TimerModel.TimerIsVisible) {
-                    TimerStop();
-                    TimerModel.TimerIsVisible = false;
-                    TimerModel.Time = null;
-                }
-            });
         }
     }
 }
