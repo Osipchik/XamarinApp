@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ResourceDictionary xmlns="http://xamarin.com/schemas/2014/forms"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                    xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+                    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                    mc:Ignorable="d"
+                    x:Class="Labs.Theme.DarkTheme">
+
+    <Color x:Key="AccentColor">#607D8B</Color>
+    <Color x:Key="LabelTextColor">#9E9E9E</Color>
+    <Color x:Key="TextColor">#9E9E9E</Color>
+
+    <Color x:Key="PageBackGroundColor">#212121</Color>
+
+    <Color x:Key="FrameBackGroundColor">#424242</Color>
+    <Color x:Key="FrameBorderColor">#757575</Color>
+
+    <Color x:Key="ButtonBackGroundColor">#424242</Color>
+    <Color x:Key="BorderColor">#607D8B</Color>
+    <Color x:Key="ButtonTextColor">#607D8B</Color>
+
+    <Color x:Key="MasterDetailTextColor">#BDBDBD</Color>
+
+    <Color x:Key="SearchBarTextColor">#9E9E9E</Color>
+</ResourceDictionary>

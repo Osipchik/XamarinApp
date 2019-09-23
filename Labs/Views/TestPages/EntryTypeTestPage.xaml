@@ -6,7 +6,9 @@
              xmlns:helpers="clr-namespace:Labs.Helpers;assembly=Labs"
              mc:Ignorable="d"
              x:Class="Labs.Views.TestPages.EntryTypeTestPage"
-             Title="Entry Type">
+             Title="Entry Type"
+             BackgroundColor="{DynamicResource PageBackGroundColor}">
+
     <ContentPage.Content>
         <StackLayout>
             <Grid BindingContext="{Binding GeTimerModel}"

@@ -6,7 +6,8 @@
              xmlns:helpers="clr-namespace:Labs.Helpers;assembly=Labs"
              mc:Ignorable="d"
              x:Class="Labs.Views.Creators.CreatorMenuPage"
-             Title="{helpers:Translate CreatorTitle}">
+             Title="{helpers:Translate CreatorTitle}"
+             BackgroundColor="{DynamicResource PageBackGroundColor}">
 
     <ContentPage.Resources>
         <Style x:Key="ImageButtonStyle" TargetType="ImageButton">
@@ -37,10 +38,7 @@
                     <StackLayout HorizontalOptions="FillAndExpand">
                         <Button x:Name="ButtonSettings"
                                 Text="{helpers:Translate TestSettingsButton}"
-                                TextColor="White"
-                                BorderColor="#039BE5"
-                                BorderWidth="1"
-                                BackgroundColor="#039BE5"
+                                Style="{StaticResource ButtonNormalStyle}"
                                 Clicked="SettingsButton_OnClickedAsync"
                                 WidthRequest="350"
                                 CornerRadius="30"
@@ -84,7 +82,7 @@
                                            VerticalOptions="Center"
                                            Margin="0"
                                            Grid.Column="2" Grid.Row="0"/>
-                                            <Entry Text="{Binding Seconds}"
+                                        <Entry Text="{Binding Seconds}"
                                            Margin="0"
                                            Keyboard="Numeric"
                                            Grid.Column="3" Grid.Row="0"/>
@@ -96,10 +94,8 @@
                     </StackLayout>
                 </Frame>
               </ContentView>
-                <ListView CachingStrategy="RecycleElement"
-                          SeparatorVisibility="None"
-                          VerticalScrollBarVisibility="Never"
-                          HasUnevenRows="True"
+                <ListView Style="{StaticResource ListView}"
+                      CachingStrategy="RecycleElement"
                           ItemSelected="ListViewFiles_OnItemSelected"
                           ItemTapped="ListViewFiles_OnItemTapped"
                           ItemsSource="{Binding GetInfoModels}">
@@ -107,21 +103,20 @@
                         <DataTemplate>
                             <ViewCell>
                                 <ContentView Padding="5">
-                                    <Frame BorderColor="#CFD8DC"
-                                           Padding="10">
+                                    <Frame Style="{StaticResource Frame}">
                                         <StackLayout HorizontalOptions="FillAndExpand"
                                                      VerticalOptions="FillAndExpand">
                                             <Label Text="{Binding Title}"
                                                    Style="{StaticResource LabelTitle}"/>
                                             <StackLayout Orientation="Horizontal">
-                                            <Label Text="{helpers:Translate Price}"
-                                                   Style="{StaticResource LabelUnderTitle}"/>
+                                                <Label Text="{helpers:Translate Price}"
+                                                       Style="{StaticResource LabelUnderTitle}"/>
                                                 <Label Text="{Binding Detail}"
                                                        Style="{StaticResource Detail}"/>
                                                 <Label Text="{Binding Date}"
                                                        Style="{StaticResource Date}"/>
                                             </StackLayout>
-                                    </StackLayout>
+                                        </StackLayout>
                                     </Frame>
                                 </ContentView>
                             </ViewCell>

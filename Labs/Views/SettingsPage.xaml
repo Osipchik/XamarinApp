@@ -5,7 +5,8 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:helpers="clr-namespace:Labs.Helpers;assembly=Labs"
              mc:Ignorable="d"
-             x:Class="Labs.Views.SettingsPage">
+             x:Class="Labs.Views.SettingsPage"
+             BackgroundColor="{DynamicResource PageBackGroundColor}">
 
     <ContentPage.Content>
         <TableView Margin="12">
@@ -15,9 +16,11 @@
                         <StackLayout Orientation="Horizontal"
                                      Margin="24,0,24,0">
                             <Label Text="{helpers:Translate Labguage}"
+                                   TextColor="{DynamicResource LabelTextColor}"
                                    FontSize="Medium"
                                    VerticalOptions="Center"/>
                             <Picker x:Name="PickerLanguages"
+                                    TextColor="{DynamicResource MasterDetailTextColor}"
                                     HorizontalOptions="EndAndExpand"
                                     ItemsSource="{Binding Languages}"
                                     ItemDisplayBinding="{Binding DisplayName}"
@@ -30,12 +33,31 @@
                         <StackLayout Orientation="Horizontal"
                                      Margin="24,0,24,0">
                             <Label Text="{helpers:Translate Theme}"
+                                   TextColor="{DynamicResource LabelTextColor}"
                                    FontSize="Medium"
                                    VerticalOptions="Center"
                                    HorizontalOptions="FillAndExpand"/>
                             <Label Text="Light"
                                    FontSize="Medium"
                                    VerticalOptions="Center"/>
+                        </StackLayout>
+                    </ViewCell>
+                </TableSection>
+                <TableSection>
+                    <ViewCell>
+                        <StackLayout Orientation="Horizontal"
+                                     Margin="24,0,24,0">
+                            <Button Text="Light"
+                                    Clicked="ButtonLight_OnClicked"/>
+                        </StackLayout>
+                    </ViewCell>
+                </TableSection>
+                <TableSection>
+                    <ViewCell>
+                        <StackLayout Orientation="Horizontal"
+                                     Margin="24,0,24,0">
+                            <Button Text="Dark"
+                                    Clicked="ButtonDark_OnClicked"/>
                         </StackLayout>
                     </ViewCell>
                 </TableSection>

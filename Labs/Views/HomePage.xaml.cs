@@ -1,5 +1,4 @@
-﻿using Labs.Helpers;
-using Labs.ViewModels;
+﻿using Labs.ViewModels;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 

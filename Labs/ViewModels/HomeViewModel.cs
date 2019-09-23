@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
-using Labs.Helpers;
 using Labs.Models;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Labs.Annotations;
+using Labs.Helpers;
 using Labs.Views;
 using Xamarin.Forms;
 
@@ -72,7 +72,7 @@ namespace Labs.ViewModels
         private string GetMainTestFolderPath()
         {
             var folder = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
-            return Path.Combine(folder, (string)Application.Current.Resources["TestFolder"]);
+            return Path.Combine(folder, Constants.TestFolder);
         }
 
         private IEnumerable<InfoModel> Search(string keyword)
@@ -152,7 +152,7 @@ namespace Labs.ViewModels
         }
         private Color GetColor(string filter, string propertyName) =>
             filter == propertyName ? (Color)Application.Current.Resources["ColorMaterialBlue"]
-                                   : (Color) Application.Current.Resources["ColorMaterialGrayText"];
+                                   : (Color) Application.Current.Resources["TextColor"];
 
         private async void DisableSearchModificationAsync()
         {
@@ -160,7 +160,7 @@ namespace Labs.ViewModels
                 foreach (var model in _infoModels) {
                     model.TitleColor =
                         model.DetailColor =
-                            model.DateColor = (Color)Application.Current.Resources["ColorMaterialGrayText"];
+                            model.DateColor = (Color)Application.Current.Resources["TextColor"];
                 }
             });
         }

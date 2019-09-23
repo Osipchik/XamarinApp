@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
 using System.Reflection;
@@ -7,7 +6,6 @@ using System.Runtime.CompilerServices;
 using Labs.Annotations;
 using Labs.Helpers;
 using Labs.Models;
-using Xamarin.Forms;
 
 namespace Labs.ViewModels
 {
@@ -32,25 +30,15 @@ namespace Labs.ViewModels
             _modelProperties = typeof(InfoModel).GetProperties();
         }
 
-        public string GetNameOfPropertyInModel(int index)
-        {
-            return _modelProperties[index].Name;
-        }
+        public string GetNameOfPropertyInModel(int index) => _modelProperties[index].Name;
 
-        public string GetElementPath(int index)
-        {
-            if (InfoModels.Count == 0) {
-                throw new ArgumentNullException();
-            }
-
-            return Path.Combine(_path, InfoModels[index].Name);
-        }
+        public string GetElementPath(int index) => Path.Combine(_path, InfoModels[index].Name);
 
         public void GetFilesModel()
         {
             InfoModels.Clear();
             foreach (var info in new DirectoryInfo(_path).GetFiles()) {
-                if (info.Name == (string)Application.Current.Resources["SettingsFileTxt"]) continue;
+                if (info.Name == Constants.SettingsFileTxt) continue;
                 InfoModels.Add(GetFileModel(info));
             }
         }
@@ -69,7 +57,7 @@ namespace Labs.ViewModels
 
         private InfoModel GetDirectoryModel(DirectoryInfo dirInfo)
         {
-            string path = Path.Combine(dirInfo.FullName, (string)Application.Current.Resources["SettingsFileTxt"]);
+            string path = Path.Combine(dirInfo.FullName, Constants.SettingsFileTxt);
             InfoModel model = null;
             var asd = Directory.GetFiles(dirInfo.FullName);
             if (File.Exists(path)) {

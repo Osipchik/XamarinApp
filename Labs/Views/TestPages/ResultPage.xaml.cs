@@ -24,8 +24,8 @@ namespace Labs.Views.TestPages
             if (_isClickAble) {
                 _model.Price = 0;
                 _model.RightAnswers = 0;
-                MessagingCenter.Send<Page>(this, (string)Application.Current.Resources["Check"]);
-                MessagingCenter.Send<object>(this, (string)Application.Current.Resources["ReturnPages"]);
+                MessagingCenter.Send<Page>(this, Constants.Check);
+                MessagingCenter.Send<object>(this, Constants.ReturnPages);
                 _isClickAble = false;
             }
         }

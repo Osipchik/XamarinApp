@@ -5,7 +5,9 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:helpers="clr-namespace:Labs.Helpers;assembly=Labs"
              mc:Ignorable="d"
-             x:Class="Labs.Views.TestPages.ResultPage">
+             x:Class="Labs.Views.TestPages.ResultPage"
+             BackgroundColor="{DynamicResource PageBackGroundColor}">
+
     <ContentPage.Content>
         <StackLayout VerticalOptions="FillAndExpand">
             <Grid HorizontalOptions="Center"

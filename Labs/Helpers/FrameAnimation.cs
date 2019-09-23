@@ -19,17 +19,15 @@ namespace Labs.Helpers
         {
             await Task.Run(() => {
                 new Animation((d) => button.WidthRequest = d, button.Width, widthMax)
-                    .Commit(button, "ButtonShow", (uint)Application.Current.Resources["AnimationRate"],
-                        (uint)Application.Current.Resources["AnimationLength"], Easing.SinInOut);
+                    .Commit(button, "ButtonShow", Constants.AnimationRate, Constants.AnimationLength, Easing.SinInOut);
             });
         }
         private static async void RunSettingsButtonAnimationToHideAsync(Button button)
         {
-            var buttonWidthMin = button.Text.Length * (uint)Application.Current.Resources["SymbolLength"];
+            var buttonWidthMin = button.Text.Length * Constants.SymbolLength;
             await Task.Run(() => {
                 new Animation((d) => button.WidthRequest = d, button.Width, buttonWidthMin)
-                    .Commit(button, "ButtonHide", (uint)Application.Current.Resources["AnimationRate"],
-                           (uint)Application.Current.Resources["AnimationLength"], Easing.SinInOut);
+                    .Commit(button, "ButtonHide", Constants.AnimationRate, Constants.AnimationLength, Easing.SinInOut);
             });
         }
 
@@ -37,8 +35,7 @@ namespace Labs.Helpers
         {
             await Task.Run(() => {
                 new Animation((d) => view.HeightRequest = d, view.Height, heightEnd)
-                    .Commit(view, "ShowOrShow", (uint)Application.Current.Resources["AnimationRate"],
-                        (uint)Application.Current.Resources["AnimationLength"], Easing.SinInOut);
+                    .Commit(view, "ShowOrShow", Constants.AnimationRate, Constants.AnimationLength, Easing.SinInOut);
             });
         }
 

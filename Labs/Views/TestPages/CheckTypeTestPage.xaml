@@ -5,7 +5,9 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
              x:Class="Labs.Views.TestPages.CheckTypeTestPage"
-             Title="Check Type">
+             Title="Check Type"
+             BackgroundColor="{DynamicResource PageBackGroundColor}">
+
     <ContentPage.Content>
         <StackLayout>
             <Grid BindingContext="{Binding GeTimerModel}"

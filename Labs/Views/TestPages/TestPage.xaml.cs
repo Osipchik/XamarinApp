@@ -24,8 +24,7 @@ namespace Labs.Views.TestPages
         {
             InitializeComponent();
             _testViewModel = new TestViewModel(this);
-            _timerViewModel = testTime != (string)Application.Current.Resources["TimeZero"] 
-                ? new TimerViewModel(testTime, -1) : null;
+            _timerViewModel = testTime != Constants.TimeZero ? new TimerViewModel(testTime, -1) : null;
             _testModel = new TestModel();
             _pages = new List<Page>();
             FillPages(path);
@@ -55,7 +54,7 @@ namespace Labs.Views.TestPages
             }
             await Device.InvokeOnMainThreadAsync(() => Children.Add(new ResultPage(_testModel)));
             if (_timerViewModel == null) {
-                MessagingCenter.Send<Page>(this, (string)Application.Current.Resources["RunFirstTimer"]);
+                MessagingCenter.Send<Page>(this, Constants.RunFirstTimer);
             }
         }
 
@@ -63,13 +62,13 @@ namespace Labs.Views.TestPages
         {
             Page page = null;
             var testType = DirectoryHelper.GetTypeName(model.Name);
-            if (testType == (string) Application.Current.Resources["TestTypeCheck"]) {
+            if (testType == Constants.TestTypeCheck) {
                 page = new CheckTypeTestPage(path, model.Name, _timerViewModel, _testModel, Children.Count + 1);
             }
-            else if (testType == (string) Application.Current.Resources["TestTypeEntry"]) {
+            else if (testType == Constants.TestTypeEntry) {
                 page = new EntryTypeTestPage(path, model.Name, _timerViewModel, _testModel, Children.Count + 1);
             }
-            else if (testType == (string)Application.Current.Resources["TestTypeStack"]) {
+            else if (testType == Constants.TestTypeStack) {
                 page = new StackTypeTestPage(path, model.Name, _timerViewModel, _testModel, Children.Count + 1);
             }
 
@@ -80,7 +79,7 @@ namespace Labs.Views.TestPages
         {
             base.OnPagesChanged(e);
             if (Children.Count > 1 && _timerViewModel == null && _isAble) {
-                MessagingCenter.Send<Page>(this, (string)Application.Current.Resources["StopAllTimers"]);
+                MessagingCenter.Send<Page>(this, Constants.StopAllTimers);
             }
         }
         
@@ -88,8 +87,8 @@ namespace Labs.Views.TestPages
 
         private void Subscribe()
         {
-            MessagingCenter.Subscribe<object>(this, (string)Application.Current.Resources["TimerIsEnd"], GoToNextPage);
-            MessagingCenter.Subscribe<object>(this, (string)Application.Current.Resources["ReturnPages"], ReturnPagesAsync);
+            MessagingCenter.Subscribe<object>(this, Constants.TimerIsEnd, GoToNextPage);
+            MessagingCenter.Subscribe<object>(this, Constants.ReturnPages, ReturnPagesAsync);
         }
 
         private void GoToNextPage(object sender)

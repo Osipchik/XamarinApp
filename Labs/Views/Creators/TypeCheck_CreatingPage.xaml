@@ -6,7 +6,8 @@
              xmlns:helpers="clr-namespace:Labs.Helpers;assembly=Labs"
              mc:Ignorable="d"
              x:Class="Labs.Views.Creators.TypeCheckCreatingPage"
-             Title="{helpers:Translate TypeCheckTitle}">
+             Title="{helpers:Translate TypeCheckTitle}"
+             BackgroundColor="{DynamicResource PageBackGroundColor}">
 
     <ContentPage.ToolbarItems>
         <ToolbarItem Text="{helpers:Translate Save}"

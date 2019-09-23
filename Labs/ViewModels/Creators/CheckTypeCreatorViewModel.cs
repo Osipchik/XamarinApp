@@ -12,6 +12,12 @@ using Xamarin.Forms;
 
 namespace Labs.ViewModels.Creators
 {
+    public enum Mode : int
+    {
+        ItemDelete = -1,
+        ItemSelect,
+        ItemRight
+    }
     public class CheckTypeCreatorViewModel 
     {
         private readonly string _path;
@@ -100,11 +106,10 @@ namespace Labs.ViewModels.Creators
         {
             switch (Modificator)
             {
-                case -1:
+                case (int)Mode.ItemDelete:
                     await Task.Run(() => { FrameViewModel.ItemToDelete(index); });
                     break;
-                case 0: goto default;
-                case 1:
+                case (int)Mode.ItemRight:
                     await Task.Run(() => { FrameViewModel.RightItems(index); });
                     break;
                 default:
@@ -116,7 +121,7 @@ namespace Labs.ViewModels.Creators
         private async void Save()
         {
             if (await PageIsValid()) {
-                DirectoryHelper.SaveFile((string)Application.Current.Resources["TestTypeCheck"], _path, _fileName, await GetStringsToSave());
+                DirectoryHelper.SaveFile(Constants.TestTypeCheck, _path, _fileName, await GetStringsToSave());
                 await _page.Navigation.PopAsync(true);
             }
         }

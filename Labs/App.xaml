@@ -3,66 +3,56 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Labs.App">
     <Application.Resources>
-        <Style x:Key="ButtonNormalStyle" TargetType="Button">
-            <Setter Property="TextColor" Value="#039BE5"/>
-            <Setter Property="HorizontalOptions" Value="FillAndExpand"/>
-            <Setter Property="BorderColor" Value="#039BE5"/>
-            <Setter Property="BackgroundColor" Value="White"/>
-            <Setter Property="Padding" Value="12"/>
-            <Setter Property="BorderWidth" Value="1"/>
-            <Setter Property="CornerRadius" Value="60"/>
-            <Setter Property="Margin" Value="6,0,6,0"/>
-        </Style>
+        <ResourceDictionary>
+            <Color x:Key="ColorMaterialBlue">#03A9F4</Color>
+            <Color x:Key="ColorMaterialRed">#f44336</Color>
+            <Color x:Key="ColorMaterialBlueGray">#607D8B</Color>
+            <Color x:Key="ColorMaterialGray">#B0BEC5</Color>
+            <Color x:Key="ColorMaterialGreen">#4CAF50</Color>
 
-        <Color x:Key="ColorMaterialBlue">#03A9F4</Color>
-        <Color x:Key="ColorMaterialRed">#f44336</Color>
-        <Color x:Key="ColorMaterialBlueGray">#607D8B</Color>
-        <Color x:Key="ColorMaterialGray">#B0BEC5</Color>
-        <Color x:Key="ColorMaterialGrayText">#9E9E9E</Color>
-        <Color x:Key="ColorMaterialGreen">#4CAF50</Color>
+            <Style x:Key="LabelTitle" TargetType="Label">
+                <Setter Property="FontSize" Value="18"/>
+            </Style>
+            <Style x:Key="LabelUnderTitle" TargetType="Label">
+                <Setter Property="TextColor" Value="{DynamicResource TextColor}"/>
+                <Setter Property="HorizontalOptions" Value="Start"/>
+                <Setter Property="FontSize" Value="12"/>
+                <Setter Property="Opacity" Value="0.7"/>
+            </Style>
+            <Style x:Key="Detail" TargetType="Label">
+                <Setter Property="HorizontalOptions" Value="FillAndExpand"/>
+                <Setter Property="FontSize" Value="14"/>
+                <Setter Property="Opacity" Value="0.7"/>
+            </Style>
+            <Style x:Key="Date" TargetType="Label">
+                <Setter Property="HorizontalOptions" Value="End"/>
+                <Setter Property="FontSize" Value="12"/>
+                <Setter Property="Opacity" Value="0.7"/>
+            </Style>
 
-        <x:String x:Key="TimeZero">00:00:00</x:String>
-        <x:String x:Key="UploadTitles">UploadTitles</x:String>
-        <x:String x:Key="ReturnPages">ReturnPages</x:String>
-        <x:String x:Key="TimerIsEnd">TimerIsEnd</x:String>
-        <x:String x:Key="StopAllTimers">StopAllTimers</x:String>
-        <x:String x:Key="RunFirstTimer">RunFirstTimer</x:String>
-        <x:String x:Key="SettingsFileTxt">settings.txt</x:String>
-        <x:String x:Key="TestTypeStack">Stack</x:String>
-        <x:String x:Key="TestTypeEntry">Entry</x:String>
-        <x:String x:Key="TestTypeCheck">Check</x:String>
-        <x:String x:Key="TestName">Test_</x:String>
-        <x:String x:Key="TempFolder">Temp</x:String>
-        <x:String x:Key="TestFolder">Test</x:String>
-        <x:String x:Key="Check">check</x:String>
+            <Style x:Key="ButtonNormalStyle" TargetType="Button">
+                <Setter Property="TextColor" Value="{DynamicResource ButtonTextColor}"/>
+                <Setter Property="HorizontalOptions" Value="FillAndExpand"/>
+                <Setter Property="BorderColor" Value="{DynamicResource BorderColor}"/>
+                <Setter Property="BackgroundColor" Value="{DynamicResource ButtonBackGroundColor}"/>
+                <Setter Property="Padding" Value="12"/>
+                <Setter Property="BorderWidth" Value="1"/>
+                <Setter Property="CornerRadius" Value="60"/>
+                <Setter Property="Margin" Value="6,0,6,0"/>
+            </Style>
 
-        <x:UInt32 x:Key="SymbolLength">11</x:UInt32>
-        <x:UInt32 x:Key="AnimationRate">16</x:UInt32>
-        <x:UInt32 x:Key="AnimationLength">700</x:UInt32>
+            <Style x:Key="Frame" TargetType="Frame">
+                <Setter Property="BorderColor" Value="{DynamicResource FrameBorderColor}"/>
+                <Setter Property="BackgroundColor" Value="{DynamicResource FrameBackGroundColor}"/>
+                <Setter Property="Padding" Value="10"/>
+            </Style>
 
-        <Style x:Key="Frame" TargetType="Frame">
-            <Setter Property="BorderColor" Value="#CFD8DC"/>
-            <Setter Property="Padding" Value="10"/>
-        </Style>
-        <Style x:Key="LabelTitle" TargetType="Label">
-            <Setter Property="FontSize" Value="18"/>
-        </Style>
-        <Style x:Key="LabelUnderTitle" TargetType="Label">
-            <Setter Property="HorizontalOptions" Value="Start"/>
-            <Setter Property="FontSize" Value="12"/>
-            <Setter Property="Opacity" Value="0.5"/>
-        </Style>
-        <Style x:Key="Detail" TargetType="Label">
-            <Setter Property="HorizontalOptions" Value="FillAndExpand"/>
-            <Setter Property="FontSize" Value="14"/>
-            <Setter Property="Opacity" Value="0.7"/>
-        </Style>
-        <Style x:Key="Date" TargetType="Label">
-            <Setter Property="HorizontalOptions" Value="End"/>
-            <Setter Property="FontSize" Value="12"/>
-            <Setter Property="Opacity" Value="0.7"/>
-        </Style>
+            <Style x:Key="ListView" TargetType="ListView">
+                <Setter Property="SeparatorVisibility" Value="None"/>
+                <Setter Property="BackgroundColor" Value="Transparent"/>
+                <Setter Property="HasUnevenRows" Value="True"/>
+            </Style>
 
-        
+        </ResourceDictionary>
     </Application.Resources>
 </Application>

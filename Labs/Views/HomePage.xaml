@@ -3,15 +3,17 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:forms="clr-namespace:Lottie.Forms;assembly=Lottie.Forms"
              xmlns:helpers="clr-namespace:Labs.Helpers;assembly=Labs"
              mc:Ignorable="d"
-             x:Class="Labs.Views.HomePage">
+             x:Class="Labs.Views.HomePage"
+             BackgroundColor="{DynamicResource PageBackGroundColor}">
 
     <ContentPage.Content>
         <StackLayout Margin="12,0,12,0">
             <SearchBar Placeholder="{helpers:Translate SearchBarPlaceHolder}"
                        HorizontalOptions="Center"
+                       TextColor="{DynamicResource SearchBarTextColor}"
+                       PlaceholderColor="{DynamicResource TextColor}"
                        Text="{Binding SearchBarText}"/>
             <Grid x:Name="GridButtons"
                   IsVisible="False"
@@ -41,6 +43,7 @@
                 <Label x:Name="LabelSubject"
                        Text="{helpers:Translate SearchSubject}"
                        Margin="14,0,14,0"
+                       TextColor="{DynamicResource TextColor}"
                        VerticalOptions="Center"
                        HorizontalOptions="Center"
                        Grid.Row="0" Grid.Column="1">
@@ -50,6 +53,7 @@
                 </Label>
                 <Label x:Name="LabelDate"
                        Text="{helpers:Translate SearchDate}"
+                       TextColor="{DynamicResource TextColor}"
                        VerticalOptions="Center"
                        HorizontalOptions="Center"
                        Grid.Row="0" Grid.Column="2">
@@ -58,10 +62,8 @@
                     </Label.GestureRecognizers>
                 </Label>
             </Grid>
-            <ListView CachingStrategy="RecycleElement"
-                      SeparatorVisibility="None"
-                      VerticalScrollBarVisibility="Never"
-                      HasUnevenRows="True"
+            <ListView Style="{StaticResource ListView}"
+                      CachingStrategy="RecycleElement"
                       ItemSelected="ListView_OnItemSelected"
                       ItemTapped="ListView_OnItemTapped"
                       ItemsSource="{Binding GetInfoModels}">

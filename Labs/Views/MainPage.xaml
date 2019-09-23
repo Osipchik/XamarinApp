@@ -3,18 +3,18 @@
                   xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
                   xmlns:d="http://xamarin.com/schemas/2014/forms/design"
                   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-                  xmlns:labs="clr-namespace:Labs;assembly=Labs"
-                  xmlns:helpers="clr-namespace:Labs.Helpers;assembly=Labs"
                   mc:Ignorable="d"
                   x:Class="Labs.Views.MainPage"
                   Title="asd">
 
     <MasterDetailPage.Master>
-        <ContentPage Title="Master">
+        <ContentPage Title="Master"
+                     BackgroundColor="{DynamicResource PageBackGroundColor}">
             <ContentPage.Content>
                 <StackLayout Spacing="0">
                     <ListView x:Name="ListViewDetail"
                               CachingStrategy="RecycleElement"
+                              BackgroundColor="Transparent"
                               ItemTapped="ListViewDetail_OnItemTapped"
                               ItemSelected="ListViewDetail_OnItemSelected">
                        <ListView.ItemTemplate>
@@ -28,10 +28,10 @@
                                               HeightRequest="24"
                                               Margin="0,0,24,0"/>
                                         <Label Text="{Binding Text}"
+                                               TextColor="{DynamicResource MasterDetailTextColor}"
                                                VerticalOptions="Center"
                                                HorizontalOptions="FillAndExpand"
-                                               FontSize="Medium"
-                                               TextColor="Black"/>
+                                               FontSize="Medium"/>
                                    </StackLayout>
                                </ViewCell>
                            </DataTemplate>

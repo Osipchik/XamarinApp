@@ -51,7 +51,7 @@ namespace Labs.Models
             }
         }
 
-        private Color _titleColor;
+        private Color _titleColor = (Color)Application.Current.Resources["TextColor"];
         public Color TitleColor
         {
             get => _titleColor;
@@ -62,7 +62,7 @@ namespace Labs.Models
             }
         }
 
-        private Color _detailColor;
+        private Color _detailColor = (Color)Application.Current.Resources["TextColor"];
         public Color DetailColor
         {
             get => _detailColor;
@@ -73,7 +73,7 @@ namespace Labs.Models
             }
         }
 
-        private Color _dateColor;
+        private Color _dateColor = (Color)Application.Current.Resources["TextColor"];
         public Color DateColor
         {
             get => _dateColor;

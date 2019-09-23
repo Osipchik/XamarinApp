@@ -2,8 +2,6 @@
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-using Xamarin.Forms;
 
 namespace Labs.Helpers
 {
@@ -38,8 +36,7 @@ namespace Labs.Helpers
         {
             var testPath = string.Empty;
             for (int i = 0; Directory.Exists(testPath) || string.IsNullOrEmpty(testPath); i++) {
-                testPath = Path.Combine(path, (string)Application.Current.Resources["TestFolder"],
-                    $"{(string)Application.Current.Resources["TestName"]}{i}");
+                testPath = Path.Combine(path, Constants.TestFolder, $"{Constants.TestName}{i}");
             }
 
             return testPath;
@@ -47,8 +44,8 @@ namespace Labs.Helpers
 
         public static void SaveTest(string path, IEnumerable<string> settings)
         {
-            File.WriteAllLines(Path.Combine(path, (string)Application.Current.Resources["SettingsFileTxt"]), settings, Encoding.UTF8);
-            if (path.Contains((string)Application.Current.Resources["TempFolder"])) {
+            File.WriteAllLines(Path.Combine(path, Constants.SettingsFileTxt), settings, Encoding.UTF8);
+            if (path.Contains(Constants.TempFolder)) {
                 MoveFiles(path);
             }
         }

@@ -5,6 +5,7 @@ using Labs.Helpers;
 using Labs.Models;
 using Labs.Resources;
 using Plugin.Multilingual;
+using Plugin.Settings;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -19,7 +20,6 @@ namespace Labs.Views
             InitializeComponent();
 
             Languages = Language.GetLanguageList();
-
             BindingContext = this;
             SetIndex();
         }
@@ -29,8 +29,8 @@ namespace Labs.Views
             var culture = new CultureInfo(Languages[PickerLanguages.SelectedIndex].ShortName);
             AppResources.Culture = culture;
             CrossMultilingual.Current.CurrentCultureInfo = culture;
-
-            MessagingCenter.Send<Page>(this, (string) Application.Current.Resources["UploadTitles"]);
+            CrossSettings.Current.AddOrUpdateValue(Constants.Culture, culture.ToString());
+            MessagingCenter.Send<Page>(this, Constants.UploadTitles);
         }
 
         private void SetIndex()
@@ -42,5 +42,9 @@ namespace Labs.Views
                 }
             }
         }
+
+        private void ButtonLight_OnClicked(object sender, EventArgs e) => ThemeSettings.SetTheme(ThemeSettings.Theme.Light);
+
+        private void ButtonDark_OnClicked(object sender, EventArgs e) => ThemeSettings.SetTheme(ThemeSettings.Theme.Dark);
     }
 }

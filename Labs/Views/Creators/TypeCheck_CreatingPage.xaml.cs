@@ -32,8 +32,8 @@ namespace Labs.Views.Creators
             FrameAnimation.RunShowOrHideAnimation(SettingsLayout, _heightMax, 0, _settingsIsVisible);
         }
 
-        private void ChooseItemsToDelete_OnClicked(object sender, EventArgs e) => ChooseItems(-1);
-        private void ChooseRightItems_OnClicked(object sender, EventArgs e) => ChooseItems(1);
+        private void ChooseItemsToDelete_OnClicked(object sender, EventArgs e) => ChooseItems((int)Mode.ItemDelete);
+        private void ChooseRightItems_OnClicked(object sender, EventArgs e) => ChooseItems((int)Mode.ItemRight);
         private void ChooseItems(int modificator)
         {
             HideOrShowAsync_OnClicked(this, EventArgs.Empty);

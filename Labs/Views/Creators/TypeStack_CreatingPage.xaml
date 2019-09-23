@@ -6,7 +6,8 @@
              xmlns:helpers="clr-namespace:Labs.Helpers;assembly=Labs"
              mc:Ignorable="d"
              x:Class="Labs.Views.Creators.TypeStackCreatingPage"
-             Title="{helpers:Translate TypeStackTitle}">
+             Title="{helpers:Translate TypeStackTitle}"
+             BackgroundColor="{DynamicResource PageBackGroundColor}">
 
     <ContentPage.ToolbarItems>
         <ToolbarItem Text="{helpers:Translate Save}"
