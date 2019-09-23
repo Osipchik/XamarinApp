@@ -15,10 +15,10 @@
         <ToolbarItem Text="{helpers:Translate Delete}"
                      Order="Secondary"
                      Command="{Binding DeleteCurrentFileCommand}"/>
-        <ToolbarItem Text="Delete items"
+        <ToolbarItem Text="{helpers:Translate DeleteItem}"
                      Order="Secondary"
                      Clicked="ChooseItemsToDelete_OnClicked"/>
-        <ToolbarItem Text="Add"
+        <ToolbarItem Text="{helpers:Translate AddItem}"
                      Order="Secondary"
                      Command="{Binding AddItemCommand}"/>
     </ContentPage.ToolbarItems>
@@ -117,8 +117,7 @@
                              Command="{Binding AcceptGridButtonCommand}"
                              Grid.Row="0" Grid.Column="4"/>
             </Grid>
-            <ListView x:Name="ListView"
-                      CachingStrategy="RecycleElement"
+            <ListView CachingStrategy="RecycleElement"
                       SeparatorVisibility="None"
                       VerticalScrollBarVisibility="Never"
                       HasUnevenRows="True"

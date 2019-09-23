@@ -69,28 +69,21 @@
                     <DataTemplate>
                         <ViewCell>
                             <ContentView Padding="5">
-                                <Frame BorderColor="#B0BEC5"
-                                       Padding="10">
+                                <Frame Style="{StaticResource Frame}">
                                     <StackLayout HorizontalOptions="FillAndExpand"
                                                  VerticalOptions="FillAndExpand">
                                         <Label Text="{Binding Title}"
                                                TextColor="{Binding TitleColor}"
-                                               FontSize="18"/>
+                                               Style="{StaticResource LabelTitle}"/>
                                         <StackLayout Orientation="Horizontal">
                                             <Label Text="{helpers:Translate Subject}"
-                                                   HorizontalOptions="Start"
-                                                   FontSize="12"
-                                                   Opacity="0.5"/>
+                                                   Style="{StaticResource LabelUnderTitle}"/>
                                             <Label Text="{Binding Detail}"
                                                    TextColor="{Binding DetailColor}"
-                                                   HorizontalOptions="FillAndExpand"
-                                                   FontSize="12"
-                                                   Opacity="0.7"/>
+                                                   Style="{StaticResource Detail}"/>
                                             <Label Text="{Binding Date}"
                                                    TextColor="{Binding DateColor}"
-                                                   HorizontalOptions="End"
-                                                   FontSize="12"
-                                                   Opacity="0.7"/>
+                                                   Style="{StaticResource Date}"/>
                                         </StackLayout>
                                     </StackLayout>
                                 </Frame>

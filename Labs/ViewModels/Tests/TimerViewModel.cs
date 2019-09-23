@@ -76,7 +76,7 @@ namespace Labs.ViewModels.Tests
                 return _timerIsAlive;
             }
 
-            MessagingCenter.Send<object>(this, Constants.TimerIsEnd);
+            MessagingCenter.Send<object>(this, (string)Application.Current.Resources["TimerIsEnd"]);
             return false;
         }
 
@@ -98,7 +98,7 @@ namespace Labs.ViewModels.Tests
 
         private void Subscribe()
         {
-            MessagingCenter.Subscribe<Page>(this, Constants.StopAllTimers,
+            MessagingCenter.Subscribe<Page>(this, (string)Application.Current.Resources["StopAllTimers"],
                 (sender) => { TimerStop(); });
         }
     }

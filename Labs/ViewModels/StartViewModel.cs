@@ -49,7 +49,7 @@ namespace Labs.ViewModels
         private async void ReadSettingsAsync(string path)
         {
             await Task.Run(() => {
-                var settings = DirectoryHelper.ReadStringsFromFile(path, Constants.SettingsFileTxt);
+                var settings = DirectoryHelper.ReadStringsFromFile(path, (string)Application.Current.Resources["SettingsFileTxt"]);
                 if (settings != null) {
                     SettingsViewModel.SetStartPageSettings(settings);
                 }
@@ -67,14 +67,14 @@ namespace Labs.ViewModels
 
         private void ChangeButtonStyle_OnClick(Button button)
         {
-            button.BackgroundColor = Constants.Colors.ColorMaterialBlue;
+            button.BackgroundColor = (Color)Application.Current.Resources["ColorMaterialBlue"];
             button.TextColor = Color.White;
         }
 
         private void ChangeButtonStyle_OnCallBack(Button button)
         {
             button.BackgroundColor = Color.White;
-            button.TextColor = Constants.Colors.ColorMaterialBlue;
+            button.TextColor = (Color)Application.Current.Resources["ColorMaterialBlue"];
         }
     }
 }

@@ -39,8 +39,8 @@ namespace Labs.ViewModels
             var message = string.Empty;
             SettingsModel.Name = CheckText(SettingsModel.Name);
             SettingsModel.Subject = CheckText(SettingsModel.Subject);
-            message += string.IsNullOrEmpty(SettingsModel.Name) ? "name" + " \n" : "";
-            message += string.IsNullOrEmpty(SettingsModel.Subject) ? "subject" + " \n" : "";
+            message += string.IsNullOrEmpty(SettingsModel.Name) ? AppResources.AddName + " \n" : "";
+            message += string.IsNullOrEmpty(SettingsModel.Subject) ? AppResources.AddSubjectName + " \n" : "";
             message += CheckTimeAndPrice();
 
             return message;

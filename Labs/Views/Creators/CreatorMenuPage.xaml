@@ -112,22 +112,16 @@
                                         <StackLayout HorizontalOptions="FillAndExpand"
                                                      VerticalOptions="FillAndExpand">
                                             <Label Text="{Binding Title}"
-                                                   FontSize="18"/>
+                                                   Style="{StaticResource LabelTitle}"/>
                                             <StackLayout Orientation="Horizontal">
-                                                <Label Text="{helpers:Translate Price}"
-                                                       HorizontalOptions="Start"
-                                                       FontSize="12"
-                                                       Opacity="0.5"/>
+                                            <Label Text="{helpers:Translate Price}"
+                                                   Style="{StaticResource LabelUnderTitle}"/>
                                                 <Label Text="{Binding Detail}"
-                                                       HorizontalOptions="FillAndExpand"
-                                                       FontSize="14"
-                                                       Opacity="0.7"/>
+                                                       Style="{StaticResource Detail}"/>
                                                 <Label Text="{Binding Date}"
-                                                       HorizontalOptions="End"
-                                                       FontSize="12"
-                                                       Opacity="0.7"/>
+                                                       Style="{StaticResource Date}"/>
                                             </StackLayout>
-                                        </StackLayout>
+                                    </StackLayout>
                                     </Frame>
                                 </ContentView>
                             </ViewCell>

@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Labs.Helpers;
 using Labs.Models;
+using Labs.Resources;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -24,14 +21,27 @@ namespace Labs.Views.TestPages
 
         private void Button_OnClicked(object sender, EventArgs e)
         {
-            if (_isClickAble)
-            {
+            if (_isClickAble) {
                 _model.Price = 0;
                 _model.RightAnswers = 0;
-                MessagingCenter.Send<Page>(this, Constants.Check);
-                MessagingCenter.Send<object>(this, Constants.ReturnPages);
+                MessagingCenter.Send<Page>(this, (string)Application.Current.Resources["Check"]);
+                MessagingCenter.Send<object>(this, (string)Application.Current.Resources["ReturnPages"]);
                 _isClickAble = false;
             }
         }
+
+        protected override bool OnBackButtonPressed()
+        {
+            Device.BeginInvokeOnMainThread(async () => {
+                var result = await DisplayAlert(AppResources.Warning, AppResources.Escape, AppResources.Yes, 
+                    AppResources.No);
+                if (!result) return;
+                await Navigation.PopModalAsync(true);
+            });
+
+            return true;
+        }
+
+        private void BackButton_OnClicked(object sender, EventArgs e) => OnBackButtonPressed();
     }
 }

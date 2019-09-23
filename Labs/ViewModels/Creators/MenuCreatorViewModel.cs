@@ -54,7 +54,7 @@ namespace Labs.ViewModels.Creators
         private async void ReadSettingsAsync()
         {
             await Task.Run(() => {
-                var settings = DirectoryHelper.ReadStringsFromFile(_path, Constants.SettingsFileTxt);
+                var settings = DirectoryHelper.ReadStringsFromFile(_path, (string)Application.Current.Resources["SettingsFileTxt"]);
                 if (settings != null) {
                     _settingsViewModel.SetMenuPageSettings(settings);
                 }
@@ -75,18 +75,15 @@ namespace Labs.ViewModels.Creators
 
         public async void OpenCreatingPage(int index)
         {
-            switch (DirectoryHelper.GetTypeName(_infoViewModel.InfoModels[index].Name))
-            {
-                case Constants.TestTypeCheck:
-                    await _page.Navigation.PushAsync(new TypeCheckCreatingPage(_path, _infoViewModel.InfoModels[index].Name));
-                    break;
-                case Constants.TestTypeStack:
-                    await _page.Navigation.PushAsync(new TypeStackCreatingPage(_path, _infoViewModel.InfoModels[index].Name));
-                    break;
-
-                case Constants.TestTypeEntry:
-                    await _page.Navigation.PushAsync(new TypeEntryCreatingPage(_path, _infoViewModel.InfoModels[index].Name));
-                    break;
+            var testType = DirectoryHelper.GetTypeName(_infoViewModel.InfoModels[index].Name);
+            if (testType == (string)Application.Current.Resources["TestTypeCheck"]) {
+                await _page.Navigation.PushAsync(new TypeCheckCreatingPage(_path, _infoViewModel.InfoModels[index].Name));
+            }
+            else if(testType == (string)Application.Current.Resources["TestTypeStack"]) {
+                await _page.Navigation.PushAsync(new TypeStackCreatingPage(_path, _infoViewModel.InfoModels[index].Name));
+            }
+            else if (testType == (string)Application.Current.Resources["TestTypeEntry"]) {
+                await _page.Navigation.PushAsync(new TypeEntryCreatingPage(_path, _infoViewModel.InfoModels[index].Name));
             }
         }
 
@@ -114,7 +111,7 @@ namespace Labs.ViewModels.Creators
             await Task.Run(async () => {
                 if (await PageIsValid()) {
                     DirectoryHelper.SaveTest(_path, await _settingsViewModel.GetPageSettingsAsync(true));
-                    if (_path.Contains(Constants.TempFolder)) GetFilesAsync();
+                    if (_path.Contains((string)Application.Current.Resources["TempFolder"])) GetFilesAsync();
                     else {
                         await Device.InvokeOnMainThreadAsync(async ()=>
                             await _page.Navigation.PopToRootAsync(true));
@@ -138,7 +135,7 @@ namespace Labs.ViewModels.Creators
         private string GetMessage()
         {
             var message = _settingsViewModel.CheckCreatorMenuPageSettings();
-            message += _infoViewModel.InfoModels.Count < 1 ? "asd" : string.Empty;
+            message += _infoViewModel.InfoModels.Count < 1 ? AppResources.AddTestPage : string.Empty;
             return message;
         }
 
@@ -154,7 +151,7 @@ namespace Labs.ViewModels.Creators
 
         public bool OnBackButtonPressed()
         {
-            if (_path != Constants.TempFolder) {
+            if (_path != (string)Application.Current.Resources["TempFolder"]) {
                 Device.BeginInvokeOnMainThread(async () => {
                     var result = await _page.DisplayAlert(AppResources.Warning, AppResources.Escape, AppResources.Yes, AppResources.No);
                     if (!result) return;

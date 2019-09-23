@@ -7,6 +7,7 @@ using System.Runtime.CompilerServices;
 using Labs.Annotations;
 using Labs.Helpers;
 using Labs.Models;
+using Xamarin.Forms;
 
 namespace Labs.ViewModels
 {
@@ -49,7 +50,7 @@ namespace Labs.ViewModels
         {
             InfoModels.Clear();
             foreach (var info in new DirectoryInfo(_path).GetFiles()) {
-                if (info.Name == Constants.SettingsFileTxt) continue;
+                if (info.Name == (string)Application.Current.Resources["SettingsFileTxt"]) continue;
                 InfoModels.Add(GetFileModel(info));
             }
         }
@@ -68,7 +69,7 @@ namespace Labs.ViewModels
 
         private InfoModel GetDirectoryModel(DirectoryInfo dirInfo)
         {
-            string path = Path.Combine(dirInfo.FullName, Constants.SettingsFileTxt);
+            string path = Path.Combine(dirInfo.FullName, (string)Application.Current.Resources["SettingsFileTxt"]);
             InfoModel model = null;
             var asd = Directory.GetFiles(dirInfo.FullName);
             if (File.Exists(path)) {

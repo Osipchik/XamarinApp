@@ -72,7 +72,7 @@ namespace Labs.ViewModels
         private string GetMainTestFolderPath()
         {
             var folder = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
-            return Path.Combine(folder, Constants.TestFolder);
+            return Path.Combine(folder, (string)Application.Current.Resources["TestFolder"]);
         }
 
         private IEnumerable<InfoModel> Search(string keyword)
@@ -94,7 +94,7 @@ namespace Labs.ViewModels
         {
             var filter = string.Empty;
             for (var i = 0; i < _labels.Length; i++) {
-                if (_labels[i].TextColor == Constants.Colors.ColorMaterialBlue) {
+                if (_labels[i].TextColor == (Color)Application.Current.Resources["ColorMaterialBlue"]) {
                     filter = _infoViewModel.GetNameOfPropertyInModel(i);
                     break;
                 }
@@ -132,13 +132,13 @@ namespace Labs.ViewModels
         private void ActiveSearchLabelStyle(Label label)
         {
             label.FontSize = 16;
-            label.TextColor = Constants.Colors.ColorMaterialBlue;
+            label.TextColor = (Color)Application.Current.Resources["ColorMaterialBlue"];
         }
         private void DisableSearchLabelStyle(Label activeLabel)
         {
             foreach (var label in _labels.Where(label => activeLabel != label)) {
                 label.FontSize = 14;
-                label.TextColor = Constants.Colors.ColorMaterialGray;
+                label.TextColor = (Color)Application.Current.Resources["ColorMaterialGray"];
             }
         }
         private async void ChangeStyleOfLabelsAsync(InfoModel model, string filter)
@@ -151,7 +151,8 @@ namespace Labs.ViewModels
             });
         }
         private Color GetColor(string filter, string propertyName) =>
-            filter == propertyName ? Constants.Colors.ColorMaterialBlue : Constants.Colors.ColorMaterialGrayText;
+            filter == propertyName ? (Color)Application.Current.Resources["ColorMaterialBlue"]
+                                   : (Color) Application.Current.Resources["ColorMaterialGrayText"];
 
         private async void DisableSearchModificationAsync()
         {
@@ -159,7 +160,7 @@ namespace Labs.ViewModels
                 foreach (var model in _infoModels) {
                     model.TitleColor =
                         model.DetailColor =
-                            model.DateColor = Constants.Colors.ColorMaterialGrayText;
+                            model.DateColor = (Color)Application.Current.Resources["ColorMaterialGrayText"];
                 }
             });
         }

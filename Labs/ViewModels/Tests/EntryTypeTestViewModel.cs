@@ -1,7 +1,7 @@
-﻿using System.Drawing;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Labs.Helpers;
 using Labs.Models;
+using Xamarin.Forms;
 
 namespace Labs.ViewModels.Tests
 {
@@ -25,7 +25,7 @@ namespace Labs.ViewModels.Tests
             await Task.Run(() => {
                 _settingsViewModel.SetPageSettingsModel(strings[0], strings[1], strings[2]);
                 EntryModel.RightAnswer = strings[3];
-                EntryModel.BorderColor = Constants.Colors.ColorMaterialBlue;
+                EntryModel.BorderColor = (Color)Application.Current.Resources["ColorMaterialBlue"];
             });
         }
 
@@ -57,6 +57,7 @@ namespace Labs.ViewModels.Tests
         }
 
         private Color GetColor(bool isRight) =>
-            isRight ? Constants.Colors.ColorMaterialGreen : Constants.Colors.ColorMaterialRed;
+            isRight ? (Color)Application.Current.Resources["ColorMaterialGreen"] 
+                    : (Color)Application.Current.Resources["ColorMaterialRed"];
     }
 }

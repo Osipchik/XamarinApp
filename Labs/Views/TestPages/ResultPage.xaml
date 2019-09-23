@@ -3,16 +3,39 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:helpers="clr-namespace:Labs.Helpers;assembly=Labs"
              mc:Ignorable="d"
              x:Class="Labs.Views.TestPages.ResultPage">
     <ContentPage.Content>
-        <StackLayout>
-            <Label Text="{Binding Price}"/>
-            <Label Text="{Binding RightAnswers}"/>
-            <Button Text="check"
+        <StackLayout VerticalOptions="FillAndExpand">
+            <Grid HorizontalOptions="Center"
+                  VerticalOptions="Center">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <Label Text="{helpers:Translate Price}"
+                       Grid.Row="0" Grid.Column="0"/>
+                <Label Text="{Binding Price}"
+                       Grid.Row="0" Grid.Column="1"/>
+                <Label Text="{helpers:Translate Rights}"
+                       Grid.Row="1" Grid.Column="0"/>
+                <Label Text="{Binding RightAnswers}"
+                       Grid.Row="1" Grid.Column="1"/>
+            </Grid>
+            <Button Text="{helpers:Translate Check}"
                     Clicked="Button_OnClicked"
-                    HorizontalOptions="Center"
-                    VerticalOptions="Center"/>
+                    Style="{StaticResource ButtonNormalStyle}"/>
+            <Button Text="{helpers:Translate Back}"
+                    Clicked="BackButton_OnClicked"
+                    Style="{StaticResource ButtonNormalStyle}"
+                    TextColor="#f44336"
+                    BorderColor="#f44336"
+                    VerticalOptions="End"/>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

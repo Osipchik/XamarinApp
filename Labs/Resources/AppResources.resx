@@ -120,6 +120,21 @@
   <data name="AboutApp" xml:space="preserve">
     <value>About app</value>
   </data>
+  <data name="AddAnswerOption" xml:space="preserve">
+    <value>Add answer option</value>
+  </data>
+  <data name="AddItem" xml:space="preserve">
+    <value>Add item</value>
+  </data>
+  <data name="AddName" xml:space="preserve">
+    <value>Add name</value>
+  </data>
+  <data name="AddSubjectName" xml:space="preserve">
+    <value>Add subject name</value>
+  </data>
+  <data name="AddTestPage" xml:space="preserve">
+    <value>Add test page</value>
+  </data>
   <data name="Answer" xml:space="preserve">
     <value>Answer</value>
   </data>
@@ -138,6 +153,9 @@
   <data name="Clear" xml:space="preserve">
     <value>Clear</value>
   </data>
+  <data name="CorrectAnswer" xml:space="preserve">
+    <value>Correct answer</value>
+  </data>
   <data name="CreateTestButton" xml:space="preserve">
     <value>Create test</value>
   </data>
@@ -152,6 +170,9 @@
   </data>
   <data name="DeleteAnswer" xml:space="preserve">
     <value>Do you rely want to delete this Test?</value>
+  </data>
+  <data name="DeleteItem" xml:space="preserve">
+    <value>Delete item</value>
   </data>
   <data name="Escape" xml:space="preserve">
     <value>Do you really want to escape this page?</value>
@@ -169,13 +190,13 @@
     <value>Mark</value>
   </data>
   <data name="MaxMarck" xml:space="preserve">
-    <value>Max marck</value>
+    <value>Max mark</value>
   </data>
   <data name="No" xml:space="preserve">
     <value>No</value>
   </data>
   <data name="Price" xml:space="preserve">
-    <value>Price:</value>
+    <value>Mark:</value>
   </data>
   <data name="Question" xml:space="preserve">
     <value>Question</value>

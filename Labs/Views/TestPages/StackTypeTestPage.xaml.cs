@@ -33,7 +33,7 @@ namespace Labs.Views.TestPages
         {
             base.OnAppearing();
             if (_timerViewModel == null && _stackViewModel.TimerViewModel != null) {
-                MessagingCenter.Send<Page>(this, Constants.StopAllTimers);
+                MessagingCenter.Send<Page>(this, (string)Application.Current.Resources["StopAllTimers"]);
                 _stackViewModel.TimerViewModel.TimerRunAsync();
             }
         }
@@ -41,10 +41,10 @@ namespace Labs.Views.TestPages
         private void Subscribe(int? num)
         {
             if (num != null && num.Value == 1) {
-                MessagingCenter.Subscribe<Page>(this, Constants.RunFirstTimer,
+                MessagingCenter.Subscribe<Page>(this, (string)Application.Current.Resources["RunFirstTimer"],
                     (sender) => { OnAppearing(); });
             }
-            MessagingCenter.Subscribe<Page>(this, Constants.Check,
+            MessagingCenter.Subscribe<Page>(this, (string)Application.Current.Resources["Check"],
                 (sender) => { _stackViewModel.CheckPageAsync(_testModel); });
         }
     }

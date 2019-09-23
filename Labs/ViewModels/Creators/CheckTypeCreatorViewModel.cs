@@ -116,7 +116,7 @@ namespace Labs.ViewModels.Creators
         private async void Save()
         {
             if (await PageIsValid()) {
-                DirectoryHelper.SaveFile(Constants.TestTypeCheck, _path, _fileName, await GetStringsToSave());
+                DirectoryHelper.SaveFile((string)Application.Current.Resources["TestTypeCheck"], _path, _fileName, await GetStringsToSave());
                 await _page.Navigation.PopAsync(true);
             }
         }
@@ -170,7 +170,7 @@ namespace Labs.ViewModels.Creators
         private string CheckFrames()
         {
             var message = string.Empty;
-            message += FrameViewModel.Models.Count < 1 ? "Add frame" : "";
+            message += FrameViewModel.Models.Count < 1 ? AppResources.AddAnswerOption : "";
             if (FrameViewModel.Models.Any(model => string.IsNullOrEmpty(model.ItemTextLeft))) {
                 message += AppResources.WarningAnswer;
             }

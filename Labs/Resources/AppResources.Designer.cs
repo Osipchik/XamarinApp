@@ -70,6 +70,51 @@ namespace Labs.Resources {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на Add answer option.
+        /// </summary>
+        internal static string AddAnswerOption {
+            get {
+                return ResourceManager.GetString("AddAnswerOption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Add item.
+        /// </summary>
+        internal static string AddItem {
+            get {
+                return ResourceManager.GetString("AddItem", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Add name.
+        /// </summary>
+        internal static string AddName {
+            get {
+                return ResourceManager.GetString("AddName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Add subject name.
+        /// </summary>
+        internal static string AddSubjectName {
+            get {
+                return ResourceManager.GetString("AddSubjectName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Add test page.
+        /// </summary>
+        internal static string AddTestPage {
+            get {
+                return ResourceManager.GetString("AddTestPage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Answer.
         /// </summary>
         internal static string Answer {
@@ -124,6 +169,15 @@ namespace Labs.Resources {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на Correct answer.
+        /// </summary>
+        internal static string CorrectAnswer {
+            get {
+                return ResourceManager.GetString("CorrectAnswer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Create test.
         /// </summary>
         internal static string CreateTestButton {
@@ -165,6 +219,15 @@ namespace Labs.Resources {
         internal static string DeleteAnswer {
             get {
                 return ResourceManager.GetString("DeleteAnswer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Delete item.
+        /// </summary>
+        internal static string DeleteItem {
+            get {
+                return ResourceManager.GetString("DeleteItem", resourceCulture);
             }
         }
         
@@ -214,7 +277,7 @@ namespace Labs.Resources {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Max marck.
+        ///   Ищет локализованную строку, похожую на Max mark.
         /// </summary>
         internal static string MaxMarck {
             get {
@@ -232,7 +295,7 @@ namespace Labs.Resources {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Price:.
+        ///   Ищет локализованную строку, похожую на Mark:.
         /// </summary>
         internal static string Price {
             get {

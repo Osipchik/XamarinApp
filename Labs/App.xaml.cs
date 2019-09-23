@@ -3,7 +3,6 @@ using Labs.Resources;
 using Labs.Views;
 using Plugin.Multilingual;
 using Xamarin.Forms;
-using Xamarin.Forms.Xaml;
 
 namespace Labs
 {
@@ -13,7 +12,7 @@ namespace Labs
         public App()
         {
             InitializeComponent();
-
+            
             var culture = CrossMultilingual.Current.DeviceCultureInfo;
             AppResources.Culture = culture;
 

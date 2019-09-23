@@ -14,13 +14,14 @@
                     <ViewCell>
                         <StackLayout Orientation="Horizontal"
                                      Margin="24,0,24,0">
-                            <Label x:Name="LabelLanguage"
+                            <Label Text="{helpers:Translate Labguage}"
                                    FontSize="Medium"
-                                   HorizontalOptions="FillAndExpand"
                                    VerticalOptions="Center"/>
                             <Picker x:Name="PickerLanguages"
+                                    HorizontalOptions="EndAndExpand"
                                     ItemsSource="{Binding Languages}"
-                                    ItemDisplayBinding="{Binding DisplayName}"/>
+                                    ItemDisplayBinding="{Binding DisplayName}"
+                                    SelectedIndexChanged="PickerLanguages_OnSelectedIndexChanged"/>
                         </StackLayout>
                     </ViewCell>
                 </TableSection>
@@ -28,7 +29,7 @@
                     <ViewCell>
                         <StackLayout Orientation="Horizontal"
                                      Margin="24,0,24,0">
-                            <Label x:Name="LabelTheme"
+                            <Label Text="{helpers:Translate Theme}"
                                    FontSize="Medium"
                                    VerticalOptions="Center"
                                    HorizontalOptions="FillAndExpand"/>

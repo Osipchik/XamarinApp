@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using Labs.Helpers;
 using Labs.Models;
+using Xamarin.Forms;
 
 namespace Labs.ViewModels.Tests
 {
@@ -80,7 +81,7 @@ namespace Labs.ViewModels.Tests
         {
             var pageIsRight = true;
             foreach (var model in _frameViewModel.Models) {
-                var isRight = model.BorderColor == Constants.Colors.ColorMaterialBlue == model.IsRight;
+                var isRight = model.BorderColor == (Color)Application.Current.Resources["ColorMaterialBlue"] == model.IsRight;
                 model.BorderColor = FrameViewModel.GetColorOnCheck(isRight);
                 pageIsRight = pageIsRight && isRight;
             }

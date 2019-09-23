@@ -23,10 +23,10 @@ namespace Labs.Views
             Subscribe();
         }
 
-        private void Subscribe() =>
-            MessagingCenter.Subscribe<Page>(this, Constants.UploadTitles, (sender) => UploadTitles());
+        private void Subscribe() => 
+            MessagingCenter.Subscribe<Page>(this, (string)Application.Current.Resources["UploadTitles"], 
+                (sender) => UploadTitles());
         
-
         private void UploadTitles() => ListViewDetail.ItemsSource = MasterDetail.GetDetailItems();
         
 
@@ -34,8 +34,8 @@ namespace Labs.Views
         {
             var appPath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
             string[] paths = {
-                Path.Combine(appPath, Constants.TestFolder),
-                Path.Combine(appPath, Constants.TempFolder)
+                Path.Combine(appPath, (string)Application.Current.Resources["TestFolder"]),
+                Path.Combine(appPath, (string)Application.Current.Resources["TempFolder"])
             };
 
             return paths;
@@ -65,12 +65,14 @@ namespace Labs.Views
                     break;
                 case 1:
                     var path = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
-                    Detail = new NavigationPage(new CreatorMenuPage(Path.Combine(path, Constants.TempFolder)));
+                    Detail = new NavigationPage(new CreatorMenuPage(Path.Combine(path, (string)Application.Current.Resources["TempFolder"])));
                     IsPresented = false;
                     break;
                 case 2:
                     Detail = new NavigationPage(new SettingsPage());
                     IsPresented = false;
+                    break;
+                default:
                     break;
             }
         }

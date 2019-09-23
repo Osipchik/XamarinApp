@@ -2,12 +2,11 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Drawing;
 using System.Runtime.CompilerServices;
 using Labs.Annotations;
-using Labs.Helpers;
 using Labs.Models;
 using System.Threading.Tasks;
+using Xamarin.Forms;
 
 namespace Labs.ViewModels
 {
@@ -35,7 +34,7 @@ namespace Labs.ViewModels
         {
             await Task.Run(() => {
                 Models.Add(new FrameModel {
-                    BorderColor = Constants.Colors.ColorMaterialGray,
+                    BorderColor = (Color)Application.Current.Resources["ColorMaterialGray"],
                     ItemTextLeft = string.Empty,
                     ItemTextRight = string.Empty,
                     IsRight = false
@@ -48,7 +47,8 @@ namespace Labs.ViewModels
             DisableLastItem();
             await Task.Run(() => {
                 foreach (var model in Models) {
-                    model.BorderColor = model.IsRight ? Constants.Colors.ColorMaterialGreen : Constants.Colors.ColorMaterialGray;
+                    model.BorderColor = model.IsRight ? (Color)Application.Current.Resources["ColorMaterialGreen"] 
+                                                      : (Color)Application.Current.Resources["ColorMaterialGray"];
                 }
             });
         }
@@ -58,18 +58,18 @@ namespace Labs.ViewModels
                 DisableLastItem();
             }
             _itemIndex = index;
-            var isTrue = Models[_itemIndex].BorderColor == Constants.Colors.ColorMaterialBlue;
+            var isTrue = Models[_itemIndex].BorderColor == (Xamarin.Forms.Color) Application.Current.Resources["ColorMaterialBlue"];
             Models[_itemIndex].BorderColor = isTrue 
-                ? Constants.Colors.ColorMaterialGray 
-                : Constants.Colors.ColorMaterialBlue;
+                ? (Color)Application.Current.Resources["ColorMaterialGray"] 
+                : (Color)Application.Current.Resources["ColorMaterialBlue"];
         }
         public void DisableLastItem()
         {
             if (_itemIndex >= 0)
             {
                 Models[_itemIndex].BorderColor = Models[_itemIndex].IsRight
-                    ? Constants.Colors.ColorMaterialGreen
-                    : Constants.Colors.ColorMaterialGray;
+                    ? (Color)Application.Current.Resources["ColorMaterialGreen"]
+                    : (Color)Application.Current.Resources["ColorMaterialGray"];
             }
             _itemIndex = -1;
         }
@@ -81,23 +81,25 @@ namespace Labs.ViewModels
         }
 
         public static Color GetColor(bool isRight) =>
-            isRight ? Constants.Colors.ColorMaterialGreen : Constants.Colors.ColorMaterialGray;
+            isRight ? (Color)Application.Current.Resources["ColorMaterialGreen"]
+                    : (Color) Application.Current.Resources["ColorMaterialGray"];
 
         public static Color GetColorOnCheck(bool isRight) =>
-            isRight ? Constants.Colors.ColorMaterialGreen : Constants.Colors.ColorMaterialRed;
+            isRight ? (Color)Application.Current.Resources["ColorMaterialGreen"] 
+                    : (Color)Application.Current.Resources["ColorMaterialRed"];
         
 
         public void ItemToDelete(int index)
         {
-            if (Models[index].BorderColor == Constants.Colors.ColorMaterialRed) {
+            if (Models[index].BorderColor == (Color)Application.Current.Resources["ColorMaterialRed"]) {
                 _itemIndexToDeleteList.Remove(index);
                 Models[index].BorderColor = Models[index].IsRight 
-                    ? Constants.Colors.ColorMaterialGreen 
-                    : Constants.Colors.ColorMaterialGray;
+                    ? (Color)Application.Current.Resources["ColorMaterialGreen"]
+                    : (Color)Application.Current.Resources["ColorMaterialGray"];
             }
             else {
                 _itemIndexToDeleteList.Add(index);
-                Models[index].BorderColor = Constants.Colors.ColorMaterialRed;
+                Models[index].BorderColor = (Color)Application.Current.Resources["ColorMaterialRed"];
             }
         }
         public void DeleteItems()

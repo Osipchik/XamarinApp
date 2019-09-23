@@ -19,15 +19,17 @@ namespace Labs.Helpers
         {
             await Task.Run(() => {
                 new Animation((d) => button.WidthRequest = d, button.Width, widthMax)
-                    .Commit(button, "ButtonShow", Constants.AnimationRate, Constants.AnimationLength, Easing.SinInOut);
+                    .Commit(button, "ButtonShow", (uint)Application.Current.Resources["AnimationRate"],
+                        (uint)Application.Current.Resources["AnimationLength"], Easing.SinInOut);
             });
         }
         private static async void RunSettingsButtonAnimationToHideAsync(Button button)
         {
-            var buttonWidthMin = button.Text.Length * Constants.SymbolLength;
+            var buttonWidthMin = button.Text.Length * (uint)Application.Current.Resources["SymbolLength"];
             await Task.Run(() => {
                 new Animation((d) => button.WidthRequest = d, button.Width, buttonWidthMin)
-                    .Commit(button, "ButtonHide", Constants.AnimationRate, Constants.AnimationLength, Easing.SinInOut);
+                    .Commit(button, "ButtonHide", (uint)Application.Current.Resources["AnimationRate"],
+                           (uint)Application.Current.Resources["AnimationLength"], Easing.SinInOut);
             });
         }
 
@@ -35,7 +37,8 @@ namespace Labs.Helpers
         {
             await Task.Run(() => {
                 new Animation((d) => view.HeightRequest = d, view.Height, heightEnd)
-                    .Commit(view, "ShowOrShow", Constants.AnimationRate, Constants.AnimationLength, Easing.SinInOut);
+                    .Commit(view, "ShowOrShow", (uint)Application.Current.Resources["AnimationRate"],
+                        (uint)Application.Current.Resources["AnimationLength"], Easing.SinInOut);
             });
         }
 
@@ -47,14 +50,14 @@ namespace Labs.Helpers
 
         private static void ButtonStyleShow(Button button)
         {
-            button.BackgroundColor = Constants.Colors.ColorMaterialBlue;
+            button.BackgroundColor = (Color) Application.Current.Resources["ColorMaterialBlue"];
             button.TextColor = Color.White;
         }
 
         private static void ButtonStyleHide(Button button)
         {
             button.BackgroundColor = Color.White;
-            button.TextColor = Constants.Colors.ColorMaterialBlue;
+            button.TextColor = (Color)Application.Current.Resources["ColorMaterialBlue"];
         }
     }
 }

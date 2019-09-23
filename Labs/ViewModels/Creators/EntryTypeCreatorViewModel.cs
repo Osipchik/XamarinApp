@@ -73,7 +73,7 @@ namespace Labs.ViewModels.Creators
         private async void Save()
         {
             if (await PageIsValid()) {
-                DirectoryHelper.SaveFile(Constants.TestTypeEntry, _path, _fileName, await GetStringsToSave());
+                DirectoryHelper.SaveFile((string)Application.Current.Resources["TestTypeEntry"], _path, _fileName, await GetStringsToSave());
                 await _page.Navigation.PopAsync(true);
             }
         }
