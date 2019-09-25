@@ -1,35 +1,49 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <Application xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:helpers="clr-namespace:Labs.Helpers;assembly=Labs"
              x:Class="Labs.App">
     <Application.Resources>
         <ResourceDictionary>
-            <Color x:Key="ColorMaterialBlue">#03A9F4</Color>
-            <Color x:Key="ColorMaterialRed">#f44336</Color>
-            <Color x:Key="ColorMaterialBlueGray">#607D8B</Color>
-            <Color x:Key="ColorMaterialGray">#B0BEC5</Color>
-            <Color x:Key="ColorMaterialGreen">#4CAF50</Color>
-
-            <Style x:Key="LabelTitle" TargetType="Label">
+            <Style x:Key="LabelMainStyle" TargetType="Label">
+                <Setter Property="TextColor" Value="{DynamicResource TextColor}"/>
                 <Setter Property="FontSize" Value="18"/>
             </Style>
-            <Style x:Key="LabelUnderTitle" TargetType="Label">
+            <Style x:Key="LabelSecondStyle" TargetType="Label">
                 <Setter Property="TextColor" Value="{DynamicResource TextColor}"/>
-                <Setter Property="HorizontalOptions" Value="Start"/>
                 <Setter Property="FontSize" Value="12"/>
                 <Setter Property="Opacity" Value="0.7"/>
             </Style>
-            <Style x:Key="Detail" TargetType="Label">
-                <Setter Property="HorizontalOptions" Value="FillAndExpand"/>
-                <Setter Property="FontSize" Value="14"/>
-                <Setter Property="Opacity" Value="0.7"/>
+            <Style TargetType="Editor">
+                <Setter Property="TextColor" Value="{DynamicResource TextColor}"/>
+                <Setter Property="PlaceholderColor" Value="{DynamicResource PlaceHolderColor}"></Setter>
             </Style>
-            <Style x:Key="Date" TargetType="Label">
-                <Setter Property="HorizontalOptions" Value="End"/>
-                <Setter Property="FontSize" Value="12"/>
-                <Setter Property="Opacity" Value="0.7"/>
+            <Style TargetType="Entry">
+                <Setter Property="TextColor" Value="{DynamicResource TextColor}"/>
+                <Setter Property="PlaceholderColor" Value="{DynamicResource PlaceHolderColor}"/>
             </Style>
-
+            <Style TargetType="TimePicker">
+                <Setter Property="TextColor" Value="{DynamicResource TextColor}"/>
+            </Style>
+            <Style TargetType="Label">
+                <Setter Property="TextColor" Value="{DynamicResource TextColor}"/>
+            </Style>
+            <Style TargetType="NavigationPage">
+                <Setter Property="BarBackgroundColor" Value="{DynamicResource BarBackgroundColor}" />
+                <Setter Property="BackgroundColor" Value="{DynamicResource PageBackGroundColor}"/>
+            </Style>
+            <Style TargetType="ContentPage">
+                <Setter Property="BackgroundColor" Value="{DynamicResource PageBackGroundColor}"/>
+            </Style>
+            <Style TargetType="TabbedPage">
+                <Setter Property="BarBackgroundColor" Value="{DynamicResource BarBackgroundColor}"/>
+            </Style>
+            <Style TargetType="Frame">
+                <Setter Property="BorderColor" Value="{DynamicResource FrameBorderColor}"/>
+                <Setter Property="BackgroundColor" Value="{DynamicResource FrameBackGroundColor}"/>
+                <Setter Property="CornerRadius" Value="5"/>
+                <Setter Property="Padding" Value="10"/>
+            </Style>
             <Style x:Key="ButtonNormalStyle" TargetType="Button">
                 <Setter Property="TextColor" Value="{DynamicResource ButtonTextColor}"/>
                 <Setter Property="HorizontalOptions" Value="FillAndExpand"/>
@@ -40,15 +54,9 @@
                 <Setter Property="CornerRadius" Value="60"/>
                 <Setter Property="Margin" Value="6,0,6,0"/>
             </Style>
-
-            <Style x:Key="Frame" TargetType="Frame">
-                <Setter Property="BorderColor" Value="{DynamicResource FrameBorderColor}"/>
-                <Setter Property="BackgroundColor" Value="{DynamicResource FrameBackGroundColor}"/>
-                <Setter Property="Padding" Value="10"/>
-            </Style>
-
             <Style x:Key="ListView" TargetType="ListView">
                 <Setter Property="SeparatorVisibility" Value="None"/>
+                <Setter Property="HorizontalScrollBarVisibility" Value="Never"/>
                 <Setter Property="BackgroundColor" Value="Transparent"/>
                 <Setter Property="HasUnevenRows" Value="True"/>
             </Style>

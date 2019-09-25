@@ -28,7 +28,7 @@
                                               HeightRequest="24"
                                               Margin="0,0,24,0"/>
                                         <Label Text="{Binding Text}"
-                                               TextColor="{DynamicResource MasterDetailTextColor}"
+                                               TextColor="{DynamicResource TextColor}"
                                                VerticalOptions="Center"
                                                HorizontalOptions="FillAndExpand"
                                                FontSize="Medium"/>

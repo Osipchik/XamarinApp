@@ -232,6 +232,15 @@ namespace Labs.Resources {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на Done.
+        /// </summary>
+        internal static string Done {
+            get {
+                return ResourceManager.GetString("Done", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Do you really want to escape this page?.
         /// </summary>
         internal static string Escape {

@@ -10,7 +10,7 @@ namespace Labs.Views.Creators
     public partial class CreatorMenuPage
     {
         private bool _tableVisible = true;
-        private uint _heightMax = 635;
+        private uint _heightMax;
         private readonly MenuCreatorViewModel _menuCreatorViewModel;
 
         public CreatorMenuPage(string path)
@@ -26,13 +26,11 @@ namespace Labs.Views.Creators
             await Device.InvokeOnMainThreadAsync(() =>
             {
                 _tableVisible = !_tableVisible;
-                FrameAnimation.RunShowOrHideButtonAnimation(ButtonSettings, 350, _tableVisible);
-                if (_heightMax == 0)
-                {
-                    _heightMax = (uint) SettingsTableView.Height;
+                if (_heightMax == 0){
+                    _heightMax = 680;
                 }
 
-                FrameAnimation.RunShowOrHideAnimation(SettingsTableView, _heightMax, 0, _tableVisible);
+                FrameAnimation.RunShowOrHideAnimation(SettingsTableView, _heightMax, 0, _tableVisible, false);
             });
         }
 

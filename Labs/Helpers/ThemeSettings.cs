@@ -12,26 +12,24 @@ namespace Labs.Helpers
             Dark
         }
 
-        public static async void SetTheme(Theme theme)
+        public static bool GetCurrentTheme { private set; get; }
+        public static void SetTheme(Theme theme)
         {
-            await Device.InvokeOnMainThreadAsync(() =>
+            switch (theme)
             {
-                // TODO: fix resources list
-                var asd = Application.Current.Resources.MergedDictionaries;
-                switch (theme)
-                {
-                    case Theme.Dark:
-                        CrossSettings.Current.AddOrUpdateValue(Constants.Theme, (int) Theme.Dark);
-                        Application.Current.Resources.Add(new DarkTheme());
-                        break;
-                    case Theme.Light:
-                        CrossSettings.Current.AddOrUpdateValue(Constants.Theme, (int)Theme.Light);
-                        Application.Current.Resources.Add(new LightTheme());
-                        break;
-                    default:
-                        break;
-                }
-            });
+                case Theme.Dark:
+                    GetCurrentTheme = false;
+                    CrossSettings.Current.AddOrUpdateValue(Constants.Theme, (int)Theme.Dark);
+                    Application.Current.Resources.Add(new DarkTheme());
+                    break;
+                case Theme.Light:
+                    GetCurrentTheme = true;
+                    CrossSettings.Current.AddOrUpdateValue(Constants.Theme, (int)Theme.Light);
+                    Application.Current.Resources.Add(new LightTheme());
+                    break;
+                default:
+                    break;
+            }
         }
     }
 }

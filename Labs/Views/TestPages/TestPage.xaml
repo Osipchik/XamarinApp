@@ -5,6 +5,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
              x:Class="Labs.Views.TestPages.TestPage"
-             BackgroundColor="{DynamicResource PageBackGroundColor}">
+             BackgroundColor="{DynamicResource PageBackGroundColor}"
+             BarBackgroundColor="{DynamicResource BarBackgroundColor}">
 
 </TabbedPage>

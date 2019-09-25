@@ -16,6 +16,7 @@ namespace Labs
         {
             InitializeComponent();
             SetCulture();
+            //SetTheme();
             MainPage = new MainPage();
         }
 

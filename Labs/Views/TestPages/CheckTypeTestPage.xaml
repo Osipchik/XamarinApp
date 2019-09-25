@@ -9,7 +9,7 @@
              BackgroundColor="{DynamicResource PageBackGroundColor}">
 
     <ContentPage.Content>
-        <StackLayout>
+        <StackLayout HorizontalOptions="FillAndExpand">
             <Grid BindingContext="{Binding GeTimerModel}"
                   HorizontalOptions="FillAndExpand"
                   ColumnSpacing="0"

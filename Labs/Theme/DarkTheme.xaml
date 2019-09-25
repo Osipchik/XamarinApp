@@ -3,23 +3,37 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
                     xmlns:d="http://xamarin.com/schemas/2014/forms/design"
                     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                    xmlns:local="clr-namespace:Labs"
                     mc:Ignorable="d"
                     x:Class="Labs.Theme.DarkTheme">
 
     <Color x:Key="AccentColor">#607D8B</Color>
     <Color x:Key="LabelTextColor">#9E9E9E</Color>
-    <Color x:Key="TextColor">#9E9E9E</Color>
 
-    <Color x:Key="PageBackGroundColor">#212121</Color>
+    <Color x:Key="TextColor">#e1e1e1</Color>
+    <Color x:Key="BarBackgroundColor">#1f1f1f</Color>
+    <Color x:Key="PageBackGroundColor">#121212</Color>
+    <Color x:Key="FrameBackGroundColor">#1d1d1d</Color>
+    <Color x:Key="FrameBorderColor">#1d1d1d</Color>
 
-    <Color x:Key="FrameBackGroundColor">#424242</Color>
-    <Color x:Key="FrameBorderColor">#757575</Color>
-
-    <Color x:Key="ButtonBackGroundColor">#424242</Color>
+    <Color x:Key="ButtonBackGroundColor">#1d1d1d</Color>
     <Color x:Key="BorderColor">#607D8B</Color>
     <Color x:Key="ButtonTextColor">#607D8B</Color>
 
     <Color x:Key="MasterDetailTextColor">#BDBDBD</Color>
+    <Color x:Key="PlaceHolderColor">#9E9E9E</Color>
+    <Color x:Key="SearchBarTextColor">#757575</Color>
 
-    <Color x:Key="SearchBarTextColor">#9E9E9E</Color>
+    <Color x:Key="ColorMaterialBlue">#4FC3F7</Color>
+    <Color x:Key="ColorMaterialRed">#e57373</Color>
+    <Color x:Key="ColorMaterialBlueGray">#607D8B</Color>
+    <Color x:Key="ColorMaterialGray">#B0BEC5</Color>
+    <Color x:Key="ColorMaterialGreen">#81C784</Color>
+
+    <ImageSource x:Key="Table">TableWhite.png</ImageSource>
+    <ImageSource x:Key="Contract">ContractWhite.png</ImageSource>
+    <ImageSource x:Key="Exam">ExamWhite.png</ImageSource>
+    <ImageSource x:Key="CrossButtonImage">CrossWhite.png</ImageSource>
+    <ImageSource x:Key="CheckedButtonImage">CheckedWhite.png</ImageSource>
+
 </ResourceDictionary>

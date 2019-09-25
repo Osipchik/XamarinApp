@@ -294,4 +294,7 @@
   <data name="DeleteItem" xml:space="preserve">
     <value>Удалить элемент</value>
   </data>
+  <data name="Done" xml:space="preserve">
+    <value>Готово</value>
+  </data>
 </root>

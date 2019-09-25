@@ -51,7 +51,7 @@ namespace Labs.Views.Creators
             }
             else {
                 accept.Opacity = 0.3;
-                accept.Source = "CheckedBlack.png";
+                accept.Source = (ImageSource)Application.Current.Resources["CheckedButtonImage"];
             }
         }
     }

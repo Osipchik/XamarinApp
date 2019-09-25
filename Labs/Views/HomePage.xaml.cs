@@ -13,7 +13,7 @@ namespace Labs.Views
         public HomePage()
         {
             InitializeComponent();
-
+            
             _homeViewModel = new HomeViewModel(GridButtons, LabelName, LabelSubject, LabelDate);
             BindingContext = _homeViewModel;
         }

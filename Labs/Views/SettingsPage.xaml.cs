@@ -21,6 +21,7 @@ namespace Labs.Views
 
             Languages = Language.GetLanguageList();
             BindingContext = this;
+            SetButton();
             SetIndex();
         }
 
@@ -43,8 +44,24 @@ namespace Labs.Views
             }
         }
 
-        private void ButtonLight_OnClicked(object sender, EventArgs e) => ThemeSettings.SetTheme(ThemeSettings.Theme.Light);
+        private void ButtonLight_OnClicked(object sender, EventArgs e)
+        {
+            ThemeSettings.SetTheme(ThemeSettings.Theme.Dark);
+            MessagingCenter.Send<Page>(this, Constants.UploadTitles);
+            SetButton();
+        }
 
-        private void ButtonDark_OnClicked(object sender, EventArgs e) => ThemeSettings.SetTheme(ThemeSettings.Theme.Dark);
+        private void ButtonDark_OnClicked(object sender, EventArgs e)
+        {
+            ThemeSettings.SetTheme(ThemeSettings.Theme.Light);
+            MessagingCenter.Send<Page>(this, Constants.UploadTitles);
+            SetButton();
+        }
+
+        private void SetButton()
+        {
+            ButtonLight.IsVisible = ThemeSettings.GetCurrentTheme;
+            ButtonDark.IsVisible = !ButtonLight.IsVisible;
+        }
     }
 }

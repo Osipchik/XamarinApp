@@ -90,7 +90,7 @@
                              WidthRequest="22"
                              HeightRequest="22"
                              Opacity="0.3"
-                             Source="CrossBlack.png"
+                             Source="{DynamicResource CrossButtonImage}"
                              BackgroundColor="Transparent"
                              Command="{Binding HideGridButtonsCommand}"
                              Grid.Row="0" Grid.Column="0"/>
@@ -102,9 +102,9 @@
                 </Label>
                 <BoxView WidthRequest="2"
                          HeightRequest="3"
-                         Color="Brown"
+                         Color="{DynamicResource ColorMaterialBlueGray}"
                          Grid.Row="0" Grid.Column="2"/>
-                <Label Text="{helpers:Translate Yes}"
+                <Label Text="{helpers:Translate Done}"
                        Grid.Row="0" Grid.Column="3">
                     <Label.GestureRecognizers>
                         <TapGestureRecognizer Command="{Binding AcceptGridButtonCommand}"/>

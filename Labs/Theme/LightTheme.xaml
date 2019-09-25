@@ -8,10 +8,10 @@
 
     <Color x:Key="AccentColor">#FF4081</Color>
     <Color x:Key="LabelTextColor">#757575</Color>
-    <Color x:Key="TextColor">#616161</Color>
 
+    <Color x:Key="TextColor">#212121</Color>
+    <Color x:Key="BarBackgroundColor">#1976D2</Color>
     <Color x:Key="PageBackGroundColor">#F5F5F5</Color>
-
     <Color x:Key="FrameBackGroundColor">#FAFAFA</Color>
     <Color x:Key="FrameBorderColor">#B0BEC5</Color>
     
@@ -20,6 +20,19 @@
     <Color x:Key="ButtonTextColor">#03A9F4</Color>
 
     <Color x:Key="MasterDetailTextColor">#212121</Color>
-
+    <Color x:Key="PlaceHolderColor">#9E9E9E</Color>
     <Color x:Key="SearchBarTextColor">#212121</Color>
+
+    <Color x:Key="ColorMaterialBlue">#03A9F4</Color>
+    <Color x:Key="ColorMaterialRed">#f44336</Color>
+    <Color x:Key="ColorMaterialBlueGray">#607D8B</Color>
+    <Color x:Key="ColorMaterialGray">#B0BEC5</Color>
+    <Color x:Key="ColorMaterialGreen">#4CAF50</Color>
+
+    <ImageSource x:Key="Table">Table.png</ImageSource>
+    <ImageSource x:Key="Contract">Contract.png</ImageSource>
+    <ImageSource x:Key="Exam">Exam.png</ImageSource>
+    <ImageSource x:Key="CrossButtonImage">Cross.png</ImageSource>
+    <ImageSource x:Key="CheckedButtonImage">CheckedBlack.png</ImageSource>
+
 </ResourceDictionary>

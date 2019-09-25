@@ -32,7 +32,8 @@
     <ContentPage.Content>
         <StackLayout>
             <ContentView Padding="5">
-                <Frame Padding="10,0,10,5"
+                <Frame x:Name="FrameSettings"
+                       Padding="10,0,10,5"
                        BorderColor="#039BE5"
                        CornerRadius="10">
                     <StackLayout HorizontalOptions="FillAndExpand">
@@ -45,16 +46,30 @@
                                 Margin="12,10,12,0"/>
                         <TableView x:Name="SettingsTableView"
                                    Intent="Settings"
-                                   HeightRequest="635"
+                                   VerticalOptions="FillAndExpand"
                                    BindingContext="{Binding GetSettingsModel}">
                         <TableRoot>
                             <TableSection Title="{helpers:Translate TestSettingsInfo}">
-                                <EntryCell Text="{Binding Name}"
-                                           Label="{helpers:Translate TestSettingsName}"
-                                           Placeholder="{helpers:Translate TestSettingsNPlaceh}"/>
-                                 <EntryCell Text="{Binding Subject}"
-                                            Label="{helpers:Translate Subject}"
-                                            Placeholder="{helpers:Translate TestSettingsSPlaceh}"/>
+                                <ViewCell>
+                                    <StackLayout Orientation="Horizontal"
+                                                 Margin="9,0,0,0">
+                                        <Label Text="{helpers:Translate TestSettingsName}"
+                                               VerticalOptions="Center"/>
+                                        <Entry Placeholder="{helpers:Translate TestSettingsNPlaceh}"
+                                               HorizontalOptions="FillAndExpand"
+                                               Text="{Binding Name}"/>
+                                    </StackLayout>
+                                </ViewCell>
+                                <ViewCell>
+                                    <StackLayout Orientation="Horizontal"
+                                                 Margin="9,0,0,0">
+                                        <Label Text="{helpers:Translate Subject}"
+                                               VerticalOptions="Center"/>
+                                        <Entry Placeholder="{helpers:Translate TestSettingsNPlaceh}"
+                                               Text="{Binding Subject}"
+                                               HorizontalOptions="FillAndExpand"/>
+                                    </StackLayout>
+                                    </ViewCell>
                             </TableSection>
                             <TableSection>
                                 <ViewCell>
@@ -78,7 +93,7 @@
                                                     Grid.Column="1" Grid.Row="0"/>
                                         <Label Text=":"
                                            FontSize="Medium"
-                                           TextColor="Black"
+                                           TextColor="{DynamicResource TextColor}"
                                            VerticalOptions="Center"
                                            Margin="0"
                                            Grid.Column="2" Grid.Row="0"/>
@@ -103,18 +118,19 @@
                         <DataTemplate>
                             <ViewCell>
                                 <ContentView Padding="5">
-                                    <Frame Style="{StaticResource Frame}">
+                                    <Frame>
                                         <StackLayout HorizontalOptions="FillAndExpand"
                                                      VerticalOptions="FillAndExpand">
                                             <Label Text="{Binding Title}"
-                                                   Style="{StaticResource LabelTitle}"/>
+                                                   Style="{StaticResource LabelMainStyle}"/>
                                             <StackLayout Orientation="Horizontal">
                                                 <Label Text="{helpers:Translate Price}"
-                                                       Style="{StaticResource LabelUnderTitle}"/>
+                                                       Style="{StaticResource LabelSecondStyle}"/>
                                                 <Label Text="{Binding Detail}"
-                                                       Style="{StaticResource Detail}"/>
+                                                       HorizontalOptions="FillAndExpand"
+                                                       Style="{StaticResource LabelSecondStyle}"/>
                                                 <Label Text="{Binding Date}"
-                                                       Style="{StaticResource Date}"/>
+                                                       Style="{StaticResource LabelSecondStyle}"/>
                                             </StackLayout>
                                         </StackLayout>
                                     </Frame>
@@ -124,7 +140,6 @@
                     </ListView.ItemTemplate>
               </ListView>
 
-          
             <Grid BackgroundColor="Transparent">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
@@ -140,15 +155,15 @@
                          Margin="6,0,6,0"
                          Grid.ColumnSpan="3"
                          Grid.Row="0" Grid.Column="0"/>
-                <ImageButton Source="Exam.png"
-                             Style="{StaticResource ImageButtonStyle}"
+                <ImageButton Style="{StaticResource ImageButtonStyle}"
+                             Source="{DynamicResource Exam}"
                              Command="{Binding CreateCheckTypePageCommand}"
                              Grid.Column="0" Grid.Row="1"/>
-                <ImageButton Source="Contract.png"
+                <ImageButton Source="{DynamicResource Contract}"
                              Style="{StaticResource ImageButtonStyle}"
                              Command="{Binding CreateEntryTypePageCommand}"
                              Grid.Column="1" Grid.Row="1"/>
-                <ImageButton Source="Table.png"
+                <ImageButton Source="{DynamicResource Table}"
                              Style="{StaticResource ImageButtonStyle}"
                              Command="{Binding CreateStackTypePageCommand}"
                              Grid.Column="2" Grid.Row="1"/>

@@ -59,7 +59,6 @@ namespace Labs.ViewModels
         {
             string path = Path.Combine(dirInfo.FullName, Constants.SettingsFileTxt);
             InfoModel model = null;
-            var asd = Directory.GetFiles(dirInfo.FullName);
             if (File.Exists(path)) {
                 ReadSettings(out string title, out string detail, path);
                 model = new InfoModel {
@@ -90,24 +89,20 @@ namespace Labs.ViewModels
                 question = reader.ReadLine();
             }
 
-            question = CutText(question);
-        }
-        private string CutText(string text)
-        {
-            if (text.Length >= 30) {
-                text = text.Remove(27);
-                text += "...";
-            }
-
-            return text;
+            question = CutText(question, 69);
         }
 
+        private string CutText(string text, int maxLength) => text.Length > maxLength ? text.Remove(maxLength - 3) + "..." : text;
+        
         private void ReadSettings(out string title, out string detail, string path)
         {
             using (var reader = new StreamReader(path)) {
                 title = reader.ReadLine();
                 detail = reader.ReadLine();
             }
+
+            title = CutText(title, 89);
+            detail = CutText(detail, 9);
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

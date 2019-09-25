@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using System.IO;
 using Labs.Helpers;
-using Labs.Models;
+using Labs.ViewModels;
 using Labs.Views.Creators;
 using Xamarin.Forms;
 
@@ -19,15 +19,15 @@ namespace Labs.Views
             
             ShowHomePage();
             BindingContext = this;
-            ListViewDetail.ItemsSource = MasterDetail.GetDetailItems();
+            ListViewDetail.ItemsSource = MasterDetailViewModel.GetDetailItems();
             Subscribe();
         }
 
-        private void Subscribe() => 
+        private void Subscribe() =>
             MessagingCenter.Subscribe<Page>(this, Constants.UploadTitles, (sender) => UploadTitles());
-        
-        private void UploadTitles() => ListViewDetail.ItemsSource = MasterDetail.GetDetailItems();
-        
+
+        private void UploadTitles() => ListViewDetail.ItemsSource = MasterDetailViewModel.GetDetailItems();
+
         private string[] GetPaths()
         {
             var appPath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);

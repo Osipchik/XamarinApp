@@ -5,6 +5,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:helpers="clr-namespace:Labs.Helpers;assembly=Labs"
              mc:Ignorable="d"
+             xmlns:views="clr-namespace:Labs.Views"
              x:Class="Labs.Views.SettingsPage"
              BackgroundColor="{DynamicResource PageBackGroundColor}">
 
@@ -37,26 +38,11 @@
                                    FontSize="Medium"
                                    VerticalOptions="Center"
                                    HorizontalOptions="FillAndExpand"/>
-                            <Label Text="Light"
-                                   FontSize="Medium"
-                                   VerticalOptions="Center"/>
-                        </StackLayout>
-                    </ViewCell>
-                </TableSection>
-                <TableSection>
-                    <ViewCell>
-                        <StackLayout Orientation="Horizontal"
-                                     Margin="24,0,24,0">
-                            <Button Text="Light"
+                            <Button x:Name="ButtonLight"
+                                    Text="Light"
                                     Clicked="ButtonLight_OnClicked"/>
-                        </StackLayout>
-                    </ViewCell>
-                </TableSection>
-                <TableSection>
-                    <ViewCell>
-                        <StackLayout Orientation="Horizontal"
-                                     Margin="24,0,24,0">
-                            <Button Text="Dark"
+                            <Button x:Name="ButtonDark"
+                                    Text="Dark"
                                     Clicked="ButtonDark_OnClicked"/>
                         </StackLayout>
                     </ViewCell>

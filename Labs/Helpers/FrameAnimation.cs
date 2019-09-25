@@ -5,8 +5,8 @@ namespace Labs.Helpers
 {
     public static class FrameAnimation
     {
-        public static void RunShowOrHideAnimation(View view, uint heightMax, uint heightMin, bool show) =>
-            RunSettingsViewAnimationAsync(view, show ? heightMax : heightMin); 
+        public static void RunShowOrHideAnimation(View view, uint heightMax, uint heightMin, bool show, bool isVisible = true) =>
+            RunSettingsViewAnimationAsync(view, show ? heightMax : heightMin, isVisible); 
 
         public static void RunShowOrHideButtonAnimation(Button button, uint widthMax, bool show)
         {
@@ -31,11 +31,14 @@ namespace Labs.Helpers
             });
         }
 
-        private static async void RunSettingsViewAnimationAsync(View view, uint heightEnd)
+        private static async void RunSettingsViewAnimationAsync(View view, uint heightEnd, bool isVisible = true)
         {
             await Task.Run(() => {
                 new Animation((d) => view.HeightRequest = d, view.Height, heightEnd)
-                    .Commit(view, "ShowOrShow", Constants.AnimationRate, Constants.AnimationLength, Easing.SinInOut);
+                    .Commit(view, "ShowOrShow", Constants.AnimationRate, Constants.AnimationLength, Easing.Linear);
+                if (isVisible) {
+                    Device.InvokeOnMainThreadAsync(() => view.IsVisible = !view.IsVisible);
+                }
             });
         }
 

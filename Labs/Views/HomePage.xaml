@@ -5,15 +5,14 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:helpers="clr-namespace:Labs.Helpers;assembly=Labs"
              mc:Ignorable="d"
-             x:Class="Labs.Views.HomePage"
-             BackgroundColor="{DynamicResource PageBackGroundColor}">
+             x:Class="Labs.Views.HomePage">
 
     <ContentPage.Content>
         <StackLayout Margin="12,0,12,0">
             <SearchBar Placeholder="{helpers:Translate SearchBarPlaceHolder}"
                        HorizontalOptions="Center"
-                       TextColor="{DynamicResource SearchBarTextColor}"
-                       PlaceholderColor="{DynamicResource TextColor}"
+                       TextColor="{DynamicResource TextColor}"
+                       PlaceholderColor="{DynamicResource SearchBarTextColor}"
                        Text="{Binding SearchBarText}"/>
             <Grid x:Name="GridButtons"
                   IsVisible="False"
@@ -71,21 +70,23 @@
                     <DataTemplate>
                         <ViewCell>
                             <ContentView Padding="5">
-                                <Frame Style="{StaticResource Frame}">
+                                <Frame>
                                     <StackLayout HorizontalOptions="FillAndExpand"
                                                  VerticalOptions="FillAndExpand">
                                         <Label Text="{Binding Title}"
                                                TextColor="{Binding TitleColor}"
-                                               Style="{StaticResource LabelTitle}"/>
+                                               Style="{StaticResource LabelMainStyle}"/>
                                         <StackLayout Orientation="Horizontal">
                                             <Label Text="{helpers:Translate Subject}"
-                                                   Style="{StaticResource LabelUnderTitle}"/>
+                                                   Style="{StaticResource LabelSecondStyle}"
+                                                   HorizontalOptions="Start"/>
                                             <Label Text="{Binding Detail}"
                                                    TextColor="{Binding DetailColor}"
-                                                   Style="{StaticResource Detail}"/>
+                                                   HorizontalOptions="FillAndExpand"
+                                                   Style="{StaticResource LabelSecondStyle}"/>
                                             <Label Text="{Binding Date}"
                                                    TextColor="{Binding DateColor}"
-                                                   Style="{StaticResource Date}"/>
+                                                   Style="{StaticResource LabelSecondStyle}"/>
                                         </StackLayout>
                                     </StackLayout>
                                 </Frame>
