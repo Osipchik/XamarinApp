@@ -2,16 +2,17 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using Labs.Annotations;
+using Labs.Interfaces;
 using Labs.ViewModels;
 
 namespace Labs.Models
 {
-    public class SettingsModel : INotifyPropertyChanged
+    public sealed class SettingsModel : INotifyPropertyChanged, ISettings
     {
         private TimeSpan _timeSpan;
         public TimeSpan TimeSpan
         {
-            get { return _timeSpan; }
+            get => _timeSpan;
             set
             {
                 _timeSpan = value;
@@ -19,13 +20,24 @@ namespace Labs.Models
             }
         }
 
-        private string _seconds;
-        public string Seconds
+        private string _totalCount;
+        public string TotalCount
         {
-            get => _seconds ?? "00";
+            get => _totalCount ?? "00";
             set
             {
-                _seconds = SettingsViewModel.FixText(value, true);
+                _totalCount = SettingsViewModel.FixText(value, true);
+                OnPropertyChanged();
+            }
+        }
+
+        private string _totalPrice;
+        public string TotalPrice
+        {
+            get => _totalPrice;
+            set
+            {
+                _totalPrice = value;
                 OnPropertyChanged();
             }
         }
@@ -87,7 +99,7 @@ namespace Labs.Models
         public event PropertyChangedEventHandler PropertyChanged;
 
         [NotifyPropertyChangedInvocator]
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null) =>
+        private void OnPropertyChanged([CallerMemberName] string propertyName = null) =>
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
 }

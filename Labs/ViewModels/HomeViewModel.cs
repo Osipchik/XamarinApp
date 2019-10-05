@@ -1,26 +1,44 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.IO;
-using Labs.Models;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
+using Labs.Models;
 using System.Windows.Input;
 using Labs.Annotations;
+using Labs.Data;
 using Labs.Helpers;
 using Labs.Views;
+using Realms;
 using Xamarin.Forms;
 
 namespace Labs.ViewModels
 {
-    class HomeViewModel : INotifyPropertyChanged
+    class HomeViewModel : Search, INotifyPropertyChanged
     {
-        private readonly Grid _grid;
-        private readonly Label[] _labels;
-        private readonly InfoViewModel _infoViewModel;
-        private ObservableCollection<InfoModel> _infoModels;
+        private static IList<Label> _labels;
+
+        public HomeViewModel(Grid grid, params Label[] labels)
+        {
+            Grid = grid;
+            _labels = labels;
+            Filter = FilterMode.Name;
+            SetCommands();
+        }
+
+        public INavigation Navigation { get; set; }
+
+        private ObservableCollection<TestInfoModel> _testModels = new ObservableCollection<TestInfoModel>();
+        public ObservableCollection<TestInfoModel> GetInfo
+        {
+            get => _testModels;
+            private set
+            {
+                _testModels = value;
+                OnPropertyChanged();
+            }
+        }
 
         private string _searchBarText;
         public string SearchBarText
@@ -29,155 +47,69 @@ namespace Labs.ViewModels
             set
             {
                 _searchBarText = value;
-                _infoViewModel.InfoModels = Search(SearchBarText).ToObservableCollection();
-                OnPropertyChanged();
+                GetInfo = StartSearch(SearchBarText).ToObservableCollection();
             }
         }
 
-        public HomeViewModel(Grid grid, params Label[] labels)
-        {
-            _grid = grid;
-            _labels = labels;
-            _infoViewModel = new InfoViewModel(GetMainTestFolderPath());
-            SetCommands();
-        }
-
-        public ObservableCollection<InfoModel> GetInfoModels => _infoViewModel.InfoModels;
-
-        public void RefreshModels()
-        {
-            _infoViewModel.SetDirectoriesInfo();
-            _infoModels = _infoViewModel.InfoModels;
-        }
-
-        public ICommand NameLabelTapCommand { protected set; get; }
-        public ICommand SubjectLabelTapCommand { protected set; get; }
-        public ICommand DateLabelTapCommand { protected set; get; }
+        public ICommand NameLabelTapCommand { get; set; }
+        public ICommand DateLabelTapCommand { get; set; }
+        public ICommand SubjectLabelTapCommand { get; set; }
 
         private void SetCommands()
         {
-            NameLabelTapCommand = new Command(() => { SetLabelTapCommand(0); });
-            SubjectLabelTapCommand = new Command(() => { SetLabelTapCommand(1); });
-            DateLabelTapCommand = new Command(() => { SetLabelTapCommand(2); });
+            NameLabelTapCommand = new Command(() => { SetLabelTapCommand(_labels[0], FilterMode.Name); });
+            SubjectLabelTapCommand = new Command(() => { SetLabelTapCommand(_labels[1], FilterMode.Subject); });
+            DateLabelTapCommand = new Command(() => { SetLabelTapCommand(_labels[2], FilterMode.Date); });
         }
 
-        private void SetLabelTapCommand(int index)
-        {
-            DisableSearchModificationAsync();
-            ActiveSearchLabelStyle(_labels[index]);
-            DisableSearchLabelStyle(_labels[index]);
-            _infoViewModel.InfoModels = Search(SearchBarText).ToList().ToObservableCollection();
-        }
+        public async void SetInfoAsync() =>
+            await Task.Run(() => {
+                using (var realm = Realm.GetInstance())
+                {
+                    GetInfo.Clear();
+                    foreach (var query in realm.All<TestModel>().Where(d => !d.IsTemp)) {
+                        GetInfo.Add(new TestInfoModel
+                        {
+                            TestId = query.Id,
+                            Name = query.Name,
+                            Subject = query.Subject,
+                            Date = query.Date.ToString("d"),
+                        });
+                    }
 
-        private string GetMainTestFolderPath()
-        {
-            var folder = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
-            return Path.Combine(folder, Constants.TestFolder);
-        }
-
-        private IEnumerable<InfoModel> Search(string keyword)
-        {
-            IEnumerable<InfoModel> models;
-            if (string.IsNullOrEmpty(keyword)) {
-                _grid.IsVisible = false;
-                DisableSearchModificationAsync();
-                models = _infoModels;
-            }
-            else {
-                _grid.IsVisible = true;
-                models = StartSearch(keyword);
-            }
-
-            return models;
-        }
-        private IEnumerable<InfoModel> StartSearch(string keyword)
-        {
-            var filter = string.Empty;
-            for (var i = 0; i < _labels.Length; i++) {
-                if (_labels[i].TextColor == (Color)Application.Current.Resources["ColorMaterialBlue"]) {
-                    filter = _infoViewModel.GetNameOfPropertyInModel(i);
-                    break;
+                    TestModels = GetInfo;
                 }
-            }
+            });
 
-            return SearchByFilter(keyword, filter);
-        }
-        private IEnumerable<InfoModel> SearchByFilter(string keyword, string filter)
+        public async void GoToStartTestPage(int index) =>
+            await Navigation.PushAsync(new StartTestPage(GetInfo[index].TestId));
+
+        private void SetLabelTapCommand(Label sender, FilterMode filter)
         {
-            IEnumerable<InfoModel> searchQuery = from model in _infoModels
-                                                 where FilterBy(model, keyword, filter)
-                                                 select model;
-            return searchQuery;
-        }
-        private bool FilterBy(InfoModel model, string keyword, string filter)
-        {
-            var itContain = false;
-            switch (filter)
-            {
-                case nameof(model.Name):
-                    itContain = model.Title.ToLower().Contains(keyword.ToLower());
-                    break;
-                case nameof(model.Detail):
-                    itContain = model.Detail.ToLower().Contains(keyword.ToLower());
-                    break;
-                case nameof(model.Date):
-                    itContain = model.Date.ToLower().Contains(keyword.ToLower());
-                    break;
-            }
-            if (itContain) ChangeStyleOfLabelsAsync(model, filter);
-
-            return itContain;
+            ActiveSearchLabelStyle(sender);
+            DisableSearchLabelStyle(sender);
+            Filter = filter;
+            GetInfo = StartSearch(SearchBarText).ToObservableCollection();
         }
 
-        private void ActiveSearchLabelStyle(Label label)
+        private static void ActiveSearchLabelStyle(Label label)
         {
             label.FontSize = 16;
-            label.TextColor = (Color)Application.Current.Resources["ColorMaterialBlue"];
+            label.TextColor = GetColor(true);
         }
-        private void DisableSearchLabelStyle(Label activeLabel)
+
+        private static void DisableSearchLabelStyle(Label activeLabel)
         {
             foreach (var label in _labels.Where(label => activeLabel != label)) {
                 label.FontSize = 14;
-                label.TextColor = (Color)Application.Current.Resources["ColorMaterialGray"];
+                label.TextColor = GetColor(false);
             }
         }
-        private async void ChangeStyleOfLabelsAsync(InfoModel model, string filter)
-        {
-            await Task.Run(() =>
-            {
-                model.TitleColor = GetColor(filter, nameof(model.Name));
-                model.DetailColor = GetColor(filter, nameof(model.Detail));
-                model.DateColor = GetColor(filter, nameof(model.Date));
-            });
-        }
-        private Color GetColor(string filter, string propertyName) =>
-            filter == propertyName ? (Color)Application.Current.Resources["ColorMaterialBlue"]
-                                   : (Color) Application.Current.Resources["TextColor"];
-
-        private async void DisableSearchModificationAsync()
-        {
-            await Task.Run(() => {
-                foreach (var model in _infoModels) {
-                    model.TitleColor =
-                        model.DetailColor =
-                            model.DateColor = (Color)Application.Current.Resources["TextColor"];
-                }
-            });
-        }
-
-        public async void GoToStartTestPage(int index, Page page) =>
-            await page.Navigation.PushAsync(new StartTestPage(_infoViewModel.GetElementPath(index)));
 
         public event PropertyChangedEventHandler PropertyChanged;
 
         [NotifyPropertyChangedInvocator]
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null) =>
+        private void OnPropertyChanged([CallerMemberName] string propertyName = null) =>
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-    }
-
-    public static class Extensions
-    {
-        public static ObservableCollection<T> ToObservableCollection<T>(this IEnumerable<T> collection) =>
-            new ObservableCollection<T>(collection);
     }
 }

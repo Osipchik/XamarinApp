@@ -1,11 +1,12 @@
-﻿using System.Collections.Generic;
-using System.Collections.Specialized;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Labs.Helpers;
-using Labs.Models;
-using Labs.ViewModels;
+using Labs.Data;
+using Labs.Interfaces;
+using Labs.Resources;
 using Labs.ViewModels.Tests;
+using Realms;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -14,81 +15,87 @@ namespace Labs.Views.TestPages
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class TestPage : TabbedPage
     {
-        private readonly TestViewModel _testViewModel;
-        private readonly TimerViewModel _timerViewModel;
-        private readonly TestModel _testModel;
-        private readonly List<Page> _pages;
-        private bool _isAble = true;
+        public const string ReturnPages = "ReturnPages";
+        private readonly ISettings _settings;
+        private TimerViewModel _timer;
 
-        public TestPage(string path, string testTime)
+        private readonly List<Page> _pages = new List<Page>();
+
+        public TestPage(string testId, ISettings settings)
         {
             InitializeComponent();
-            _testViewModel = new TestViewModel(this);
-            _timerViewModel = testTime != Constants.TimeZero ? new TimerViewModel(testTime, -1) : null;
-            _testModel = new TestModel();
-            _pages = new List<Page>();
-            FillPages(path);
-            Subscribe();
+            _settings = settings;
+            InitializeAsync(settings, testId);
         }
 
-        private void FillPages(string path)
+        private async void InitializeAsync(ISettings settings, string id)
         {
-            var infos = new InfoViewModel(path);
-            infos.GetFilesModel();
-            AddPagesAsync(infos.InfoModels, path);
+            await Task.Run(() => {
+                SetTimer(settings.TimeSpan);
+                using (var realm = Realm.GetInstance())
+                {
+                    foreach (var question in realm.Find<TestModel>(id).Questions) {
+                        AddTestPage(question.Type, question.Id, question.Time);
+                    }
+                }
+
+                Subscribe();
+            });
         }
 
-        private async void AddPagesAsync(IEnumerable<InfoModel> infoModels, string path)
+        private void SetTimer(TimeSpan time)
         {
-            await Task.Run(() => { AddTestPages(infoModels, path); });
-            await Task.Run(() => { _timerViewModel?.TimerRunAsync(); });
+            _timer = null;
+            if (!time.Equals(TimeSpan.Zero)){
+                _timer = new TimerViewModel(time);
+            }
         }
 
-        private async void AddTestPages(IEnumerable<InfoModel> infoModels, string path)
+        private void AddTestPage(int type, string questionId, string time)
         {
-            foreach (var model in infoModels) {
-                await Device.InvokeOnMainThreadAsync(() => {
-                    _pages.Add(AddTestPage(path, model));
-                    Children.Add(_pages.Last());
-                });
-            }
-            await Device.InvokeOnMainThreadAsync(() => Children.Add(new ResultPage(_testModel)));
-            if (_timerViewModel == null) {
-                MessagingCenter.Send<Page>(this, Constants.RunFirstTimer);
+            var index = _pages.Count;
+            switch (type)
+            {
+                case (int)Repository.Type.Check:
+                    var checkViewModel = new CheckTypeTestViewModel(questionId, _timer, time, _settings, index);
+                    AddPage(new CheckTypeTestPage(checkViewModel));
+                    break;
+                case (int)Repository.Type.Stack:
+                    var stackViewModel = new StackTypeTestViewModel(questionId, _timer, time, _settings, index);
+                    AddPage(new StackTypeTestPage(stackViewModel));
+                    break;
+                case (int)Repository.Type.Entry:
+                    var entryViewModel = new EntryTypeTestViewModel(questionId, _timer, time, _settings, index);
+                    AddPage(new EntryTypeTestPage(entryViewModel));
+                    break;
             }
         }
 
-        private Page AddTestPage(string path, InfoModel model)
+        private void AddPage(Page page)
         {
-            Page page = null;
-            var testType = DirectoryHelper.GetTypeName(model.Name);
-            if (testType == Constants.TestTypeCheck) {
-                page = new CheckTypeTestPage(path, model.Name, _timerViewModel, _testModel, Children.Count + 1);
+            Device.BeginInvokeOnMainThread(() => Children.Add(page));
+            _pages.Add(page);
+            if (_pages.Count == int.Parse(_settings.TotalCount)) {
+                Device.BeginInvokeOnMainThread(() => Children.Add(new ResultPage(_settings)));
+                MessagingCenter.Send<Page>(this, TestViewModel.RunFirstTimer);
             }
-            else if (testType == Constants.TestTypeEntry) {
-                page = new EntryTypeTestPage(path, model.Name, _timerViewModel, _testModel, Children.Count + 1);
-            }
-            else if (testType == Constants.TestTypeStack) {
-                page = new StackTypeTestPage(path, model.Name, _timerViewModel, _testModel, Children.Count + 1);
-            }
-
-            return page;
         }
 
-        protected override void OnPagesChanged(NotifyCollectionChangedEventArgs e)
+        protected override bool OnBackButtonPressed()
         {
-            base.OnPagesChanged(e);
-            if (Children.Count > 1 && _timerViewModel == null && _isAble) {
-                MessagingCenter.Send<Page>(this, Constants.StopAllTimers);
-            }
+            Device.BeginInvokeOnMainThread(async () => {
+                var result = await DisplayAlert(AppResources.Warning, AppResources.Escape, AppResources.Yes, AppResources.No);
+                if (!result) return;
+                await Navigation.PopModalAsync(true);
+            });
+
+            return true;
         }
-        
-        protected override bool OnBackButtonPressed() => _testViewModel.OnBackButtonPressed();
 
         private void Subscribe()
         {
-            MessagingCenter.Subscribe<object>(this, Constants.TimerIsEnd, GoToNextPage);
-            MessagingCenter.Subscribe<object>(this, Constants.ReturnPages, ReturnPagesAsync);
+            MessagingCenter.Subscribe<object>(this, TimerViewModel.TimerIsEnd, GoToNextPage);
+            MessagingCenter.Subscribe<object>(this, ReturnPages, ReturnPagesAsync);
         }
 
         private void GoToNextPage(object sender)
@@ -101,7 +108,6 @@ namespace Labs.Views.TestPages
                     }
                 }
                 else {
-                    _isAble = false;
                     CurrentPage = GetNextPage((int)timer.Index);
                     Children.Remove(_pages[(int)timer.Index - 1]);
                 }
@@ -120,10 +126,11 @@ namespace Labs.Views.TestPages
 
         private async void ReturnPagesAsync(object sender)
         {
-            await Device.InvokeOnMainThreadAsync(() => {
+            await Task.Run(() => {
                 for (int i = 0; i < _pages.Count; i++) {
                     if (Children[i] != _pages[i]) {
-                        Children.Insert(i, _pages[i]);
+                        var i1 = i;
+                        Device.BeginInvokeOnMainThread(() => Children.Insert(i1, _pages[i1]));
                     }
                 }
             });

@@ -1,26 +1,32 @@
-﻿using Labs.Resources;
-using Xamarin.Forms;
+﻿using System.Collections.ObjectModel;
+using Labs.Interfaces;
+using Labs.Models;
 
 namespace Labs.ViewModels.Tests
 {
-    public class TestViewModel
+    public abstract class TestViewModel
     {
-        private readonly Page _page;
+        public const string RunFirstTimer = "RunFirstTimer";
 
-        public TestViewModel(Page page)
+        protected FrameViewModel FrameViewModel;
+        protected SettingsViewModel SettingsViewModel;
+        protected ISettings Settings;
+        public TimerViewModel Timer;
+        public int Index;
+
+        protected bool IsChickAble = true;
+
+        public SettingsModel GetSettingsModel => SettingsViewModel.SettingsModel;
+        public ObservableCollection<FrameModel> GetFrameModel => FrameViewModel.Models;
+        public TimerModel GetTimerModel => Timer.TimerModel;
+
+        protected void DisableTimer()
         {
-            _page = page;
-        }
-
-        public bool OnBackButtonPressed()
-        {
-            Device.BeginInvokeOnMainThread(async () => {
-                var result = await _page.DisplayAlert(AppResources.Warning, AppResources.Escape, AppResources.Yes, AppResources.No);
-                if (!result) return;
-                await _page.Navigation.PopModalAsync(true);
-            });
-
-            return true;
+            if (Timer != null) {
+                Timer.TimerModel.TimerIsVisible = false;
+                Timer.Index = null;
+                Timer = null;
+            }
         }
     }
 }

@@ -29,24 +29,16 @@
                             <TapGestureRecognizer Tapped="HideOrShowAsync_OnClicked"/>
                         </Frame.GestureRecognizers>
                         <StackLayout x:Name="SettingsLayout"
-                                     BindingContext="{Binding GetSettingsModel}">
+                                 BindingContext="{Binding GetSettingsModel}">
                             <StackLayout Orientation="Horizontal"
                                      HorizontalOptions="FillAndExpand"
                                      Margin="0">
                                 <Label Text="{helpers:Translate TestSettingsTime}"
                                    VerticalOptions="Center"
                                    Margin="0"/>
-                                <TimePicker Format="HH:mm"
-                                        Time="{Binding TimeSpan}"
+                                <TimePicker Time="{Binding TimeSpan}"
+                                        Format="HH:mm"
                                         Margin="0"/>
-                                <Label Text=":"
-                                   FontSize="Medium"
-                                   TextColor="Black"
-                                   VerticalOptions="Center"
-                                   Margin="0"/>
-                                <Entry Text="{Binding Seconds}"
-                                   Margin="0"
-                                   Keyboard="Numeric"/>
                                 <Label Text="{helpers:Translate Price}"
                                    HorizontalOptions="EndAndExpand"
                                    HorizontalTextAlignment="End"
@@ -54,8 +46,8 @@
                                    Margin="0"
                                    VerticalOptions="Center"/>
                                 <Entry Text="{Binding Price}"
+                                   WidthRequest="23"
                                    Margin="0"
-                                   WidthRequest="30"
                                    Keyboard="Numeric"/>
                             </StackLayout>
                             <BoxView Margin="12,0,12,0"
@@ -69,16 +61,32 @@
                         </StackLayout>
                     </Frame>
                 </ContentView>
-                <ContentView Padding="5">
-                    <Frame Padding="10,5,10,5"
-                           BorderColor="#03A9F4"
-                           CornerRadius="10">
-                        <Editor AutoSize="TextChanges"
-                                HorizontalOptions="Center"
-                                Text="{Binding Answer}"
-                                Placeholder="{helpers:Translate Answer}"/>
-                    </Frame>
-                </ContentView>
+                <ListView CachingStrategy="RecycleElement"
+                          SeparatorVisibility="None"
+                          VerticalScrollBarVisibility="Never"
+                          HasUnevenRows="True"
+                          ItemSelected="ListView_OnItemSelected"
+                          ItemsSource="{Binding GetFrameModels}">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <ContentView Padding="5">
+                                    <Frame BorderColor="{Binding BorderColor}"
+                                           CornerRadius="10"
+                                           Padding="10">
+                                        <StackLayout HorizontalOptions="FillAndExpand"
+                                                     VerticalOptions="FillAndExpand">
+                                            <Editor Placeholder="{helpers:Translate Text}"
+                                                    HorizontalOptions="CenterAndExpand"
+                                                    Text="{Binding MainText}"
+                                                    AutoSize="TextChanges"/>
+                                        </StackLayout>
+                                    </Frame>
+                                </ContentView>
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
             </StackLayout>
         </ScrollView>
     </ContentPage.Content>

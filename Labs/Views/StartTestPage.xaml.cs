@@ -6,16 +6,25 @@ namespace Labs.Views
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class StartTestPage
     {
-        public StartViewModel StartViewModel { get; }
-        public StartTestPage(string path)
+        private readonly string _testId;
+        public StartViewModel StartViewModel { get; private set; }
+
+        public StartTestPage(string testId)
         {
             InitializeComponent();
-
-            StartViewModel = new StartViewModel(path, this, ChangeButton, StartButton);
-            ChangeButton.BindingContext = StartViewModel;
-            StartButton.BindingContext = StartViewModel;
-            BindingContext = this;
+            _testId = testId;
+            Initialize();
         }
+
+        private void Initialize()
+        {
+            StartViewModel = new StartViewModel(_testId)
+            {
+                ChangeButton = ChangeButton, StartButton = StartButton, Navigation = Navigation
+            };
+            BindingContext = StartViewModel;
+        }
+
 
         protected override void OnAppearing()
         {

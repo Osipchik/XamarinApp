@@ -10,12 +10,11 @@
 
     <ContentPage.Content>
         <StackLayout VerticalOptions="FillAndExpand">
-            <ScrollView BindingContext="{Binding StartViewModel}"
-                        VerticalOptions="FillAndExpand">
+            <ScrollView VerticalOptions="FillAndExpand">
                 <StackLayout Margin="12"
-                             VerticalOptions="FillAndExpand"
-                             BindingContext="{Binding GetSettingsModel}">
-                    <Grid HorizontalOptions="Center">
+                             VerticalOptions="FillAndExpand">
+                    <Grid HorizontalOptions="Center"
+                          BindingContext="{Binding Settings}">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
@@ -27,28 +26,20 @@
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
                         <Label Text="{helpers:Translate TestSettingsNPlaceh}"
-                               TextColor="{DynamicResource TextColor}"
                                Grid.Row="0" Grid.Column="0"/>
                         <Label Text="{Binding Name}"
-                               TextColor="{DynamicResource TextColor}"
                                Grid.Row="0" Grid.Column="1"/>
                         <Label Text="{helpers:Translate Subject}"
-                               TextColor="{DynamicResource TextColor}"
                                Grid.Row="1" Grid.Column="0"/>
                         <Label Text="{Binding Subject}"
-                               TextColor="{DynamicResource TextColor}"
                                Grid.Row="1" Grid.Column="1"/>
                         <Label Text="{helpers:Translate TestSettingsTime}"
-                               TextColor="{DynamicResource TextColor}"
                                Grid.Row="2" Grid.Column="0"/>
                         <Label Text="{Binding Time}"
-                               TextColor="{DynamicResource TextColor}"
                                Grid.Row="2" Grid.Column="1"/>
                         <Label Text="{helpers:Translate MaxMarck}"
-                               TextColor="{DynamicResource TextColor}"
                                Grid.Row="3" Grid.Column="0"/>
-                        <Label Text="{Binding Price}"
-                               TextColor="{DynamicResource TextColor}"
+                        <Label Text="{Binding TotalPrice}"
                                Grid.Row="3" Grid.Column="1"/>
                     </Grid>
                     <BoxView HeightRequest="1"

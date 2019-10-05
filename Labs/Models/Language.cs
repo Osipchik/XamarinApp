@@ -4,6 +4,7 @@ namespace Labs.Models
 {
     public class Language
     {
+        public const string CultureSetting = "Culture";
         public string DisplayName { get; set; }
         public string ShortName { get; set; }
 

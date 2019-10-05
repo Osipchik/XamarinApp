@@ -1,165 +1,172 @@
-﻿using System.Collections.ObjectModel;
-using System.IO;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Labs.Annotations;
+using Labs.Data;
 using Labs.Helpers;
 using Labs.Models;
 using Labs.Resources;
+using Labs.Views;
 using Labs.Views.Creators;
+using Realms;
 using Xamarin.Forms;
 
 namespace Labs.ViewModels.Creators
 {
-    public class MenuCreatorViewModel
+    public sealed class MenuCreatorViewModel : INotifyPropertyChanged
     {
-        private readonly string _path;
+        private readonly FrameViewModel _frameViewModel;
         private readonly SettingsViewModel _settingsViewModel;
-        private readonly Page _page;
+        public string TestId;
 
-        private readonly InfoViewModel _infoViewModel;
-
-        public MenuCreatorViewModel(string path, Page page = null)
+        public MenuCreatorViewModel(string testId = null)
         {
-            _path = path;
-            _page = page;
+            _frameViewModel = new FrameViewModel();
             _settingsViewModel = new SettingsViewModel();
+            TestId = testId;
 
-            _infoViewModel = new InfoViewModel(path);
-            CreateTempFolderAsync();
-            ReadSettingsAsync();
-            GetFilesAsync();
-            SetCommands();
+            InitializeAsync(testId);
         }
 
-        public ICommand CreateCheckTypePageCommand { protected set; get; }
-        public ICommand CreateEntryTypePageCommand { protected set; get; }
-        public ICommand CreateStackTypePageCommand { protected set; get; }
-        public ICommand SaveTestCommand { protected set; get; }
-        public ICommand DeleteTestCommand { protected set; get; }
-        private void SetCommands()
-        {
-            CreateCheckTypePageCommand = new Command(async () =>
-                await _page.Navigation.PushAsync(new TypeCheckCreatingPage(_path)));
+        public Page Page { get; set; }
+        public IEnumerable<FrameModel> GetFrameModels => _frameViewModel.Models;
+        public SettingsModel GetSettings => _settingsViewModel.SettingsModel;
 
-            CreateEntryTypePageCommand = new Command(async () =>
-                await _page.Navigation.PushAsync(new TypeEntryCreatingPage(_path)));
-            
-            CreateStackTypePageCommand = new Command(async () =>
-                await _page.Navigation.PushAsync(new TypeStackCreatingPage(_path)));
-            
-            SaveTestCommand = new Command(Save);
-            DeleteTestCommand = new Command(DeleteFolderAsync);
-        }
+        public ICommand CreateCheckTypePageCommand => new Command(OpenCheckCreator());
+        public ICommand CreateEntryTypePageCommand => new Command(OpenEntryCreator());
+        public ICommand CreateStackTypePageCommand => new Command(OpenStackCreator());
+        public ICommand SaveTestCommand => new Command(Save);
+        public ICommand DeleteTestCommand => new Command(Delete);
 
-        private async void ReadSettingsAsync()
+        public async void InitializeAsync(string testId)
         {
+            _frameViewModel.Models.Clear();
             await Task.Run(() => {
-                var settings = DirectoryHelper.ReadStringsFromFile(_path, Constants.SettingsFileTxt);
-                if (settings != null) {
-                    _settingsViewModel.SetMenuPageSettings(settings);
+                using (var realm = Realm.GetInstance())
+                {
+                    var test = string.IsNullOrEmpty(testId) ? Repository.GetTempTestModel(realm) : realm.Find<TestModel>(testId);
+                    TestId = test.Id;
+                    FillQuestionFrames(test.Questions);
+                    SetSettings(realm, test);
                 }
             });
         }
 
-        public SettingsModel GetSettingsModel => _settingsViewModel.SettingsModel;
-        public ObservableCollection<InfoModel> GetInfoModels => _infoViewModel.InfoModels;
-
-        public async void GetFilesAsync()
+        private void SetSettings(Realm realm, TestModel model)
         {
-            await Task.Run(() => {
-                if (_page != null) {
-                    _infoViewModel.GetFilesModel();
-                }
-            });
-        }
-
-        public async void OpenCreatingPage(int index)
-        {
-            var testType = DirectoryHelper.GetTypeName(_infoViewModel.InfoModels[index].Name);
-            if (testType == Constants.TestTypeCheck) {
-                await _page.Navigation.PushAsync(new TypeCheckCreatingPage(_path, _infoViewModel.InfoModels[index].Name));
+            if (model == null) {
+                _settingsViewModel.SetEmptyModel();
             }
-            else if(testType == Constants.TestTypeStack) {
-                await _page.Navigation.PushAsync(new TypeStackCreatingPage(_path, _infoViewModel.InfoModels[index].Name));
-            }
-            else if (testType == Constants.TestTypeEntry) {
-                await _page.Navigation.PushAsync(new TypeEntryCreatingPage(_path, _infoViewModel.InfoModels[index].Name));
+            else {
+                _settingsViewModel.SetTestSettingsModel(realm, model);
             }
         }
 
-        private async void DeleteFolderAsync()
+        private void FillQuestionFrames(IEnumerable<Question> questions)
         {
-            if (Directory.Exists(_path)){
-                Directory.Delete(_path, true);
+            foreach (var item in questions) {
+                _frameViewModel.Models.Add(new FrameModel 
+                {
+                    Id = item.Id,
+                    QuestionType = item.Type,
+                    MainText = item.QuestionText,
+                    Text = item.Date.ToString("d"),
+                    TextUnderMain = item.Price
+                });
             }
-            CreateTempFolderAsync();
-            await Device.InvokeOnMainThreadAsync(async ()=> 
-                await _page.Navigation.PopToRootAsync(true));
         }
 
-        private async void CreateTempFolderAsync()
+        private Action OpenCheckCreator(string questionId = null) =>
+            async () => { await Page.Navigation.PushAsync(new TypeCheckCreatingPage(questionId, TestId)); };
+
+        private Action OpenStackCreator(string questionId = null) =>
+            async () => { await Page.Navigation.PushAsync(new TypeStackCreatingPage(questionId, TestId)); };
+
+        private Action OpenEntryCreator(string questionId = null) =>
+            async () => { await Page.Navigation.PushAsync(new TypeEntryCreatingPage(questionId, TestId)); };
+
+        public void OpenCreatingPage(int index)
         {
-            await Task.Run(() => {
-                if (!Directory.Exists(_path)) {
-                    Directory.CreateDirectory(_path);
-                }
-            });
+            var question = _frameViewModel.Models[index];
+            switch (question.QuestionType)
+            {
+                case (int)Repository.Type.Check:
+                    OpenCheckCreator(question.Id).Invoke();
+                    break;
+                case (int)Repository.Type.Stack:
+                    OpenStackCreator(question.Id).Invoke();
+                    break;
+                case (int)Repository.Type.Entry:
+                    OpenEntryCreator(question.Id).Invoke();
+                    break;
+            }
         }
 
         private async void Save()
         {
-            await Task.Run(async () => {
-                if (await PageIsValid()) {
-                    DirectoryHelper.SaveTest(_path, await _settingsViewModel.GetPageSettingsAsync(true));
-                    if (_path.Contains(Constants.TempFolder)) GetFilesAsync();
-                    else {
-                        await Device.InvokeOnMainThreadAsync(async ()=>
-                            await _page.Navigation.PopToRootAsync(true));
+            if (await PageIsValid()) {
+                await Task.Run(() => {
+                    using (var realm = Realm.GetInstance())
+                    {
+                        var test = realm.Find<TestModel>(TestId);
+                        test.Realm.Write(() =>
+                        {
+                            test.Name = _settingsViewModel.SettingsModel.Name;
+                            test.Subject = _settingsViewModel.SettingsModel.Subject;
+                            test.Time = _settingsViewModel.SettingsModel.TimeSpan.TimeToString();
+                            test.IsTemp = false;
+                        });
                     }
-                }
-            });
+                    InitializeAsync(TestId);
+                });
+                await PushBackAsync();
+            }
+        }
+
+        private async Task PushBackAsync()
+        {
+            if (Page.Navigation.NavigationStack.Count == 1) {
+                await Page.Navigation.PushAsync(new HomePage());
+                Page.Navigation.RemovePage(Page);
+            }
+            else {
+                await Page.Navigation.PopAsync(true);
+            }
+        }
+
+        private async void Delete()
+        {
+            await Repository.RemoveTestAsync(TestId);
+            Page.Navigation.InsertPageBefore(new HomePage(), Page);
+            await Page.Navigation.PopToRootAsync(true);
         }
 
         private async Task<bool> PageIsValid()
         {
-            var message = await Task.Run(GetMessage);
+            var message = await GetMessage();
             var returnValue = string.IsNullOrEmpty(message);
             if (!returnValue) {
-                await Device.InvokeOnMainThreadAsync(()=>
-                    _page.DisplayAlert(AppResources.Warning, message, AppResources.Cancel));
+                await Device.InvokeOnMainThreadAsync(() => 
+                    Page.DisplayAlert(AppResources.Warning, message, AppResources.Cancel));
             }
 
             return returnValue;
         }
 
-        private string GetMessage()
+        private async Task<string> GetMessage()
         {
-            var message = _settingsViewModel.CheckCreatorMenuPageSettings();
-            message += _infoViewModel.InfoModels.Count < 1 ? AppResources.AddTestPage : string.Empty;
+            var message = await _settingsViewModel.CheckCreatorMenuPageSettings();
+            message += _frameViewModel.Models.Count < 1 ? AppResources.AddTestPage : string.Empty;
             return message;
         }
 
-        private string GetTotalPrice()
-        {
-            var totalPrice = 0;
-            foreach (var price in _infoViewModel.InfoModels) {
-                totalPrice += int.Parse(price.Detail);
-            }
+        public event PropertyChangedEventHandler PropertyChanged;
 
-            return totalPrice.ToString();
-        }
-
-        public bool OnBackButtonPressed()
-        {
-            if (_path != Constants.TempFolder) {
-                Device.BeginInvokeOnMainThread(async () => {
-                    var result = await _page.DisplayAlert(AppResources.Warning, AppResources.Escape, AppResources.Yes, AppResources.No);
-                    if (!result) return;
-                    await _page.Navigation.PopAsync(true);
-                });
-            }
-
-            return true;
-        }
+        [NotifyPropertyChangedInvocator]
+        private void OnPropertyChanged([CallerMemberName] string propertyName = null) =>
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
 }

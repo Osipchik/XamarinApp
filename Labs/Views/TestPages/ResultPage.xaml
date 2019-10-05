@@ -19,15 +19,20 @@
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
                 <Label Text="{helpers:Translate Price}"
                        Grid.Row="0" Grid.Column="0"/>
                 <Label Text="{Binding Price}"
                        Grid.Row="0" Grid.Column="1"/>
+                <Label x:Name="LabelPrice"
+                       Grid.Row="0" Grid.Column="2"/>
                 <Label Text="{helpers:Translate Rights}"
                        Grid.Row="1" Grid.Column="0"/>
                 <Label Text="{Binding RightAnswers}"
                        Grid.Row="1" Grid.Column="1"/>
+                <Label x:Name="LabelCount"
+                       Grid.Row="1" Grid.Column="2"/>
             </Grid>
             <Button Text="{helpers:Translate Check}"
                     Clicked="Button_OnClicked"

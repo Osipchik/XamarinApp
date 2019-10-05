@@ -12,6 +12,8 @@ namespace Labs.Helpers
             Dark
         }
 
+        public const string ThemeSetting = "Theme";
+
         public static bool GetCurrentTheme { private set; get; }
         public static void SetTheme(Theme theme)
         {
@@ -19,15 +21,13 @@ namespace Labs.Helpers
             {
                 case Theme.Dark:
                     GetCurrentTheme = false;
-                    CrossSettings.Current.AddOrUpdateValue(Constants.Theme, (int)Theme.Dark);
+                    CrossSettings.Current.AddOrUpdateValue(ThemeSetting, (int)Theme.Dark);
                     Application.Current.Resources.Add(new DarkTheme());
                     break;
                 case Theme.Light:
                     GetCurrentTheme = true;
-                    CrossSettings.Current.AddOrUpdateValue(Constants.Theme, (int)Theme.Light);
+                    CrossSettings.Current.AddOrUpdateValue(ThemeSetting, (int)Theme.Light);
                     Application.Current.Resources.Add(new LightTheme());
-                    break;
-                default:
                     break;
             }
         }

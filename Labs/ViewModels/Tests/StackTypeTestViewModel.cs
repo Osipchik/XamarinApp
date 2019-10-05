@@ -1,128 +1,103 @@
-﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
+using Labs.Data;
 using Labs.Helpers;
-using Labs.Models;
+using Labs.Interfaces;
+using Realms;
 
 namespace Labs.ViewModels.Tests
 {
-    class StackTypeTestViewModel
+    public class StackTypeTestViewModel : TestViewModel
     {
-        public readonly FrameViewModel FrameViewModel;
-        private readonly SettingsViewModel _settingsViewModel;
-        public TimerViewModel TimerViewModel;
-        private bool _isClickAble = true;
         private int? _lineToSwap;
 
-        public StackTypeTestViewModel(string path, string fileName, TimerViewModel testTimeViewModel)
+        public StackTypeTestViewModel(string questionId, TimerViewModel testTimeViewModel, string time, ISettings settings, int index)
         {
+            Index = index;
             FrameViewModel = new FrameViewModel();
-            _settingsViewModel = new SettingsViewModel();
-
-            Initialize(path, fileName, testTimeViewModel);
+            SettingsViewModel = new SettingsViewModel();
+            Timer = testTimeViewModel ?? new TimerViewModel(TimeSpan.Parse(time), Index);
+            Initialize(questionId, testTimeViewModel);
         }
 
-        public SettingsModel GetSettingsModel => _settingsViewModel.SettingsModel;
-        public ObservableCollection<FrameModel> GetFrameModel => FrameViewModel.Models;
-        public TimerModel GeTimerModel => TimerViewModel.TimerModel;
-
-        private async void Initialize(string path, string fileName, TimerViewModel testTimeViewModel)
+        private async void Initialize(string questionId, TimerViewModel testTimeViewModel)
         {
-            var strings = DirectoryHelper.ReadStringsFromFile(path, fileName);
-            TimerViewModel = testTimeViewModel ?? new TimerViewModel(strings[0]);
-            await Task.Run(() => { _settingsViewModel.SetPageSettingsModel(strings[0], strings[1], strings[2]); });
-            FillFramesAsync(strings, 3);
-            await Task.Run(FrameViewModel.Models.Shuffle);
-        }
-
-        private async void FillFramesAsync(IReadOnlyList<string> strings, int startIndex)
-        {
-            var textRightList = new List<string>();
             await Task.Run(() => {
-                for (int i = startIndex; i < strings.Count; i++) {
-                    FrameViewModel.Models.Add(new FrameModel {
-                        ItemTextLeft = strings[i],
-                        RightString = strings[++i],
-                        BorderColor = FrameViewModel.GetColor(false)
-                    });
-                    textRightList.Add(strings[i]);
+                using (var realm = Realm.GetInstance())
+                {
+                    var question = realm.Find<Question>(questionId);
+                    SettingsViewModel.SetSettingsModel(question.QuestionText, question.Price, question.Time);
+                    FillFramesAsync(question.Contents);
                 }
-
-                FillRightTextItemsAsync(textRightList);
             });
         }
 
-        private async void FillRightTextItemsAsync(IList<string> strings)
+        private async void FillFramesAsync(IEnumerable<QuestionContent> contents)
         {
+            FrameViewModel.FillTestFrames(contents, out var textList);
+            textList.Shuffle();
             await Task.Run(() => {
-                strings.Shuffle();
-                for (int i = 0; i < strings.Count; i++) {
-                    FrameViewModel.Models[i].ItemTextRight = strings[i];
+                for (int i = 0; i < textList.Count; i++) {
+                    FrameViewModel.Models[i].Text = textList[i];
                 }
+                FrameViewModel.Models.Shuffle();
             });
         }
 
         public async void TapEvent(int index)
         {
-            if (_isClickAble) {
-                await Task.Run(() => { FrameViewModel.SelectItem(index, false); });
-                await Task.Run(() => { CanSwap(index); });
+            if (IsChickAble) {
+                await Task.Run(() => {
+                    FrameViewModel.SelectItem(index, false);
+                    TrySwap(index);
+                });
             }
         }
 
-        private void CanSwap(int index)
+        private void TrySwap(int index)
         {
             if (_lineToSwap == null) {
                 _lineToSwap = index;
             }
             else if (index != _lineToSwap) {
-                SwapAsync(_lineToSwap.Value, index);
+                Swap(_lineToSwap.Value, index);
                 _lineToSwap = null;
             }
         }
 
-        private async void SwapAsync(int firstIndex, int secondIndex)
+        private void Swap(int firstIndex, int secondIndex)
         {
-            await Task.Run(() => {
-                var a = FrameViewModel.Models[firstIndex].ItemTextRight;
-                FrameViewModel.Models[firstIndex].ItemTextRight = FrameViewModel.Models[secondIndex].ItemTextRight;
-                FrameViewModel.Models[secondIndex].ItemTextRight = a;
-                FrameViewModel.DisableAllAsync();
-            });
+            var a = FrameViewModel.Models[firstIndex].Text;
+            FrameViewModel.Models[firstIndex].Text = FrameViewModel.Models[secondIndex].Text;
+            FrameViewModel.Models[secondIndex].Text = a;
+            FrameViewModel.DisableAllAsync();
         }
 
-        public async void CheckPageAsync(TestModel testModel)
-        {
-            await Task.Run(() => {
-                if (CheckModel() && testModel != null) {
-                    testModel.Price += int.Parse(GetSettingsModel.Price);
-                    testModel.RightAnswers++;
-                }
-            });
-            _isClickAble = false;
-            await Task.Run(DisableTimer);
-        }
+        //public async void CheckPageAsync(TestModel testModel)
+        //{
+        //    await Task.Run(() => {
+        //        if (CheckModel() && testModel != null) {
+        //            testModel.Price += int.Parse(GetSettingsModel.Price);
+        //            testModel.RightAnswers++;
+        //        }
+        //    });
+        //    _isClickAble = false;
+        //    await Task.Run(DisableTimer);
+        //}
 
-        private void DisableTimer()
-        {
-            if (TimerViewModel != null) {
-                TimerViewModel.TimerModel.TimerIsVisible = false;
-                TimerViewModel.Index = null;
-                TimerViewModel = null;
-            }
-        }
 
-        private bool CheckModel()
-        {
-            var pageIsRight = true;
-            foreach (var model in FrameViewModel.Models) {
-                var isRight = model.ItemTextRight == model.RightString;
-                model.BorderColor = FrameViewModel.GetColorOnCheck(isRight);
-                pageIsRight = pageIsRight && isRight;
-            }
+        //private bool CheckModel()
+        //{
+        //    var pageIsRight = true;
+        //    foreach (var model in FrameViewModel.Models) {
+        //        var isRight = model.ItemTextRight == model.RightString;
+        //        model.BorderColor = FrameViewModel.GetColorOnCheck(isRight);
+        //        pageIsRight = pageIsRight && isRight;
+        //    }
 
-            return pageIsRight;
-        }
+        //    return pageIsRight;
+        //}
     }
 
 }

@@ -6,16 +6,25 @@ using System.Runtime.CompilerServices;
 using Labs.Annotations;
 using Labs.Models;
 using System.Threading.Tasks;
+using System.Windows.Input;
+using Labs.Data;
 using Xamarin.Forms;
 
 namespace Labs.ViewModels
 {
-    public class FrameViewModel : INotifyPropertyChanged
+    public sealed class FrameViewModel : INotifyPropertyChanged
     {
+        public enum Mode : int
+        {
+            ItemDelete = -1,
+            ItemSelect,
+            ItemRight
+        }
+
         private ObservableCollection<FrameModel> _models = new ObservableCollection<FrameModel>();
         public ObservableCollection<FrameModel> Models
         {
-            get { return _models; }
+            get => _models;
             set
             {
                 _models = value;
@@ -28,18 +37,84 @@ namespace Labs.ViewModels
         public FrameViewModel()
         {
             _itemIndexToDeleteList = new List<int>();
+            GetContentsToDelete = new List<QuestionContent>();
         }
 
-        public async void AddNewModelAsync()
+        public ICommand AddItemCommand => new Command(AddEmptyModelAsync);
+
+        private Mode _modificator;
+        public Mode Modificator
         {
+            get => _modificator;
+            set
+            {
+                _modificator = value;
+                if (_modificator != 0){
+                    DisableLastItem();
+                }
+            }
+        }
+
+        public async void TapEvent(int index)
+        {
+            switch (Modificator)
+            {
+                case Mode.ItemDelete:
+                    await Task.Run(() => { ItemToDelete(index); });
+                    break;
+                case Mode.ItemRight:
+                    await Task.Run(() => { RightItems(index); });
+                    break;
+                default:
+                    await Task.Run(() => { SelectItem(index); });
+                    break;
+            }
+        }
+
+        public IList<QuestionContent> GetContentsToDelete { get; private set; }
+
+        public async void AddEmptyModelAsync() => 
             await Task.Run(() => {
-                Models.Add(new FrameModel {
+                Models.Add(new FrameModel
+                {
+                    Id = Guid.NewGuid().ToString(),
                     BorderColor = (Color)Application.Current.Resources["ColorMaterialGray"],
-                    ItemTextLeft = string.Empty,
-                    ItemTextRight = string.Empty,
+                    MainText = string.Empty,
+                    Text = string.Empty,
                     IsRight = false
                 });
             });
+
+        public void FillCreatorFramesAsync(Question question, bool withColor = false)
+        {
+            foreach (var content in question.Contents) {
+                Models.Add(new FrameModel
+                {
+                    Id = content.Id,
+                    Content = content,
+                    MainText = content.MainText,
+                    Text = content.Text,
+                    IsRight = content.IsRight,
+                    BorderColor = GetColor(withColor && content.IsRight)
+                });
+            }
+        }
+
+        public void FillTestFrames(IEnumerable<QuestionContent> contents, out IList<string> textList)
+        {
+            textList = new List<string>();
+            foreach (var content in contents) {
+                Models.Add(new FrameModel
+                {
+                    Id = content.Id,
+                    Text = content.Text,
+                    TextUnderMain = content.Text,
+                    MainText = content.MainText,
+                    IsRight = content.IsRight,
+                    BorderColor = GetColor(false)
+                });
+                textList.Add(content.Text);
+            }
         }
 
         public async void DisableAllAsync()
@@ -47,49 +122,55 @@ namespace Labs.ViewModels
             DisableLastItem();
             await Task.Run(() => {
                 foreach (var model in Models) {
-                    model.BorderColor = model.IsRight ? (Color)Application.Current.Resources["ColorMaterialGreen"] 
-                                                      : (Color)Application.Current.Resources["ColorMaterialGray"];
+                    model.BorderColor = GetColor(model.IsRight);
                 }
             });
         }
+
         public void SelectItem(int index, bool disablePrevious = true)
         {
             if (disablePrevious) {
                 DisableLastItem();
             }
             _itemIndex = index;
-            var isTrue = Models[_itemIndex].BorderColor == (Xamarin.Forms.Color) Application.Current.Resources["ColorMaterialBlue"];
-            Models[_itemIndex].BorderColor = isTrue 
-                ? (Color)Application.Current.Resources["ColorMaterialGray"] 
-                : (Color)Application.Current.Resources["ColorMaterialBlue"];
+            var isTrue = Models[_itemIndex].BorderColor == (Color) Application.Current.Resources["ColorMaterialBlue"];
+            Models[_itemIndex].BorderColor = GetColor(isTrue, true);
         }
-        public void DisableLastItem()
+
+        private void DisableLastItem()
         {
-            if (_itemIndex >= 0)
-            {
-                Models[_itemIndex].BorderColor = Models[_itemIndex].IsRight
-                    ? (Color)Application.Current.Resources["ColorMaterialGreen"]
-                    : (Color)Application.Current.Resources["ColorMaterialGray"];
+            if (_itemIndex >= 0) {
+                Models[_itemIndex].BorderColor = GetColor(Models[_itemIndex].IsRight);
             }
             _itemIndex = -1;
         }
 
-        public void RightItems(int index)
+        private void RightItems(int index)
         {
             Models[index].IsRight = !Models[index].IsRight;
             Models[index].BorderColor = GetColor(Models[index].IsRight);
         }
 
-        public static Color GetColor(bool isRight) =>
-            isRight ? (Color)Application.Current.Resources["ColorMaterialGreen"]
-                    : (Color) Application.Current.Resources["ColorMaterialGray"];
+        public static Color GetColor(bool isRight, bool greenToBlue = false)
+        {
+            Color color = default;
+            if (greenToBlue) {
+                color = isRight ? (Color)Application.Current.Resources["ColorMaterialGray"]
+                                : (Color)Application.Current.Resources["ColorMaterialBlue"];
+            }
+            else {
+                color = isRight ? (Color)Application.Current.Resources["ColorMaterialGreen"]
+                                : (Color)Application.Current.Resources["ColorMaterialGray"];
+            }
+
+            return color;
+        }
 
         public static Color GetColorOnCheck(bool isRight) =>
             isRight ? (Color)Application.Current.Resources["ColorMaterialGreen"] 
                     : (Color)Application.Current.Resources["ColorMaterialRed"];
-        
 
-        public void ItemToDelete(int index)
+        private void ItemToDelete(int index)
         {
             if (Models[index].BorderColor == (Color)Application.Current.Resources["ColorMaterialRed"]) {
                 _itemIndexToDeleteList.Remove(index);
@@ -102,43 +183,21 @@ namespace Labs.ViewModels
                 Models[index].BorderColor = (Color)Application.Current.Resources["ColorMaterialRed"];
             }
         }
+
         public void DeleteItems()
         {
-            foreach (var model in GetItemsToDelete()) {
-                Models.Remove(model);
-            }
-        }
-        private IEnumerable<FrameModel> GetItemsToDelete()
-        {
-            var list = new List<FrameModel>();
+            GetContentsToDelete.Clear();
             foreach (var i in _itemIndexToDeleteList) {
-                list.Add(Models[i]);
+                GetContentsToDelete.Add(Models[i].Content);
+                Models.Remove(Models[i]);
             }
             _itemIndexToDeleteList.Clear();
-
-            return list;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
 
         [NotifyPropertyChangedInvocator]
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null) =>
+        private void OnPropertyChanged([CallerMemberName] string propertyName = null) =>
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-    }
-
-    internal static class ListExtensions
-    {
-        public static void Shuffle<T>(this IList<T> list)
-        {
-            int n = list.Count;
-            Random rnd = new Random();
-            while (n > 1) {
-                int k = (rnd.Next(0, n) % n);
-                n--;
-                T value = list[k];
-                list[k] = list[n];
-                list[n] = value;
-            }
-        }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Labs.Helpers;
 using Labs.ViewModels.Creators;
 using Xamarin.Forms;
@@ -11,41 +12,53 @@ namespace Labs.Views.Creators
     {
         private bool _tableVisible = true;
         private uint _heightMax;
-        private readonly MenuCreatorViewModel _menuCreatorViewModel;
+        private MenuCreatorViewModel _viewModel;
+        private bool Refresh;
 
-        public CreatorMenuPage(string path)
+        public CreatorMenuPage(string testId = null)
         {
             InitializeComponent();
-
-            _menuCreatorViewModel = new MenuCreatorViewModel(path, this);
-            BindingContext = _menuCreatorViewModel;
+            //_viewModel = new MenuCreatorViewModel(testId) {Page = this};
+            //BindingContext = _viewModel;
+            InitializeAsync(testId);
         }
 
-        private async void SettingsButton_OnClickedAsync(object sender, EventArgs e)
+        private async void InitializeAsync(string testId )
         {
-            await Device.InvokeOnMainThreadAsync(() =>
-            {
+            await Task.Run(() => {
+                _viewModel = new MenuCreatorViewModel(testId) {Page = this};
+                BindingContext = _viewModel;
+            });
+        }
+
+        private async void SettingsButton_OnClickedAsync(object sender, EventArgs e) => 
+            await Device.InvokeOnMainThreadAsync(() => {
                 _tableVisible = !_tableVisible;
-                if (_heightMax == 0){
+                if (_heightMax == 0) {
                     _heightMax = 680;
                 }
 
                 FrameAnimation.RunShowOrHideAnimation(SettingsTableView, _heightMax, 0, _tableVisible, false);
             });
-        }
-
-        private void ListViewFiles_OnItemTapped(object sender, ItemTappedEventArgs e) =>
-            _menuCreatorViewModel.OpenCreatingPage(e.ItemIndex);
         
+        private void ListViewFiles_OnItemTapped(object sender, ItemTappedEventArgs e) => 
+            _viewModel.OpenCreatingPage(e.ItemIndex);
+
         private void ListViewFiles_OnItemSelected(object sender, SelectedItemChangedEventArgs e) =>
             ((ListView)sender).SelectedItem = null;
-
-        protected override bool OnBackButtonPressed() => _menuCreatorViewModel.OnBackButtonPressed();
 
         protected override void OnAppearing()
         {
             base.OnAppearing();
-            _menuCreatorViewModel.GetFilesAsync();
+            if (Refresh)
+            {
+                _viewModel.InitializeAsync(_viewModel.TestId);
+                BindingContext = _viewModel;
+            }
+            else
+            {
+                Refresh = true;
+            }
         }
     }
 }

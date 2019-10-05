@@ -1,63 +1,52 @@
-﻿using System.Threading.Tasks;
-using Labs.Helpers;
-using Labs.Models;
-using Xamarin.Forms;
+﻿using System;
+using System.Threading.Tasks;
+using Labs.Data;
+using Labs.Interfaces;
+using Realms;
 
 namespace Labs.ViewModels.Tests
 {
-    public class EntryTypeTestViewModel
+    public class EntryTypeTestViewModel : TestViewModel
     {
-        private readonly SettingsViewModel _settingsViewModel;
-        public TimerViewModel TimerViewModel;
-        public EntryTestModel EntryModel { get; }
-
-        public EntryTypeTestViewModel(string path, string fileName, TimerViewModel testTimeViewModel)
+        public EntryTypeTestViewModel(string questionId, TimerViewModel testTimeViewModel, string time, ISettings settings, int index)
         {
-            _settingsViewModel = new SettingsViewModel();
-            EntryModel = new EntryTestModel();
-            Initialize(path, fileName, testTimeViewModel);
+            Index = index;
+            FrameViewModel = new FrameViewModel();
+            SettingsViewModel = new SettingsViewModel();
+            Timer = testTimeViewModel ?? new TimerViewModel(TimeSpan.Parse(time), Index);
+            Initialize(questionId, testTimeViewModel);
         }
 
-        private async void Initialize(string path, string fileName, TimerViewModel testTimeViewModel)
+        private async void Initialize(string questionId, TimerViewModel testTimeViewModel)
         {
-            var strings = DirectoryHelper.ReadStringsFromFile(path, fileName);
-            TimerViewModel = testTimeViewModel ?? new TimerViewModel(strings[0]);
             await Task.Run(() => {
-                _settingsViewModel.SetPageSettingsModel(strings[0], strings[1], strings[2]);
-                EntryModel.RightAnswer = strings[3];
-                EntryModel.BorderColor = (Color)Application.Current.Resources["ColorMaterialBlue"];
-            });
-        }
-
-        public SettingsModel GetSettingsModel => _settingsViewModel.SettingsModel;
-        public TimerModel GeTimerModel => TimerViewModel.TimerModel;
-
-        public async void CheckPageAsync(TestModel testModel)
-        {
-            EntryModel.IsReadOnly = true;
-            await Task.Run(() => {
-                if (EntryModel.Answer == EntryModel.RightAnswer) {
-                    EntryModel.BorderColor = GetColor(true);
-                    if (testModel == null) return;
-                    testModel.Price += int.Parse(GetSettingsModel.Price);
-                    testModel.RightAnswers++;
+                using (var realm = Realm.GetInstance())
+                {
+                    var question = realm.Find<Question>(questionId);
+                    SettingsViewModel.SetSettingsModel(question.QuestionText, question.Price, question.Time);
+                    FrameViewModel.FillTestFrames(question.Contents, out _);
                 }
-                else EntryModel.BorderColor = GetColor(false);
             });
-
-            await Task.Run(DisableTimer);
-        }
-        private void DisableTimer()
-        {
-            if (TimerViewModel != null) {
-                TimerViewModel.TimerModel.TimerIsVisible = false;
-                TimerViewModel.Index = null;
-                TimerViewModel = null;
-            }
         }
 
-        private Color GetColor(bool isRight) =>
-            isRight ? (Color)Application.Current.Resources["ColorMaterialGreen"] 
-                    : (Color)Application.Current.Resources["ColorMaterialRed"];
+        //public async void CheckPageAsync(TestModel testModel)
+        //{
+        //    EntryModel.IsReadOnly = true;
+        //    await Task.Run(() => {
+        //        if (EntryModel.Answer == EntryModel.RightAnswer) {
+        //            EntryModel.BorderColor = GetColor(true);
+        //            if (testModel == null) return;
+        //            testModel.Price += int.Parse(GetSettingsModel.Price);
+        //            testModel.RightAnswers++;
+        //        }
+        //        else EntryModel.BorderColor = GetColor(false);
+        //    });
+
+        //    await Task.Run(DisableTimer);
+        //}
+     
+        //private Color GetColor(bool isRight) =>
+        //    isRight ? (Color)Application.Current.Resources["ColorMaterialGreen"] 
+        //            : (Color)Application.Current.Resources["ColorMaterialRed"];
     }
 }

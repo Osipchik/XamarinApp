@@ -47,60 +47,71 @@
                         <TableView x:Name="SettingsTableView"
                                    Intent="Settings"
                                    VerticalOptions="FillAndExpand"
-                                   BindingContext="{Binding GetSettingsModel}">
-                        <TableRoot>
-                            <TableSection Title="{helpers:Translate TestSettingsInfo}">
-                                <ViewCell>
-                                    <StackLayout Orientation="Horizontal"
+                                   BindingContext="{Binding GetSettings}">
+                            <TableRoot>
+                                <TableSection Title="{helpers:Translate TestSettingsInfo}">
+                                    <ViewCell>
+                                        <StackLayout Orientation="Horizontal"
                                                  Margin="9,0,0,0">
-                                        <Label Text="{helpers:Translate TestSettingsName}"
+                                            <Label Text="{helpers:Translate TestSettingsName}"
                                                VerticalOptions="Center"/>
-                                        <Entry Placeholder="{helpers:Translate TestSettingsNPlaceh}"
+                                            <Entry Placeholder="{helpers:Translate TestSettingsNPlaceh}"
                                                HorizontalOptions="FillAndExpand"
                                                Text="{Binding Name}"/>
-                                    </StackLayout>
-                                </ViewCell>
-                                <ViewCell>
-                                    <StackLayout Orientation="Horizontal"
+                                        </StackLayout>
+                                    </ViewCell>
+                                    <ViewCell>
+                                        <StackLayout Orientation="Horizontal"
                                                  Margin="9,0,0,0">
-                                        <Label Text="{helpers:Translate Subject}"
+                                            <Label Text="{helpers:Translate Subject}"
                                                VerticalOptions="Center"/>
-                                        <Entry Placeholder="{helpers:Translate TestSettingsNPlaceh}"
+                                            <Entry Placeholder="{helpers:Translate TestSettingsNPlaceh}"
                                                Text="{Binding Subject}"
                                                HorizontalOptions="FillAndExpand"/>
-                                    </StackLayout>
+                                        </StackLayout>
                                     </ViewCell>
-                            </TableSection>
-                            <TableSection>
-                                <ViewCell>
-                                    <Grid ColumnSpacing="0">
-                                        <Grid.RowDefinitions>
-                                            <RowDefinition Height="Auto"/>
-                                        </Grid.RowDefinitions>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="Auto"/>
-                                            <ColumnDefinition Width="Auto"/>
-                                            <ColumnDefinition Width="Auto"/>
-                                            <ColumnDefinition Width="Auto"/>
-                                        </Grid.ColumnDefinitions>
-                                        <Label Text="{helpers:Translate TestSettingsTime}"
-                                                VerticalOptions="Center"
-                                                Margin="12,0,0,0"
-                                                Grid.Column="0" Grid.Row="0"/>
-                                        <TimePicker Time="{Binding TimeSpan}"
-                                                    Format="HH:mm"
-                                                    Margin="0"
-                                                    Grid.Column="1" Grid.Row="0"/>
-                                        <Label Text=":"
-                                           FontSize="Medium"
-                                           TextColor="{DynamicResource TextColor}"
-                                           VerticalOptions="Center"
-                                           Margin="0"
-                                           Grid.Column="2" Grid.Row="0"/>
-                                        <Entry Text="{Binding Seconds}"
-                                           Margin="0"
-                                           Keyboard="Numeric"
-                                           Grid.Column="3" Grid.Row="0"/>
+                                </TableSection>
+                                <TableSection>
+                                    <ViewCell>
+                                        <Grid ColumnSpacing="0">
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="Auto"/>
+                                            </Grid.RowDefinitions>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="Auto"/>
+                                                <ColumnDefinition Width="Auto"/>
+                                            </Grid.ColumnDefinitions>
+                                            <Label Text="{helpers:Translate TestSettingsTime}"
+                                                   VerticalOptions="Center"
+                                                   Margin="12,0,0,0"
+                                                   Grid.Column="0" Grid.Row="0"/>
+                                            <TimePicker Time="{Binding TimeSpan}"
+                                                        VerticalOptions="Center"
+                                                        Format="HH:mm"
+                                                        Margin="0"
+                                                        Grid.Column="1" Grid.Row="0"/>
+                                        </Grid>
+                                    </ViewCell>
+                                </TableSection>
+                                <TableSection>
+                                    <ViewCell>
+                                        <Grid ColumnSpacing="0"
+                                              VerticalOptions="Center">
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="Auto"/>
+                                            </Grid.RowDefinitions>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="Auto"/>
+                                                <ColumnDefinition Width="Auto"/>
+                                            </Grid.ColumnDefinitions>
+                                            <Label Text="{helpers:Translate Price}"
+                                                   VerticalOptions="Center"
+                                                   Margin="12,0,0,0"
+                                                   Grid.Column="0" Grid.Row="0"/>
+                                            <Label Text="{Binding TotalPrice}"
+                                                   VerticalOptions="Center"
+                                                   Margin="12,0,0,0"
+                                                   Grid.Column="1" Grid.Row="0"/>
                                         </Grid>
                                     </ViewCell>
                                 </TableSection>
@@ -108,37 +119,38 @@
                         </TableView>
                     </StackLayout>
                 </Frame>
-              </ContentView>
-                <ListView Style="{StaticResource ListView}"
+            </ContentView>
+            <ListView x:Name="ListView"
+                      Style="{StaticResource ListView}"
                       CachingStrategy="RecycleElement"
-                          ItemSelected="ListViewFiles_OnItemSelected"
-                          ItemTapped="ListViewFiles_OnItemTapped"
-                          ItemsSource="{Binding GetInfoModels}">
-                    <ListView.ItemTemplate>
-                        <DataTemplate>
-                            <ViewCell>
-                                <ContentView Padding="5">
-                                    <Frame>
-                                        <StackLayout HorizontalOptions="FillAndExpand"
-                                                     VerticalOptions="FillAndExpand">
-                                            <Label Text="{Binding Title}"
-                                                   Style="{StaticResource LabelMainStyle}"/>
-                                            <StackLayout Orientation="Horizontal">
-                                                <Label Text="{helpers:Translate Price}"
-                                                       Style="{StaticResource LabelSecondStyle}"/>
-                                                <Label Text="{Binding Detail}"
-                                                       HorizontalOptions="FillAndExpand"
-                                                       Style="{StaticResource LabelSecondStyle}"/>
-                                                <Label Text="{Binding Date}"
-                                                       Style="{StaticResource LabelSecondStyle}"/>
-                                            </StackLayout>
+                      ItemSelected="ListViewFiles_OnItemSelected"
+                      ItemTapped="ListViewFiles_OnItemTapped"
+                      ItemsSource="{Binding GetFrameModels}">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <ContentView Padding="5">
+                                <Frame>
+                                    <StackLayout HorizontalOptions="FillAndExpand"
+                                                 VerticalOptions="FillAndExpand">
+                                        <Label Text="{Binding MainText}"
+                                               Style="{StaticResource LabelMainStyle}"/>
+                                        <StackLayout Orientation="Horizontal">
+                                            <Label Text="{helpers:Translate Price}"
+                                                   Style="{StaticResource LabelSecondStyle}"/>
+                                            <Label Text="{Binding TextUnderMain}"
+                                                   HorizontalOptions="FillAndExpand"
+                                                   Style="{StaticResource LabelSecondStyle}"/>
+                                            <Label Text="{Binding Text}"
+                                                   Style="{StaticResource LabelSecondStyle}"/>
                                         </StackLayout>
-                                    </Frame>
-                                </ContentView>
-                            </ViewCell>
-                        </DataTemplate>
-                    </ListView.ItemTemplate>
-              </ListView>
+                                    </StackLayout>
+                                </Frame>
+                            </ContentView>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
 
             <Grid BackgroundColor="Transparent">
                 <Grid.RowDefinitions>

@@ -44,17 +44,9 @@
                             <Label Text="{helpers:Translate TestSettingsTime}"
                                    VerticalOptions="Center"
                                    Margin="0"/>
-                            <TimePicker Format="HH:mm"
-                                        Time="{Binding TimeSpan}"
+                            <TimePicker Time="{Binding TimeSpan}"
+                                        Format="HH:mm"
                                         Margin="0"/>
-                            <Label Text=":"
-                                   FontSize="Medium"
-                                   TextColor="{DynamicResource TextColor}"
-                                   VerticalOptions="Center"
-                                   Margin="0"/>
-                            <Entry Text="{Binding Seconds}"
-                                   Margin="0"
-                                   Keyboard="Numeric"/>
                             <Label Text="{helpers:Translate Price}"
                                    HorizontalOptions="EndAndExpand"
                                    HorizontalTextAlignment="End"
@@ -62,6 +54,7 @@
                                    Margin="0"
                                    VerticalOptions="Center"/>
                             <Entry Text="{Binding Price}"
+                                   WidthRequest="23"
                                    Margin="0"
                                    Keyboard="Numeric"/>
                         </StackLayout>
@@ -139,8 +132,7 @@
                                                  VerticalOptions="FillAndExpand">
                                         <Editor Placeholder="{helpers:Translate Text}"
                                                 HorizontalOptions="FillAndExpand"
-                                                Text="{Binding ItemTextLeft}"
-                                                IsReadOnly="{Binding EditorLeftIsReadOnly}"
+                                                Text="{Binding MainText}"
                                                 AutoSize="TextChanges"/>
                                     </StackLayout>
                                 </Frame>

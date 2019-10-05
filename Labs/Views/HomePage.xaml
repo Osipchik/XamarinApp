@@ -5,7 +5,8 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:helpers="clr-namespace:Labs.Helpers;assembly=Labs"
              mc:Ignorable="d"
-             x:Class="Labs.Views.HomePage">
+             x:Class="Labs.Views.HomePage"
+             Title="Home">
 
     <ContentPage.Content>
         <StackLayout Margin="12,0,12,0">
@@ -65,7 +66,7 @@
                       CachingStrategy="RecycleElement"
                       ItemSelected="ListView_OnItemSelected"
                       ItemTapped="ListView_OnItemTapped"
-                      ItemsSource="{Binding GetInfoModels}">
+                      ItemsSource="{Binding GetInfo}">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <ViewCell>
@@ -73,20 +74,20 @@
                                 <Frame>
                                     <StackLayout HorizontalOptions="FillAndExpand"
                                                  VerticalOptions="FillAndExpand">
-                                        <Label Text="{Binding Title}"
-                                               TextColor="{Binding TitleColor}"
-                                               Style="{StaticResource LabelMainStyle}"/>
+                                        <Label Text="{Binding Name}"
+                                               Style="{StaticResource LabelMainStyle}"
+                                               TextColor="{Binding LabelNameColor}"/>
                                         <StackLayout Orientation="Horizontal">
                                             <Label Text="{helpers:Translate Subject}"
                                                    Style="{StaticResource LabelSecondStyle}"
                                                    HorizontalOptions="Start"/>
-                                            <Label Text="{Binding Detail}"
-                                                   TextColor="{Binding DetailColor}"
+                                            <Label Text="{Binding Subject}"
                                                    HorizontalOptions="FillAndExpand"
-                                                   Style="{StaticResource LabelSecondStyle}"/>
-                                            <Label Text="{Binding Date}"
-                                                   TextColor="{Binding DateColor}"
-                                                   Style="{StaticResource LabelSecondStyle}"/>
+                                                   Style="{StaticResource LabelSecondStyle}"
+                                                   TextColor="{Binding LabelSubjectColor}"/>
+                                            <Label Text="{Binding Date, StringFormat='{0:dd.MM.yyyy}'}"
+                                                   Style="{StaticResource LabelSecondStyle}"
+                                                   TextColor="{Binding LabelDateColor}"/>
                                         </StackLayout>
                                     </StackLayout>
                                 </Frame>

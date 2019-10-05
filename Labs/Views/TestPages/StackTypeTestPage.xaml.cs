@@ -1,6 +1,4 @@
-﻿using Labs.Helpers;
-using Labs.Models;
-using Labs.ViewModels.Tests;
+﻿using Labs.ViewModels.Tests;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -9,43 +7,40 @@ namespace Labs.Views.TestPages
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class StackTypeTestPage : ContentPage
     {
-        private readonly StackTypeTestViewModel _stackViewModel;
-        private readonly TimerViewModel _timerViewModel;
-        private readonly TestModel _testModel;
-        public StackTypeTestPage(string path, string fileName, TimerViewModel timerViewModel, TestModel model = null, int? num = null)
+        private readonly StackTypeTestViewModel _viewModel;
+
+        public StackTypeTestPage(StackTypeTestViewModel viewModel)
         {
             InitializeComponent();
 
-            _timerViewModel = timerViewModel;
-            Title = num.ToString();
-            _stackViewModel = new StackTypeTestViewModel(path, fileName, timerViewModel);
-            BindingContext = _stackViewModel;
-            _testModel = model;
-            Subscribe(num);
+            _viewModel = viewModel;
+            Subscribe(viewModel.Index);
+            BindingContext = _viewModel;
+            Title = _viewModel.Index.ToString();
         }
 
         private void ListView_OnItemSelected(object sender, SelectedItemChangedEventArgs e) => 
             ((ListView)sender).SelectedItem = null;
 
-        private void ListView_OnItemTapped(object sender, ItemTappedEventArgs e) => _stackViewModel.TapEvent(e.ItemIndex);
+        private void ListView_OnItemTapped(object sender, ItemTappedEventArgs e) => _viewModel.TapEvent(e.ItemIndex);
 
-        protected override void OnAppearing()
+        protected sealed override void OnAppearing()
         {
             base.OnAppearing();
-            if (_timerViewModel == null && _stackViewModel.TimerViewModel != null) {
-                MessagingCenter.Send<Page>(this, Constants.StopAllTimers);
-                _stackViewModel.TimerViewModel.TimerRunAsync();
+            if (_viewModel.Timer != null) {
+                MessagingCenter.Send<Page>(this, TimerViewModel.StopAllTimers);
+                _viewModel.Timer?.TimerRunAsync();
             }
         }
 
         private void Subscribe(int? num)
         {
-            if (num != null && num.Value == 1) {
-                MessagingCenter.Subscribe<Page>(this, Constants.RunFirstTimer,
+            if (num.HasValue && num.Value == 1) {
+                MessagingCenter.Subscribe<Page>(this, TestViewModel.RunFirstTimer,
                     (sender) => { OnAppearing(); });
             }
-            MessagingCenter.Subscribe<Page>(this, Constants.Check,
-                (sender) => { _stackViewModel.CheckPageAsync(_testModel); });
+            //MessagingCenter.Subscribe<Page>(this, Constants.Check,
+            //    (sender) => { _checkViewModel.CheckPageAsync(_testModel); });
         }
     }
 }

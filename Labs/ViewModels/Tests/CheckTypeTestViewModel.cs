@@ -1,86 +1,64 @@
-﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System;
 using System.Threading.Tasks;
+using Labs.Data;
 using Labs.Helpers;
-using Labs.Models;
+using Labs.Interfaces;
+using Realms;
 using Xamarin.Forms;
 
 namespace Labs.ViewModels.Tests
 {
-    public class CheckTypeTestViewModel
+    public class CheckTypeTestViewModel : TestViewModel
     {
-        private readonly FrameViewModel _frameViewModel;
-        private readonly SettingsViewModel _settingsViewModel;
-        public TimerViewModel TimerViewModel;
-        private bool _isChickAble = true;
-
-        public CheckTypeTestViewModel(string path, string fileName, TimerViewModel testTimeViewModel, int? index = null)
+        public CheckTypeTestViewModel(string questionId, TimerViewModel testTimeViewModel, string time, ISettings settings, int index)
         {
-            _frameViewModel = new FrameViewModel();
-            _settingsViewModel = new SettingsViewModel();
-            InitializeAsync(path, fileName, testTimeViewModel, index);
+            Index = index;
+            Settings = settings;
+            FrameViewModel = new FrameViewModel();
+            SettingsViewModel = new SettingsViewModel();
+            Timer = testTimeViewModel ?? new TimerViewModel(TimeSpan.Parse(time), Index);
+            Initialize(questionId);
         }
 
-        private async void InitializeAsync(string path, string fileName, TimerViewModel testTimeViewModel, int? index)
-        {
-            var strings = DirectoryHelper.ReadStringsFromFile(path, fileName);
-            TimerViewModel = testTimeViewModel ?? new TimerViewModel(strings[0], index);
-            await Task.Run(() => {
-                _settingsViewModel.SetPageSettingsModel(strings[0], strings[1], strings[2]);
-                FillFramesAsync(strings, strings[3], 4);
-            });
-        }
-
-        private async void FillFramesAsync(IReadOnlyList<string> strings, string answers, int startIndex)
+        private async void Initialize(string questionId)
         {
             await Task.Run(() => {
-                for (int i = startIndex; i < strings.Count; i++) {
-                    _frameViewModel.Models.Add(new FrameModel {
-                        ItemTextLeft = strings[i],
-                        IsRight = answers[i - startIndex] == '0',
-                        BorderColor = FrameViewModel.GetColor(false)
-                    });
+                using (var realm = Realm.GetInstance())
+                {
+                    var question = realm.Find<Question>(questionId);
+                    SettingsViewModel.SetSettingsModel(question.QuestionText, question.Price, question.Time);
+                    FrameViewModel.FillTestFrames(question.Contents, out _);
+                    FrameViewModel.Models.Shuffle();
                 }
             });
-            await Task.Run(() => { _frameViewModel.Models.Shuffle(); });
         }
-
-        public SettingsModel GetSettingsModel => _settingsViewModel.SettingsModel;
-        public ObservableCollection<FrameModel> GetFrameModel => _frameViewModel.Models;
-        public TimerModel GeTimerModel => TimerViewModel.TimerModel;
 
         public async void TapEvent(int index)
         {
-            if (_isChickAble) {
-                await Task.Run(() => { _frameViewModel.SelectItem(index, false); });
+            if (IsChickAble) {
+                await Task.Run(() => { FrameViewModel.SelectItem(index, false); });
             }
         }
 
-        public async void CheckPageAsync(TestModel testModel)
+        public async void CheckPageAsync()
         {
-            await Task.Run(() => {
-                if (CheckModel() && testModel != null) {
-                    testModel.Price += int.Parse(GetSettingsModel.Price);
-                    testModel.RightAnswers++;
+            await Task.Run(() =>
+            {
+                if (CheckModel())
+                {
+                    var a = int.Parse(Settings.Price) + int.Parse(GetSettingsModel.Price);
+                    Settings.Price = a.ToString();
+                    GetSettingsModel.TotalCount += "1";
                 }
             });
-            _isChickAble = false;
+            IsChickAble = false;
             await Task.Run(DisableTimer);
-        }
-
-        private void DisableTimer()
-        {
-            if (TimerViewModel != null) {
-                TimerViewModel.TimerModel.TimerIsVisible = false;
-                TimerViewModel.Index = null;
-                TimerViewModel = null;
-            }
         }
 
         private bool CheckModel()
         {
             var pageIsRight = true;
-            foreach (var model in _frameViewModel.Models) {
+            foreach (var model in FrameViewModel.Models) {
                 var isRight = model.BorderColor == (Color)Application.Current.Resources["ColorMaterialBlue"] == model.IsRight;
                 model.BorderColor = FrameViewModel.GetColorOnCheck(isRight);
                 pageIsRight = pageIsRight && isRight;

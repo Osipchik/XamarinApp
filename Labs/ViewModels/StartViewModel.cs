@@ -1,80 +1,103 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Input;
-using Labs.Helpers;
+using Labs.Data;
+using Labs.Interfaces;
 using Labs.Models;
+using Labs.ViewModels.Creators;
 using Labs.Views.Creators;
 using Labs.Views.TestPages;
+using Realms;
 using Xamarin.Forms;
 
 namespace Labs.ViewModels
 {
     public class StartViewModel
     {
-        private readonly Page _page;
-        private bool _isClickAble;
-        private readonly Button _changeButton;
-        private readonly Button _startButton;
-        public readonly SettingsViewModel SettingsViewModel;
+        private bool _buttonsIsClickAble;
+        public INavigation Navigation { get; set; }
+        public Button ChangeButton { get; set; }
+        public Button StartButton { get; set; }
+        public ISettings Settings { get; private set; }
 
-        public StartViewModel(string path, Page page, Button changeButton, Button startButton)
+        private readonly string _testId;
+
+        public StartViewModel(string testId)
         {
-            _page = page;
-            _changeButton = changeButton;
-            _startButton = startButton;
-            SettingsViewModel = new SettingsViewModel();
-            ReadSettingsAsync(path);
-            SetCommands(path);
+            _buttonsIsClickAble = true;
+            _testId = testId;
+            InitializeAsync();
+            SetCommands();
         }
 
         public ICommand ChangeButtonCommand { protected set; get; }
         public ICommand StartButtonCommand { protected set; get; }
 
-        private void SetCommands(string path)
-        {
-            ChangeButtonCommand = new Command(async () =>
-            {
-                ChangeButtonStyle_OnClick(_changeButton);
-                if (_isClickAble) return;
-                _isClickAble = true;
-                await _page.Navigation.PushAsync(new CreatorMenuPage(path));
-            });
-            StartButtonCommand = new Command(async () =>
-            {
-                ChangeButtonStyle_OnClick(_startButton);
-                if (_isClickAble) return;
-                _isClickAble = true;
-                await _page.Navigation.PushModalAsync(new TestPage(path, SettingsViewModel.SettingsModel.Time));
-            });
-        }
-        private async void ReadSettingsAsync(string path)
+        private async void InitializeAsync()
         {
             await Task.Run(() => {
-                var settings = DirectoryHelper.ReadStringsFromFile(path, Constants.SettingsFileTxt);
-                if (settings != null) {
-                    SettingsViewModel.SetStartPageSettings(settings);
+                using (var realm = Realm.GetInstance())
+                {
+                    var model = realm.Find<TestModel>(_testId);
+                    Settings = new SettingsModel
+                    {
+                        Time = model.Time,
+                        Name = model.Name,
+                        Subject = model.Subject,
+                        TimeSpan = TimeSpan.Parse(model.Time),
+                        TotalCount = model.Questions.Count.ToString(),
+                        TotalPrice = model.Questions.Sum(item => int.Parse(item.Price)).ToString()
+                    };
                 }
             });
         }
 
-        public SettingsModel GetSettingsModel => SettingsViewModel.SettingsModel;
+        private void SetCommands()
+        {
+            ChangeButtonCommand = new Command(async () =>
+            {
+                if (_buttonsIsClickAble && ChangeButton != null && Navigation != null) {
+                    ChangeButtonStyle_OnClickAsync(ChangeButton);
+                    await Navigation.PushAsync(new CreatorMenuPage(_testId));
+                }
+            });
+
+            StartButtonCommand = new Command(async () =>
+            {
+                if (_buttonsIsClickAble && StartButton != null && Navigation != null) {
+                    ChangeButtonStyle_OnClickAsync(StartButton);
+                    await Navigation.PushModalAsync(new TestPage(_testId, Settings));
+                }
+            });
+        }
 
         public void StartPageCallBack()
         {
-            _isClickAble = false;
-            ChangeButtonStyle_OnCallBack(_changeButton);
-            ChangeButtonStyle_OnCallBack(_startButton);
+            _buttonsIsClickAble = true;
+            InitializeAsync();
+            ChangeButtonStyle_OnCallBack(ChangeButton);
+            ChangeButtonStyle_OnCallBack(StartButton);
         }
 
-        private void ChangeButtonStyle_OnClick(Button button)
+        private async void ChangeButtonStyle_OnClickAsync(Button button)
         {
-            button.BackgroundColor = (Color)Application.Current.Resources["ButtonTextColor"];
-            button.TextColor = (Color)Application.Current.Resources["ButtonBackGroundColor"];
+            await Device.InvokeOnMainThreadAsync(() => {
+                _buttonsIsClickAble = false;
+                if (button != null) {
+                    button.BackgroundColor = (Color) Application.Current.Resources["ButtonTextColor"];
+                    button.TextColor = (Color) Application.Current.Resources["ButtonBackGroundColor"];
+                }
+            });
         }
 
-        private void ChangeButtonStyle_OnCallBack(Button button)
+        private async void ChangeButtonStyle_OnCallBack(Button button)
         {
-            button.BackgroundColor = (Color)Application.Current.Resources["ButtonBackGroundColor"];
-            button.TextColor = (Color)Application.Current.Resources["ButtonTextColor"];
+            await Device.InvokeOnMainThreadAsync(() => {
+                _buttonsIsClickAble = true;
+                button.BackgroundColor = (Color) Application.Current.Resources["ButtonBackGroundColor"];
+                button.TextColor = (Color) Application.Current.Resources["ButtonTextColor"];
+            });
         }
     }
 }

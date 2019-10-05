@@ -11,7 +11,7 @@
 
     <ContentPage.Content>
         <StackLayout>
-            <Grid BindingContext="{Binding GeTimerModel}"
+            <Grid BindingContext="{Binding GetTimerModel}"
                   HorizontalOptions="FillAndExpand"
                   ColumnSpacing="0"
                   RowSpacing="0">
@@ -41,18 +41,34 @@
                      Margin="12,0,12,0"
                      HeightRequest="1"
                      Color="#BDBDBD"/>
-            <ContentView Padding="5">
-                <Frame Padding="10,5,10,5"
-                       BindingContext="{Binding EntryModel}"
-                       BorderColor="{Binding BorderColor}"
-                       CornerRadius="10">
-                    <Editor AutoSize="TextChanges"
-                            HorizontalOptions="Center"
-                            Text="{Binding Answer}"
-                            IsReadOnly="{Binding IsReadOnly}"
-                            Placeholder="{helpers:Translate Answer}"/>
-                </Frame>
-            </ContentView>
+            <ListView CachingStrategy="RecycleElement"
+                      SeparatorVisibility="None"
+                      VerticalScrollBarVisibility="Never"
+                      HasUnevenRows="True"
+                      ItemSelected="ListView_OnItemSelected"
+                      ItemsSource="{Binding GetFrameModel}">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <ContentView Padding="5">
+                                <Frame BorderColor="{Binding BorderColor}"
+                                       CornerRadius="10"
+                                       Padding="10">
+                                    <StackLayout HorizontalOptions="FillAndExpand"
+                                                 VerticalOptions="FillAndExpand">
+                                        <Editor Placeholder="{helpers:Translate Text}"
+                                                HorizontalOptions="Center"
+                                                VerticalOptions="Center"
+                                                AutoSize="TextChanges"
+                                                IsReadOnly="{Binding IsChickAble}"
+                                                Text="{Binding Text}"/>
+                                    </StackLayout>
+                                </Frame>
+                            </ContentView>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

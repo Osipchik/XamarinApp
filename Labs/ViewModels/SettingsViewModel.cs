@@ -1,8 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
+using Labs.Data;
 using Labs.Helpers;
 using Labs.Models;
 using Labs.Resources;
+using Realms;
+using Xamarin.Forms;
 
 namespace Labs.ViewModels
 {
@@ -14,99 +18,63 @@ namespace Labs.ViewModels
             SettingsModel = new SettingsModel();
         }
 
-        private string CheckTimeAndPrice()
+        public void SetEmptyModel()
         {
-            var message = string.Empty;
-            SettingsModel.Price = CheckText(SettingsModel.Price);
-            SettingsModel.Seconds = CheckText(SettingsModel.Seconds);
-            message += string.IsNullOrEmpty(SettingsModel.Price) ? AppResources.WarningPrice + " \n" : "";
-            message += string.IsNullOrEmpty(SettingsModel.Seconds) ? "Add seconds" + " \n" : "";
-
-            return message;
+            SettingsModel.TimeSpan = TimeSpan.Zero;
+            SettingsModel.Question = string.Empty;
+            SettingsModel.Subject = string.Empty;
+            SettingsModel.Name = string.Empty;
+            SettingsModel.TotalPrice = "0";
         }
+
+        public void SetSettingsModel(string question, string price, string timeSpan)
+        {
+            SettingsModel.Question = question;
+            SettingsModel.Price = price;
+            SettingsModel.TimeSpan = TimeSpan.Parse(timeSpan);
+        }
+
+        public void SetTestSettingsModel(Realm realm, TestModel testModel)
+        {
+            SettingsModel.Name = testModel.Name;
+            SettingsModel.Subject = testModel.Subject;
+            SettingsModel.TimeSpan = TimeSpan.Parse(testModel.Time);
+            SettingsModel.TotalPrice = Repository.GetTotalPrice(realm, testModel);
+        }
+
+        private string CheckPrice => CheckText(SettingsModel.Price) ? AppResources.WarningPrice + " \n" : "";
+
         public string CheckPageSettings()
         {
             var message = string.Empty;
-            SettingsModel.Question = CheckText(SettingsModel.Question);
-            message += string.IsNullOrEmpty(SettingsModel.Question) ? AppResources.WarningQuestion + " \n" : "";
-            message += CheckTimeAndPrice();
+            message += CheckText(SettingsModel.Question) ? AppResources.WarningQuestion + " \n" : "";
+            message += CheckPrice;
 
             return message;
         }
 
-        public string CheckCreatorMenuPageSettings()
+        public async Task<string> CheckCreatorMenuPageSettings()
         {
             var message = string.Empty;
-            SettingsModel.Name = CheckText(SettingsModel.Name);
-            SettingsModel.Subject = CheckText(SettingsModel.Subject);
-            message += string.IsNullOrEmpty(SettingsModel.Name) ? AppResources.AddName + " \n" : "";
-            message += string.IsNullOrEmpty(SettingsModel.Subject) ? AppResources.AddSubjectName + " \n" : "";
-            message += CheckTimeAndPrice();
+            await Task.Run(() =>
+            {
+                message += CheckText(SettingsModel.Name) ? AppResources.AddName + " \n" : "";
+                message += CheckText(SettingsModel.Subject) ? AppResources.AddSubjectName + " \n" : "";
+                message += CheckPrice;
+            });
 
             return message;
         }
 
-        public async Task<IEnumerable<string>> GetPageSettingsAsync(bool all = false)
+        public bool CheckText(string text)
         {
-            if (all) return GetSettingsForCreating();
-            return await Task.Run(GetSettings);
-        }
-
-        private IEnumerable<string> GetSettings()
-        {
-            var settings = new List<string> {
-                TimeHelper.NormalizeTime(SettingsModel.TimeSpan, SettingsModel.Seconds),
-                SettingsModel.Price,
-                SettingsModel.Question
-            };
-
-            return settings;
-        }
-
-        private IEnumerable<string> GetSettingsForCreating()
-        {
-            var settings = new List<string> {
-                SettingsModel.Name,
-                SettingsModel.Subject,
-                TimeHelper.NormalizeTime(SettingsModel.TimeSpan, SettingsModel.Seconds),
-                SettingsModel.Price
-            };
-
-            return settings;
-        }
-
-        private string CheckText(string text) => string.IsNullOrEmpty(text) ? null : text.Trim();
-
-        public void SetPageSettingsModel(params string[] settings)
-        {
-            TimeHelper.GetTime(settings[0], out var timeSpan, out var seconds);
-            SettingsModel.TimeSpan = timeSpan;
-            SettingsModel.Seconds = seconds;
-            SettingsModel.Price = settings[1];
-            SettingsModel.Question = settings[2];
-        }
-
-        public void SetMenuPageSettings(params string[] settings)
-        {
-            SettingsModel.Name = settings[0];
-            SettingsModel.Subject = settings[1];
-            TimeHelper.GetTime(settings[2], out var timeSpan, out var seconds);
-            SettingsModel.TimeSpan = timeSpan;
-            SettingsModel.Seconds = seconds;
-            SettingsModel.Price = settings[3];
-        }
-
-        public void SetStartPageSettings(params string[] settings)
-        {
-            SettingsModel.Name = settings[0];
-            SettingsModel.Subject = settings[1];
-            SettingsModel.Time = settings[2];
-            SettingsModel.Price = settings[3];
+            text = string.IsNullOrEmpty(text) ? null : text.Trim();
+            return string.IsNullOrEmpty(text);
         }
 
         public static string FixText(string text, bool isSeconds = false)
         {
-            if (text == string.Empty) return string.Empty;
+            if (string.IsNullOrEmpty(text)) return string.Empty;
             if (isSeconds && int.Parse(text) > 60) return "60";
             if (text.Length > 2) text = text.Remove(2);
 

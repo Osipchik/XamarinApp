@@ -13,8 +13,10 @@ namespace Labs.Views
         public HomePage()
         {
             InitializeComponent();
-            
-            _homeViewModel = new HomeViewModel(GridButtons, LabelName, LabelSubject, LabelDate);
+            _homeViewModel = new HomeViewModel(GridButtons, LabelName, LabelSubject, LabelDate)
+            {
+                Navigation = Navigation
+            };
             BindingContext = _homeViewModel;
         }
 
@@ -22,7 +24,7 @@ namespace Labs.Views
         {
             if (_isClickAble) {
                 _isClickAble = false;
-                _homeViewModel.GoToStartTestPage(e.ItemIndex, this);
+                _homeViewModel.GoToStartTestPage(e.ItemIndex);
             }
         }
 
@@ -32,7 +34,7 @@ namespace Labs.Views
         protected override void OnAppearing()
         {
             base.OnAppearing();
-            _homeViewModel.RefreshModels();
+            _homeViewModel.SetInfoAsync();
             _isClickAble = true;
         }
     }

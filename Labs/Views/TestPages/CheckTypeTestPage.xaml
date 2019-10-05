@@ -10,7 +10,7 @@
 
     <ContentPage.Content>
         <StackLayout HorizontalOptions="FillAndExpand">
-            <Grid BindingContext="{Binding GeTimerModel}"
+            <Grid BindingContext="{Binding GetTimerModel}"
                   HorizontalOptions="FillAndExpand"
                   ColumnSpacing="0"
                   RowSpacing="0">
@@ -58,7 +58,7 @@
                                                  VerticalOptions="FillAndExpand">
                                         <Label HorizontalOptions="Center"
                                                VerticalOptions="Center"
-                                               Text="{Binding ItemTextLeft}"/>
+                                               Text="{Binding MainText}"/>
                                     </StackLayout>
                                 </Frame>
                             </ContentView>

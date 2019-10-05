@@ -5,6 +5,13 @@ namespace Labs.Helpers
 {
     public static class FrameAnimation
     {
+        private enum DefaultAnimation : uint
+        {
+            SymbolLength = 11,
+            AnimationRate = 16,
+            AnimationLength = 700,
+        }
+
         public static void RunShowOrHideAnimation(View view, uint heightMax, uint heightMin, bool show, bool isVisible = true) =>
             RunSettingsViewAnimationAsync(view, show ? heightMax : heightMin, isVisible); 
 
@@ -19,15 +26,17 @@ namespace Labs.Helpers
         {
             await Task.Run(() => {
                 new Animation((d) => button.WidthRequest = d, button.Width, widthMax)
-                    .Commit(button, "ButtonShow", Constants.AnimationRate, Constants.AnimationLength, Easing.SinInOut);
+                    .Commit(button, "ButtonShow", (uint)DefaultAnimation.AnimationRate,
+                        (uint)DefaultAnimation.AnimationLength, Easing.SinInOut);
             });
         }
         private static async void RunSettingsButtonAnimationToHideAsync(Button button)
         {
-            var buttonWidthMin = button.Text.Length * Constants.SymbolLength;
+            var buttonWidthMin = button.Text.Length * (uint)DefaultAnimation.SymbolLength;
             await Task.Run(() => {
                 new Animation((d) => button.WidthRequest = d, button.Width, buttonWidthMin)
-                    .Commit(button, "ButtonHide", Constants.AnimationRate, Constants.AnimationLength, Easing.SinInOut);
+                    .Commit(button, "ButtonHide", (uint)DefaultAnimation.AnimationRate,
+                        (uint)DefaultAnimation.AnimationLength, Easing.SinInOut);
             });
         }
 
@@ -35,7 +44,8 @@ namespace Labs.Helpers
         {
             await Task.Run(() => {
                 new Animation((d) => view.HeightRequest = d, view.Height, heightEnd)
-                    .Commit(view, "ShowOrShow", Constants.AnimationRate, Constants.AnimationLength, Easing.Linear);
+                    .Commit(view, "ShowOrShow", (uint)DefaultAnimation.AnimationRate, 
+                        (uint)DefaultAnimation.AnimationLength, Easing.Linear);
                 if (isVisible) {
                     Device.InvokeOnMainThreadAsync(() => view.IsVisible = !view.IsVisible);
                 }

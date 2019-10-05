@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Threading.Tasks;
+using Labs.Data;
 using Labs.Helpers;
+using Labs.ViewModels;
 using Labs.ViewModels.Creators;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -9,21 +12,31 @@ namespace Labs.Views.Creators
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class TypeStackCreatingPage
     {
-        private readonly StackTypeCreatorViewModel _viewModel;
+        private TestCreatorViewModel _creatorViewModel;
         private bool _settingsIsVisible = true;
         private uint _heightMax;
-        public TypeStackCreatingPage(string path, string fileName = "")
+        public TypeStackCreatingPage(string questionId, string testId)
         {
             InitializeComponent();
+            InitializeAsync(questionId, testId);
+        }
 
-            _viewModel = new StackTypeCreatorViewModel(path, fileName, this, GridButtons);
-            BindingContext = _viewModel;
+        private async void InitializeAsync(string questionId, string testId)
+        {
+            await Task.Run(() => {
+                _creatorViewModel = new TestCreatorViewModel(Repository.Type.Stack, questionId, testId)
+                {
+                    GridButtons = GridButtons, Page = this
+                };
+                BindingContext = _creatorViewModel;
+            });
         }
 
         private void ListView_OnItemSelected(object sender, SelectedItemChangedEventArgs e) =>
             ((ListView)sender).SelectedItem = null;
 
-        private void ListView_OnItemTapped(object sender, ItemTappedEventArgs e) => _viewModel.TapEvent(e.ItemIndex);
+        private void ListView_OnItemTapped(object sender, ItemTappedEventArgs e) => 
+            _creatorViewModel.FrameViewModel.TapEvent(e.ItemIndex);
         
         private void HideOrShowAsync_OnClicked(object sender, EventArgs eventArgs)
         {
@@ -32,19 +45,20 @@ namespace Labs.Views.Creators
             FrameAnimation.RunShowOrHideAnimation(SettingsLayout, _heightMax, 0, _settingsIsVisible);
         }
 
-        private void ChooseItemsToDelete_OnClicked(object sender, EventArgs e) => ChooseItems(-1);
+        private void ChooseItemsToDelete_OnClicked(object sender, EventArgs e) =>
+            ChooseItems(FrameViewModel.Mode.ItemDelete);
 
-        private void ChooseItems(int modificator)
+        private void ChooseItems(FrameViewModel.Mode modificator)
         {
             HideOrShowAsync_OnClicked(this, EventArgs.Empty);
             GridButtons.IsVisible = true;
             SetActionToGridButtons(ImageButtonAccept, modificator);
         }
 
-        private void SetActionToGridButtons(ImageButton accept, int modificator)
+        private void SetActionToGridButtons(ImageButton accept, FrameViewModel.Mode modificator)
         {
-            _viewModel.Modificator = modificator;
-            _viewModel.FrameViewModel.DisableAllAsync();
+            _creatorViewModel.FrameViewModel.Modificator = modificator;
+            _creatorViewModel.FrameViewModel.DisableAllAsync();
             if (modificator < 0) {
                 accept.Opacity = 1;
                 accept.Source = "CheckedRed.png";

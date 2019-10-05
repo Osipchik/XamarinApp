@@ -1,19 +1,16 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 using Xamarin.Forms;
 using System.Runtime.CompilerServices;
 using Labs.Annotations;
+using Labs.Data;
+using Labs.Interfaces;
 
 namespace Labs.Models
 {
-    public class FrameModel : INotifyPropertyChanged
+    public sealed class FrameModel : INotifyPropertyChanged, IFrameElement
     {
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        [NotifyPropertyChangedInvocator]
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null) =>
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-
-        private Color _borderColor;
+        private Color _borderColor = Color.Accent;
         public Color BorderColor
         {
             get => _borderColor;
@@ -24,21 +21,33 @@ namespace Labs.Models
             }
         }
 
-        public string ItemTextLeft { get; set; }
-        private string _itemTextRight;
+        public string MainText { get; set; } = string.Empty;
 
-        public string ItemTextRight
+        private string _text;
+        public string Text
         {
-            get => _itemTextRight;
+            get => _text;
             set
             {
-                _itemTextRight = value;
+                _text = value;
                 OnPropertyChanged();
             }
         }
 
+        public string TextUnderMain { get; set; } = string.Empty;
+
+        public int QuestionType { get; set; }
+
         public bool IsRight { get; set; }
 
-        public string RightString { get; set; }
+        public QuestionContent Content { get; set; }
+
+        public string Id { get; set; }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        [NotifyPropertyChangedInvocator]
+        private void OnPropertyChanged([CallerMemberName] string propertyName = null) =>
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
 }

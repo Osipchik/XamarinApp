@@ -4,7 +4,7 @@ using Labs.Annotations;
 
 namespace Labs.Models
 {
-    public class TimerModel : INotifyPropertyChanged
+    public sealed class TimerModel : INotifyPropertyChanged
     {
         private string _time;
         public string Time
@@ -43,7 +43,7 @@ namespace Labs.Models
         public event PropertyChangedEventHandler PropertyChanged;
 
         [NotifyPropertyChangedInvocator]
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null) =>
+        private void OnPropertyChanged([CallerMemberName] string propertyName = null) =>
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
 }

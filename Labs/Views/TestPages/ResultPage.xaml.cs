@@ -1,6 +1,6 @@
 ﻿using System;
 using Labs.Helpers;
-using Labs.Models;
+using Labs.Interfaces;
 using Labs.Resources;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -10,22 +10,26 @@ namespace Labs.Views.TestPages
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class ResultPage : ContentPage
     {
+        public const string Check = "Check";
         private bool _isClickAble = true;
-        private readonly TestModel _model;
-        public ResultPage(TestModel testModel)
+        private readonly ISettings _model;
+        public ResultPage(ISettings settings)
         {
             InitializeComponent();
-            _model = testModel;
+            LabelPrice.Text = "/" + settings.TotalPrice;
+            LabelCount.Text = "/" + settings.TotalCount;
+            _model = settings;
             BindingContext = _model;
         }
 
         private void Button_OnClicked(object sender, EventArgs e)
         {
-            if (_isClickAble) {
-                _model.Price = 0;
-                _model.RightAnswers = 0;
-                MessagingCenter.Send<Page>(this, Constants.Check);
-                MessagingCenter.Send<object>(this, Constants.ReturnPages);
+            if (_isClickAble)
+            {
+                _model.Price = "0";
+                _model.TotalCount = "0";
+                MessagingCenter.Send<Page>(this, Check);
+                MessagingCenter.Send<object>(this, TestPage.ReturnPages);
                 _isClickAble = false;
             }
         }

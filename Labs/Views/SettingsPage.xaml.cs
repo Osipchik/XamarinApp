@@ -4,6 +4,7 @@ using System.Globalization;
 using Labs.Helpers;
 using Labs.Models;
 using Labs.Resources;
+using Labs.ViewModels;
 using Plugin.Multilingual;
 using Plugin.Settings;
 using Xamarin.Forms;
@@ -30,8 +31,8 @@ namespace Labs.Views
             var culture = new CultureInfo(Languages[PickerLanguages.SelectedIndex].ShortName);
             AppResources.Culture = culture;
             CrossMultilingual.Current.CurrentCultureInfo = culture;
-            CrossSettings.Current.AddOrUpdateValue(Constants.Culture, culture.ToString());
-            MessagingCenter.Send<Page>(this, Constants.UploadTitles);
+            CrossSettings.Current.AddOrUpdateValue(Language.CultureSetting, culture.ToString());
+            MessagingCenter.Send<Page>(this, MainPage.UploadMainPage);
         }
 
         private void SetIndex()
@@ -47,14 +48,14 @@ namespace Labs.Views
         private void ButtonLight_OnClicked(object sender, EventArgs e)
         {
             ThemeSettings.SetTheme(ThemeSettings.Theme.Dark);
-            MessagingCenter.Send<Page>(this, Constants.UploadTitles);
+            MessagingCenter.Send<Page>(this, MainPage.UploadMainPage);
             SetButton();
         }
 
         private void ButtonDark_OnClicked(object sender, EventArgs e)
         {
             ThemeSettings.SetTheme(ThemeSettings.Theme.Light);
-            MessagingCenter.Send<Page>(this, Constants.UploadTitles);
+            MessagingCenter.Send<Page>(this, MainPage.UploadMainPage);
             SetButton();
         }
 

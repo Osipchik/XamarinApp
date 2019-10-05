@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Labs.Helpers;
 using Labs.Models;
 using Xamarin.Forms;
 
@@ -8,6 +7,9 @@ namespace Labs.ViewModels.Tests
 {
     public class TimerViewModel
     {
+        public const string StopAllTimers = "StopAllTimers";
+        public const string TimerIsEnd = "TimerIsEnd";
+
         private double _time;
         private double _step;
         private bool _timerIsAlive;
@@ -17,21 +19,19 @@ namespace Labs.ViewModels.Tests
         private const double UpdateRate = 1000 / 60f;
         private const double Hours = 3_600_000;
         private const double Minutes = 60_000;
-        private const double Seconds = 1_000;
 
-        public TimerViewModel(string time, int? index = null)
+        public TimerViewModel(TimeSpan time, int? index = null)
         {
             TimerModel = new TimerModel();
-            SetTime(time);
+            SetTime(time.TotalMilliseconds);
             Subscribe();
             Index = index;
         }
 
-        private void SetTime(string timePage)
+        private void SetTime(double totalMilliseconds)
         {
-            var time = GetMilliseconds(timePage);
-            if (time > 0) {
-                InitializeTimer(time);
+            if (totalMilliseconds > 0) {
+                InitializeTimer(totalMilliseconds);
             }
             else {
                 _time = 0;
@@ -44,16 +44,7 @@ namespace Labs.ViewModels.Tests
             _time = time;
             _step = 1 / (_time / UpdateRate);
             TimerModel.TimerIsVisible = true;
-        }
-
-        private double GetMilliseconds(string time)
-        {
-            var times = time.Split(':');
-            var milliseconds = double.Parse(times[0]) * Hours;
-            milliseconds += double.Parse(times[1]) * Minutes;
-            milliseconds += double.Parse(times[2]) * Seconds;
-
-            return milliseconds;
+            FormatTime();
         }
 
         public async void TimerRunAsync()
@@ -76,7 +67,7 @@ namespace Labs.ViewModels.Tests
                 return _timerIsAlive;
             }
 
-            MessagingCenter.Send<object>(this, Constants.TimerIsEnd);
+            MessagingCenter.Send<object>(this, TimerIsEnd);
             return false;
         }
 
@@ -97,6 +88,6 @@ namespace Labs.ViewModels.Tests
         public void TimerStop() => _timerIsAlive = false;
 
         private void Subscribe() => 
-            MessagingCenter.Subscribe<Page>(this, Constants.StopAllTimers, (sender) => { TimerStop(); });
+            MessagingCenter.Subscribe<Page>(this, StopAllTimers, (sender) => { TimerStop(); });
     }
 }

@@ -9,38 +9,39 @@ namespace Labs.Views.TestPages
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class EntryTypeTestPage : ContentPage
     {
-        private readonly EntryTypeTestViewModel _entryViewModel;
+        private readonly EntryTypeTestViewModel _viewModel;
         private readonly TimerViewModel _timerViewModel;
-        private readonly TestModel _testModel;
-        public EntryTypeTestPage(string path, string fileName, TimerViewModel timerViewModel, TestModel model = null, int? num = null)
+       
+        public EntryTypeTestPage(EntryTypeTestViewModel viewModel)
         {
             InitializeComponent();
 
-            _timerViewModel = timerViewModel;
-            Title = num.ToString();
-            _entryViewModel = new EntryTypeTestViewModel(path, fileName, timerViewModel);
-            BindingContext = _entryViewModel;
-            _testModel = model;
-            Subscribe(num);
+            _viewModel = viewModel;
+            Subscribe(viewModel.Index);
+            BindingContext = _viewModel;
+            Title = _viewModel.Index.ToString();
         }
 
-        protected override void OnAppearing()
+        private void ListView_OnItemSelected(object sender, SelectedItemChangedEventArgs e) =>
+            ((ListView)sender).SelectedItem = null;
+
+        protected sealed override void OnAppearing()
         {
             base.OnAppearing();
-            if (_timerViewModel == null && _entryViewModel.TimerViewModel != null) {
-                MessagingCenter.Send<Page>(this, Constants.StopAllTimers);
-                _entryViewModel.TimerViewModel.TimerRunAsync();
+            if (_viewModel.Timer != null) {
+                MessagingCenter.Send<Page>(this, TimerViewModel.StopAllTimers);
+                _viewModel.Timer?.TimerRunAsync();
             }
         }
 
         private void Subscribe(int? num)
         {
-            if (num != null && num.Value == 1) {
-                MessagingCenter.Subscribe<Page>(this, Constants.RunFirstTimer,
+            if (num.HasValue && num.Value == 1) {
+                MessagingCenter.Subscribe<Page>(this, TestViewModel.RunFirstTimer,
                     (sender) => { OnAppearing(); });
             }
-            MessagingCenter.Subscribe<Page>(this, Constants.Check,
-                (sender) => { _entryViewModel.CheckPageAsync(_testModel); });
+            //MessagingCenter.Subscribe<Page>(this, Constants.Check,
+            //    (sender) => { _checkViewModel.CheckPageAsync(_testModel); });
         }
     }
 }
