@@ -13,13 +13,11 @@ namespace Labs.Views.Creators
         private bool _tableVisible = true;
         private uint _heightMax;
         private MenuCreatorViewModel _viewModel;
-        private bool Refresh;
+        private bool _refresh;
 
         public CreatorMenuPage(string testId = null)
         {
             InitializeComponent();
-            //_viewModel = new MenuCreatorViewModel(testId) {Page = this};
-            //BindingContext = _viewModel;
             InitializeAsync(testId);
         }
 
@@ -27,7 +25,7 @@ namespace Labs.Views.Creators
         {
             await Task.Run(() => {
                 _viewModel = new MenuCreatorViewModel(testId) {Page = this};
-                BindingContext = _viewModel;
+                Device.BeginInvokeOnMainThread(()=>{ BindingContext = _viewModel; });
             });
         }
 
@@ -50,14 +48,13 @@ namespace Labs.Views.Creators
         protected override void OnAppearing()
         {
             base.OnAppearing();
-            if (Refresh)
-            {
+            if (_refresh) {
                 _viewModel.InitializeAsync(_viewModel.TestId);
                 BindingContext = _viewModel;
             }
             else
             {
-                Refresh = true;
+                _refresh = true;
             }
         }
     }

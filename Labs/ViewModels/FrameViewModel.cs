@@ -34,6 +34,7 @@ namespace Labs.ViewModels
 
         private int _itemIndex = -1;
         private readonly List<int> _itemIndexToDeleteList;
+
         public FrameViewModel()
         {
             _itemIndexToDeleteList = new List<int>();
@@ -151,7 +152,7 @@ namespace Labs.ViewModels
             Models[index].BorderColor = GetColor(Models[index].IsRight);
         }
 
-        public static Color GetColor(bool isRight, bool greenToBlue = false)
+        private static Color GetColor(bool isRight, bool greenToBlue = false)
         {
             Color color = default;
             if (greenToBlue) {

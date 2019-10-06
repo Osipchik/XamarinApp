@@ -1,5 +1,4 @@
-﻿using System;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using Xamarin.Forms;
 using System.Runtime.CompilerServices;
 using Labs.Annotations;
@@ -10,7 +9,7 @@ namespace Labs.Models
 {
     public sealed class FrameModel : INotifyPropertyChanged, IFrameElement
     {
-        private Color _borderColor = Color.Accent;
+        private Color _borderColor;
         public Color BorderColor
         {
             get => _borderColor;
@@ -21,9 +20,9 @@ namespace Labs.Models
             }
         }
 
-        public string MainText { get; set; } = string.Empty;
+        public string MainText { get; set; }
 
-        private string _text;
+        private string _text = string.Empty;
         public string Text
         {
             get => _text;
@@ -34,7 +33,7 @@ namespace Labs.Models
             }
         }
 
-        public string TextUnderMain { get; set; } = string.Empty;
+        public string TextUnderMain { get; set; }
 
         public int QuestionType { get; set; }
 

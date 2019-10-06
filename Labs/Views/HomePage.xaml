@@ -31,7 +31,7 @@
                 </Grid.ColumnDefinitions>
                 <Label x:Name="LabelName"
                        Text="{helpers:Translate SearchName}"
-                       TextColor="#03A9F4"
+                       TextColor="{DynamicResource ButtonTextColor}"
                        FontSize="16"
                        VerticalOptions="Center"
                        HorizontalOptions="Center"
@@ -85,7 +85,7 @@
                                                    HorizontalOptions="FillAndExpand"
                                                    Style="{StaticResource LabelSecondStyle}"
                                                    TextColor="{Binding LabelSubjectColor}"/>
-                                            <Label Text="{Binding Date, StringFormat='{0:dd.MM.yyyy}'}"
+                                            <Label Text="{Binding Date}"
                                                    Style="{StaticResource LabelSecondStyle}"
                                                    TextColor="{Binding LabelDateColor}"/>
                                         </StackLayout>

@@ -26,7 +26,7 @@ namespace Labs.Views.Creators
                 {
                     Page = this
                 };
-                BindingContext = creatorViewModel;
+                Device.BeginInvokeOnMainThread(()=>{ BindingContext = creatorViewModel; });
             });
         }
 

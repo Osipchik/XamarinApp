@@ -11,7 +11,9 @@ using Labs.Models;
 using Labs.Resources;
 using Labs.Views;
 using Labs.Views.Creators;
+using Labs.Views.Popups;
 using Realms;
+using Rg.Plugins.Popup.Services;
 using Xamarin.Forms;
 
 namespace Labs.ViewModels.Creators
@@ -48,9 +50,9 @@ namespace Labs.ViewModels.Creators
                 using (var realm = Realm.GetInstance())
                 {
                     var test = string.IsNullOrEmpty(testId) ? Repository.GetTempTestModel(realm) : realm.Find<TestModel>(testId);
-                    TestId = test.Id;
                     FillQuestionFrames(test.Questions);
                     SetSettings(realm, test);
+                    TestId = test.Id;
                 }
             });
         }
@@ -107,7 +109,7 @@ namespace Labs.ViewModels.Creators
 
         private async void Save()
         {
-            if (await PageIsValid()) {
+            if (PageIsValid()) {
                 await Task.Run(() => {
                     using (var realm = Realm.GetInstance())
                     {
@@ -144,21 +146,22 @@ namespace Labs.ViewModels.Creators
             await Page.Navigation.PopToRootAsync(true);
         }
 
-        private async Task<bool> PageIsValid()
+        private bool PageIsValid()
         {
-            var message = await GetMessage();
+            var message = GetMessage();
             var returnValue = string.IsNullOrEmpty(message);
             if (!returnValue) {
-                await Device.InvokeOnMainThreadAsync(() => 
-                    Page.DisplayAlert(AppResources.Warning, message, AppResources.Cancel));
+                Device.BeginInvokeOnMainThread(async () =>
+                    await PopupNavigation.Instance.PushAsync(new WarningPopup(AppResources.Warning, message,
+                        AppResources.Cancel)));
             }
 
             return returnValue;
         }
 
-        private async Task<string> GetMessage()
+        private string GetMessage()
         {
-            var message = await _settingsViewModel.CheckCreatorMenuPageSettings();
+            var message = _settingsViewModel.CheckCreatorMenuPageSettings();
             message += _frameViewModel.Models.Count < 1 ? AppResources.AddTestPage : string.Empty;
             return message;
         }

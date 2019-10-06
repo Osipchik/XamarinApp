@@ -28,7 +28,7 @@ namespace Labs.Views.Creators
                 {
                     GridButtons = GridButtons, Page = this
                 };
-                BindingContext = _creatorViewModel;
+                Device.BeginInvokeOnMainThread(() => BindingContext = _creatorViewModel);
             });
         }
 

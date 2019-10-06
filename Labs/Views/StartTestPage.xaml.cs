@@ -1,4 +1,5 @@
 ﻿using Labs.ViewModels;
+using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
 namespace Labs.Views
@@ -22,7 +23,7 @@ namespace Labs.Views
             {
                 ChangeButton = ChangeButton, StartButton = StartButton, Navigation = Navigation
             };
-            BindingContext = StartViewModel;
+            Device.BeginInvokeOnMainThread(()=> BindingContext = StartViewModel);
         }
 
 

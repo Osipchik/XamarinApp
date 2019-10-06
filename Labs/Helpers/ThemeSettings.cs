@@ -30,6 +30,7 @@ namespace Labs.Helpers
                     Application.Current.Resources.Add(new LightTheme());
                     break;
             }
+            MessagingCenter.Send<object>(Application.Current.Resources["BarBackgroundColor"], "SetStatusBarColor");
         }
     }
 }

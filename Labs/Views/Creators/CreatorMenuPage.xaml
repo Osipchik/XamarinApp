@@ -50,26 +50,10 @@
                                    BindingContext="{Binding GetSettings}">
                             <TableRoot>
                                 <TableSection Title="{helpers:Translate TestSettingsInfo}">
-                                    <ViewCell>
-                                        <StackLayout Orientation="Horizontal"
-                                                 Margin="9,0,0,0">
-                                            <Label Text="{helpers:Translate TestSettingsName}"
-                                               VerticalOptions="Center"/>
-                                            <Entry Placeholder="{helpers:Translate TestSettingsNPlaceh}"
-                                               HorizontalOptions="FillAndExpand"
+                                    <EntryCell Label="{helpers:Translate TestSettingsName}"
                                                Text="{Binding Name}"/>
-                                        </StackLayout>
-                                    </ViewCell>
-                                    <ViewCell>
-                                        <StackLayout Orientation="Horizontal"
-                                                 Margin="9,0,0,0">
-                                            <Label Text="{helpers:Translate Subject}"
-                                               VerticalOptions="Center"/>
-                                            <Entry Placeholder="{helpers:Translate TestSettingsNPlaceh}"
-                                               Text="{Binding Subject}"
-                                               HorizontalOptions="FillAndExpand"/>
-                                        </StackLayout>
-                                    </ViewCell>
+                                    <EntryCell Label="{helpers:Translate Subject}"
+                                               Text="{Binding Subject}"/>
                                 </TableSection>
                                 <TableSection>
                                     <ViewCell>

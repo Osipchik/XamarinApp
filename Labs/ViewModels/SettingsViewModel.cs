@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using Labs.Data;
-using Labs.Helpers;
 using Labs.Models;
 using Labs.Resources;
 using Realms;
-using Xamarin.Forms;
 
 namespace Labs.ViewModels
 {
@@ -53,16 +49,13 @@ namespace Labs.ViewModels
             return message;
         }
 
-        public async Task<string> CheckCreatorMenuPageSettings()
+        public string CheckCreatorMenuPageSettings()
         {
             var message = string.Empty;
-            await Task.Run(() =>
             {
                 message += CheckText(SettingsModel.Name) ? AppResources.AddName + " \n" : "";
                 message += CheckText(SettingsModel.Subject) ? AppResources.AddSubjectName + " \n" : "";
-                message += CheckPrice;
-            });
-
+            }
             return message;
         }
 

@@ -17,7 +17,7 @@ namespace Labs.Views
             {
                 Navigation = Navigation
             };
-            BindingContext = _homeViewModel;
+            Device.BeginInvokeOnMainThread(() => BindingContext = _homeViewModel);
         }
 
         private void ListView_OnItemTapped(object sender, ItemTappedEventArgs e)

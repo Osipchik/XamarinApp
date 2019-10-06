@@ -5,7 +5,9 @@ using System.Windows.Input;
 using Labs.Data;
 using Labs.Models;
 using Labs.Resources;
+using Labs.Views.Popups;
 using Realms;
+using Rg.Plugins.Popup.Services;
 using Xamarin.Forms;
 
 namespace Labs.ViewModels.Creators
@@ -129,7 +131,10 @@ namespace Labs.ViewModels.Creators
             var message = await Task.Run(GetMessage);
             var returnValue = string.IsNullOrEmpty(message);
             if (!returnValue) {
-                await Page.DisplayAlert(AppResources.Warning, message, AppResources.Cancel);
+                Device.BeginInvokeOnMainThread(async () => {
+                    await PopupNavigation.Instance.PushAsync(new WarningPopup(AppResources.Warning, message,
+                        AppResources.Cancel));
+                });
             }
 
             return returnValue;

@@ -3,6 +3,7 @@ using System.ComponentModel;
 using Labs.ViewModels;
 using Labs.Views.Creators;
 using Xamarin.Forms;
+using Xamarin.Forms.Xaml;
 
 namespace Labs.Views
 {
