@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using FFImageLoading.Forms;
 using Labs.Data;
 using Labs.Helpers;
 using Labs.ViewModels;
@@ -55,7 +56,7 @@ namespace Labs.Views.Creators
             SetActionToGridButtons(ImageButtonAccept, modificator);
         }
 
-        private void SetActionToGridButtons(ImageButton accept, FrameViewModel.Mode modificator)
+        private void SetActionToGridButtons(CachedImage accept, FrameViewModel.Mode modificator)
         {
             _creatorViewModel.FrameViewModel.Modificator = modificator;
             _creatorViewModel.FrameViewModel.DisableAllAsync();

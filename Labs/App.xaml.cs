@@ -21,8 +21,8 @@ namespace Labs
 
         protected override void OnStart()
         {
-            SetCulture();
-            SetTheme();
+            //SetCulture();
+            //SetTheme();
         }
 
         protected override void OnSleep()

@@ -3,7 +3,6 @@ using System.ComponentModel;
 using Labs.ViewModels;
 using Labs.Views.Creators;
 using Xamarin.Forms;
-using Xamarin.Forms.Xaml;
 
 namespace Labs.Views
 {
@@ -41,13 +40,11 @@ namespace Labs.Views
                     ShowHomePage();
                     break;
                 case 1:
-                    await Device.InvokeOnMainThreadAsync(() => {
-                        Detail = new NavigationPage(new CreatorMenuPage());
-                    });
+                    await Device.InvokeOnMainThreadAsync(() => { Detail = new NavigationPage(new CreatorMenuPage()); });
                     IsPresented = false;
                     break;
                 case 2:
-                    Detail = new NavigationPage(new SettingsPage());
+                    await Device.InvokeOnMainThreadAsync(() => { Detail = new NavigationPage(new SettingsPage()); });
                     IsPresented = false;
                     break;
             }

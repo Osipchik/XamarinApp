@@ -27,7 +27,12 @@ namespace Labs.ViewModels.Creators
             _questionType = type;
             _settingsViewModel = new SettingsViewModel();
             FrameViewModel = new FrameViewModel();
-            InitializeAsync(questionId);
+            if (string.IsNullOrEmpty(questionId)) {
+                InitializeNew();
+            }
+            else {
+                InitializeExisting(questionId);
+            }
         }
 
         public Grid GridButtons { get; set; }
@@ -41,32 +46,23 @@ namespace Labs.ViewModels.Creators
         public ICommand HideGridButtonsCommand => new Command(HideGridButtons);
         public ICommand AcceptGridButtonCommand => new Command(AcceptGridButton);
 
-        private async void InitializeAsync(string questionId)
-        {
-            await Device.InvokeOnMainThreadAsync(() => {
-                using (var realm = Realm.GetInstance())
-                {
-                    if (string.IsNullOrEmpty(questionId)) {
-                        InitializeNew();
-                    }
-                    else {
-                        InitializeExisting(realm, questionId);
-                    }
-                }
-            });
-        }
-
         private void InitializeNew()
         {
             _settingsViewModel.SetEmptyModel();
-            FrameViewModel.AddEmptyModelAsync();
+            FrameViewModel.AddEmptyModel();
         }
 
-        private void InitializeExisting(Realm realm, string questionId)
+        private async void InitializeExisting(string questionId)
         {
-            var question = realm.Find<Question>(questionId);
-            _settingsViewModel.SetSettingsModel(question.QuestionText, question.Price, question.Time);
-            FrameViewModel.FillCreatorFramesAsync(question, _questionType == Repository.Type.Check);
+            FrameViewModel.FillCreatorFramesAsync(questionId, _questionType == Repository.Type.Check);
+            await Task.Run(() =>
+            {
+                using (var realm = Realm.GetInstance())
+                {
+                    var question = realm.Find<Question>(questionId);
+                    _settingsViewModel.SetSettingsModel(question.QuestionText, question.Price, question.Time);
+                }
+            });
         }
 
         private void HideGridButtons()

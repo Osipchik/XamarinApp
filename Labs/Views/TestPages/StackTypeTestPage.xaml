@@ -62,13 +62,15 @@
                                         <Grid.RowDefinitions>
                                             <RowDefinition Height="Auto"/>
                                         </Grid.RowDefinitions>
-                                        <Label HorizontalOptions="CenterAndExpand"
+                                        <Label HorizontalOptions="FillAndExpand"
                                                Text="{Binding MainText}"
+                                               HorizontalTextAlignment="Center"
                                                Grid.Row="0" Grid.Column="0"/>
                                         <BoxView WidthRequest="1"
                                                  Color="{Binding BorderColor}"
                                                  Grid.Row="0" Grid.Column="1"/>
-                                        <Label HorizontalOptions="CenterAndExpand"
+                                        <Label HorizontalOptions="FillAndExpand"
+                                               HorizontalTextAlignment="Center"
                                                Text="{Binding Text}"
                                                Grid.Row="0" Grid.Column="2"/>
                                     </Grid>

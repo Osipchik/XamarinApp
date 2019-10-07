@@ -1,5 +1,5 @@
 ﻿using System;
-using CarouselView.FormsPlugin.iOS;
+using FFImageLoading.Forms.Platform;
 using Foundation;
 using UIKit;
 
@@ -21,18 +21,13 @@ namespace Labs.iOS
         public override bool FinishedLaunching(UIApplication app, NSDictionary options)
         {
             Rg.Plugins.Popup.Popup.Init();
+            FFImageLoading.Forms.Platform.CachedImageRenderer.Init();
 
             global::Xamarin.Forms.Forms.Init();
-
-            InitCarouselControl();
+            CachedImageRenderer.InitImageSourceHandler();
             LoadApplication(new App());
 
             return base.FinishedLaunching(app, options);
-        }
-
-        private void InitCarouselControl()
-        {
-            CarouselViewRenderer.Init();
         }
     }
 }

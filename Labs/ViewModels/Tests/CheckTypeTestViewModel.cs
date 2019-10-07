@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Labs.Data;
-using Labs.Helpers;
 using Labs.Interfaces;
 using Realms;
 using Xamarin.Forms;
@@ -10,25 +9,26 @@ namespace Labs.ViewModels.Tests
 {
     public class CheckTypeTestViewModel : TestViewModel
     {
-        public CheckTypeTestViewModel(string questionId, TimerViewModel testTimeViewModel, string time, ISettings settings, int index)
+        public CheckTypeTestViewModel(string id, TimerViewModel testTimeViewModel, ISettings settings, int index)
         {
             Index = index;
             Settings = settings;
-            FrameViewModel = new FrameViewModel();
             SettingsViewModel = new SettingsViewModel();
-            Timer = testTimeViewModel ?? new TimerViewModel(TimeSpan.Parse(time), Index);
-            Initialize(questionId);
+            FrameViewModel = new FrameViewModel();
+
+            InitializeAsync(testTimeViewModel, id);
         }
 
-        private async void Initialize(string questionId)
+        private async void InitializeAsync(TimerViewModel testTimeViewModel, string id)
         {
-            await Task.Run(() => {
+            await Task.Run(() =>
+            {
                 using (var realm = Realm.GetInstance())
                 {
-                    var question = realm.Find<Question>(questionId);
+                    var question = realm.Find<Question>(id);
+                    Timer = testTimeViewModel ?? new TimerViewModel(TimeSpan.Parse(question.Time), Index);
                     SettingsViewModel.SetSettingsModel(question.QuestionText, question.Price, question.Time);
-                    FrameViewModel.FillTestFrames(question.Contents, out _);
-                    FrameViewModel.Models.Shuffle();
+                    FrameViewModel.FillTestFramesAsync(question.Id);
                 }
             });
         }
@@ -42,10 +42,8 @@ namespace Labs.ViewModels.Tests
 
         public async void CheckPageAsync()
         {
-            await Task.Run(() =>
-            {
-                if (CheckModel())
-                {
+            await Task.Run(() => {
+                if (CheckModel()) {
                     var a = int.Parse(Settings.Price) + int.Parse(GetSettingsModel.Price);
                     Settings.Price = a.ToString();
                     GetSettingsModel.TotalCount += "1";

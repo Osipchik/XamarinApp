@@ -12,22 +12,26 @@ namespace Labs.ViewModels.Tests
     {
         private int? _lineToSwap;
 
-        public StackTypeTestViewModel(string questionId, TimerViewModel testTimeViewModel, string time, ISettings settings, int index)
+        public StackTypeTestViewModel(string id, TimerViewModel testTimeViewModel, ISettings settings, int index)
         {
             Index = index;
-            FrameViewModel = new FrameViewModel();
-            SettingsViewModel = new SettingsViewModel();
-            Timer = testTimeViewModel ?? new TimerViewModel(TimeSpan.Parse(time), Index);
-            Initialize(questionId, testTimeViewModel);
+            Settings = settings;
+
+            Initialize(id, testTimeViewModel);
         }
 
         private async void Initialize(string questionId, TimerViewModel testTimeViewModel)
         {
             await Task.Run(() => {
+                FrameViewModel = new FrameViewModel();
+                SettingsViewModel = new SettingsViewModel();
+
                 using (var realm = Realm.GetInstance())
                 {
                     var question = realm.Find<Question>(questionId);
                     SettingsViewModel.SetSettingsModel(question.QuestionText, question.Price, question.Time);
+                    Timer = testTimeViewModel ?? new TimerViewModel(TimeSpan.Parse(question.Time), Index);
+                   
                     FillFramesAsync(question.Contents);
                 }
             });
@@ -36,13 +40,17 @@ namespace Labs.ViewModels.Tests
         private async void FillFramesAsync(IEnumerable<QuestionContent> contents)
         {
             FrameViewModel.FillTestFrames(contents, out var textList);
-            textList.Shuffle();
-            await Task.Run(() => {
-                for (int i = 0; i < textList.Count; i++) {
-                    FrameViewModel.Models[i].Text = textList[i];
-                }
-                FrameViewModel.Models.Shuffle();
-            });
+            textList.ShuffleAsync();
+            await Task.WhenAny(GetTask(textList));
+        }
+
+        private async Task GetTask(IList<string> textList)
+        {
+            for (int i = 0; i < textList.Count; i++) {
+                FrameViewModel.Models[i].Text = textList[i];
+            }
+
+            FrameViewModel.Models.ShuffleAsync();
         }
 
         public async void TapEvent(int index)
@@ -74,30 +82,30 @@ namespace Labs.ViewModels.Tests
             FrameViewModel.DisableAllAsync();
         }
 
-        //public async void CheckPageAsync(TestModel testModel)
-        //{
-        //    await Task.Run(() => {
-        //        if (CheckModel() && testModel != null) {
-        //            testModel.Price += int.Parse(GetSettingsModel.Price);
-        //            testModel.RightAnswers++;
-        //        }
-        //    });
-        //    _isClickAble = false;
-        //    await Task.Run(DisableTimer);
-        //}
+        public async void CheckPageAsync()
+        {
+            await Task.Run(() => {
+                if (CheckModel()) {
+                    var a = int.Parse(Settings.Price) + int.Parse(GetSettingsModel.Price);
+                    Settings.Price = a.ToString();
+                    GetSettingsModel.TotalCount += "1";
+                }
+            });
+            IsChickAble = false;
+            await Task.Run(DisableTimer);
+        }
 
+        private bool CheckModel()
+        {
+            var pageIsRight = true;
+            foreach (var model in FrameViewModel.Models) {
+                var isRight = model.MainText == model.Text;
+                model.BorderColor = FrameViewModel.GetColorOnCheck(isRight);
+                pageIsRight = pageIsRight && isRight;
+            }
 
-        //private bool CheckModel()
-        //{
-        //    var pageIsRight = true;
-        //    foreach (var model in FrameViewModel.Models) {
-        //        var isRight = model.ItemTextRight == model.RightString;
-        //        model.BorderColor = FrameViewModel.GetColorOnCheck(isRight);
-        //        pageIsRight = pageIsRight && isRight;
-        //    }
-
-        //    return pageIsRight;
-        //}
+            return pageIsRight;
+        }
     }
 
 }

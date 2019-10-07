@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading.Tasks;
 using Labs.Data;
 
 namespace Labs.Helpers
@@ -13,19 +14,22 @@ namespace Labs.Helpers
 
         public static TestModel ToTestModel(this IQueryable<TestModel> queryable) => queryable.FirstOrDefault(); 
 
-        public static void Shuffle<T>(this IList<T> list)
+        public static async void ShuffleAsync<T>(this IList<T> list)
         {
-            int n = list.Count;
-            Random rnd = new Random();
-            while (n > 1)
-            {
-                int k = (rnd.Next(0, n) % n);
-                n--;
-                T value = list[k];
-                list[k] = list[n];
-                list[n] = value;
-            }
+            await Task.Run(() => {
+                int n = list.Count;
+                Random rnd = new Random();
+                while (n > 1)
+                {
+                    int k = (rnd.Next(0, n) % n);
+                    n--;
+                    T value = list[k];
+                    list[k] = list[n];
+                    list[n] = value;
+                }
+            });
         }
+
 
         public static string TimeToString(this TimeSpan timeSpan) => timeSpan.ToString(@"hh\:mm\:ss");
     }

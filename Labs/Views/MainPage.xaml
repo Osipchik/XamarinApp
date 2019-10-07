@@ -3,18 +3,20 @@
                   xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
                   xmlns:d="http://xamarin.com/schemas/2014/forms/design"
                   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                  xmlns:forms="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
                   mc:Ignorable="d"
                   x:Class="Labs.Views.MainPage"
                   Title="asd">
+
 
     <MasterDetailPage.Master>
         <ContentPage Title="Master"
                      BackgroundColor="{DynamicResource PageBackGroundColor}">
             <ContentPage.Content>
                 <StackLayout Spacing="0">
-                    <ListView x:Name="ListViewDetail"
+                    <ListView x:Name="ListViewDetail" 
                               CachingStrategy="RecycleElement"
-                              BackgroundColor="Transparent"
+                              BackgroundColor="Transparent" 
                               ItemTapped="ListViewDetail_OnItemTapped"
                               ItemSelected="ListViewDetail_OnItemSelected">
                        <ListView.ItemTemplate>
@@ -22,16 +24,19 @@
                                <ViewCell>
                                    <StackLayout Orientation="Horizontal"
                                                 Margin="24,0,12,0">
-                                        <Image Source="{Binding ImageSource}"
-                                              Aspect="AspectFit"
-                                              WidthRequest="24"
-                                              HeightRequest="24"
-                                              Margin="0,0,24,0"/>
-                                        <Label Text="{Binding Text}"
-                                               TextColor="{DynamicResource TextColor}"
-                                               VerticalOptions="Center"
-                                               HorizontalOptions="FillAndExpand"
-                                               FontSize="Medium"/>
+                                       <forms:CachedImage HorizontalOptions="Center" 
+                                                          VerticalOptions="Center"
+                                                          DownsampleToViewSize="true" 
+                                                          Aspect="AspectFit"
+                                                          WidthRequest="24"
+                                                          HeightRequest="24"
+                                                          Margin="0,0,24,0"
+                                                          Source="{Binding ImageSource}"/>
+                                       <Label Text="{Binding Text}" 
+                                              TextColor="{DynamicResource TextColor}"
+                                              VerticalOptions="Center" 
+                                              HorizontalOptions="FillAndExpand"
+                                              FontSize="Medium"/>
                                    </StackLayout>
                                </ViewCell>
                            </DataTemplate>
@@ -41,5 +46,4 @@
             </ContentPage.Content>
         </ContentPage>
     </MasterDetailPage.Master>
-
 </MasterDetailPage>

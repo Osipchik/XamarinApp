@@ -23,8 +23,9 @@ namespace Labs.Views.Creators
 
         private async void InitializeAsync(string testId )
         {
-            await Task.Run(() => {
-                _viewModel = new MenuCreatorViewModel(testId) {Page = this};
+            await Task.Run(() =>
+            {
+                _viewModel = new MenuCreatorViewModel(this, testId);
                 Device.BeginInvokeOnMainThread(()=>{ BindingContext = _viewModel; });
             });
         }

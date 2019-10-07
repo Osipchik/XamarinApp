@@ -32,7 +32,7 @@
     <ImageSource x:Key="Table">Table.png</ImageSource>
     <ImageSource x:Key="Contract">Contract.png</ImageSource>
     <ImageSource x:Key="Exam">Exam.png</ImageSource>
-    <ImageSource x:Key="CrossButtonImage">Cross.png</ImageSource>
+    <ImageSource x:Key="CrossButtonImage">CrossBlack.png</ImageSource>
     <ImageSource x:Key="CheckedButtonImage">CheckedBlack.png</ImageSource>
 
 </ResourceDictionary>

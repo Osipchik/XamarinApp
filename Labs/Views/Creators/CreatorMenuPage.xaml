@@ -4,19 +4,21 @@
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:helpers="clr-namespace:Labs.Helpers;assembly=Labs"
+             xmlns:forms="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
              mc:Ignorable="d"
              x:Class="Labs.Views.Creators.CreatorMenuPage"
              Title="{helpers:Translate CreatorTitle}"
              BackgroundColor="{DynamicResource PageBackGroundColor}">
 
     <ContentPage.Resources>
-        <Style x:Key="ImageButtonStyle" TargetType="ImageButton">
+        <Style x:Key="ImageButtonStyle" TargetType="forms:CachedImage">
             <Setter Property="Aspect" Value="AspectFit"/>
             <Setter Property="WidthRequest" Value="36"/>
             <Setter Property="HeightRequest" Value="36"/>
             <Setter Property="Opacity" Value="0.3"/>
             <Setter Property="Margin" Value="0,0,0,6"/>
             <Setter Property="BackgroundColor" Value="Transparent"/>
+            <Setter Property="DownsampleToViewSize" Value="True"/>
         </Style>
     </ContentPage.Resources>
 
@@ -151,18 +153,30 @@
                          Margin="6,0,6,0"
                          Grid.ColumnSpan="3"
                          Grid.Row="0" Grid.Column="0"/>
-                <ImageButton Style="{StaticResource ImageButtonStyle}"
-                             Source="{DynamicResource Exam}"
-                             Command="{Binding CreateCheckTypePageCommand}"
-                             Grid.Column="0" Grid.Row="1"/>
-                <ImageButton Source="{DynamicResource Contract}"
-                             Style="{StaticResource ImageButtonStyle}"
-                             Command="{Binding CreateEntryTypePageCommand}"
-                             Grid.Column="1" Grid.Row="1"/>
-                <ImageButton Source="{DynamicResource Table}"
-                             Style="{StaticResource ImageButtonStyle}"
-                             Command="{Binding CreateStackTypePageCommand}"
-                             Grid.Column="2" Grid.Row="1"/>
+                
+                <forms:CachedImage Source="{DynamicResource Exam}"
+                                   Style="{StaticResource ImageButtonStyle}"
+                                   Grid.Column="0" Grid.Row="1">
+                    <forms:CachedImage.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding CreateCheckTypePageCommand}"/>
+                    </forms:CachedImage.GestureRecognizers>
+                </forms:CachedImage>
+
+                <forms:CachedImage Source="{DynamicResource Contract}"
+                                   Style="{StaticResource ImageButtonStyle}"
+                                   Grid.Column="1" Grid.Row="1">
+                    <forms:CachedImage.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding CreateEntryTypePageCommand}"/>
+                    </forms:CachedImage.GestureRecognizers>
+                </forms:CachedImage>
+
+                <forms:CachedImage Source="{DynamicResource Table}"
+                                   Style="{StaticResource ImageButtonStyle}"
+                                   Grid.Column="2" Grid.Row="1">
+                    <forms:CachedImage.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding CreateStackTypePageCommand}"/>
+                    </forms:CachedImage.GestureRecognizers>
+                </forms:CachedImage>
             </Grid>
         </StackLayout>
     </ContentPage.Content>

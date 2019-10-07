@@ -22,18 +22,19 @@ namespace Labs.ViewModels.Creators
     {
         private readonly FrameViewModel _frameViewModel;
         private readonly SettingsViewModel _settingsViewModel;
+        private readonly Page _page;
         public string TestId;
 
-        public MenuCreatorViewModel(string testId = null)
+        public MenuCreatorViewModel(Page page, string testId = null)
         {
             _frameViewModel = new FrameViewModel();
             _settingsViewModel = new SettingsViewModel();
             TestId = testId;
+            _page = page;
 
             InitializeAsync(testId);
         }
 
-        public Page Page { get; set; }
         public IEnumerable<FrameModel> GetFrameModels => _frameViewModel.Models;
         public SettingsModel GetSettings => _settingsViewModel.SettingsModel;
 
@@ -82,13 +83,13 @@ namespace Labs.ViewModels.Creators
         }
 
         private Action OpenCheckCreator(string questionId = null) =>
-            async () => { await Page.Navigation.PushAsync(new TypeCheckCreatingPage(questionId, TestId)); };
+            async () => { await _page.Navigation.PushAsync(new TypeCheckCreatingPage(questionId, TestId)); };
 
         private Action OpenStackCreator(string questionId = null) =>
-            async () => { await Page.Navigation.PushAsync(new TypeStackCreatingPage(questionId, TestId)); };
+            async () => { await _page.Navigation.PushAsync(new TypeStackCreatingPage(questionId, TestId)); };
 
         private Action OpenEntryCreator(string questionId = null) =>
-            async () => { await Page.Navigation.PushAsync(new TypeEntryCreatingPage(questionId, TestId)); };
+            async () => { await _page.Navigation.PushAsync(new TypeEntryCreatingPage(questionId, TestId)); };
 
         public void OpenCreatingPage(int index)
         {
@@ -130,20 +131,20 @@ namespace Labs.ViewModels.Creators
 
         private async Task PushBackAsync()
         {
-            if (Page.Navigation.NavigationStack.Count == 1) {
-                await Page.Navigation.PushAsync(new HomePage());
-                Page.Navigation.RemovePage(Page);
+            if (_page.Navigation.NavigationStack.Count == 1) {
+                await _page.Navigation.PushAsync(new HomePage());
+                _page.Navigation.RemovePage(_page);
             }
             else {
-                await Page.Navigation.PopAsync(true);
+                await _page.Navigation.PopAsync(true);
             }
         }
 
         private async void Delete()
         {
             await Repository.RemoveTestAsync(TestId);
-            Page.Navigation.InsertPageBefore(new HomePage(), Page);
-            await Page.Navigation.PopToRootAsync(true);
+            _page.Navigation.InsertPageBefore(new HomePage(), _page);
+            await _page.Navigation.PopToRootAsync(true);
         }
 
         private bool PageIsValid()

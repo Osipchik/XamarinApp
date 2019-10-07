@@ -25,17 +25,17 @@ namespace Labs.Views.TestPages
         {
             InitializeComponent();
             _settings = settings;
-            InitializeAsync(settings, testId);
+            InitializeAsync(testId);
         }
 
-        private async void InitializeAsync(ISettings settings, string id)
+        private async void InitializeAsync(string id)
         {
             await Task.Run(() => {
-                SetTimer(settings.TimeSpan);
+                SetTimer(_settings.TimeSpan);
                 using (var realm = Realm.GetInstance())
                 {
                     foreach (var question in realm.Find<TestModel>(id).Questions) {
-                        AddTestPage(question.Type, question.Id, question.Time);
+                        AddTestPage(question.Id, question.Type);
                     }
                 }
 
@@ -51,22 +51,19 @@ namespace Labs.Views.TestPages
             }
         }
 
-        private void AddTestPage(int type, string questionId, string time)
+        private void AddTestPage(string id, int type)
         {
             var index = _pages.Count;
             switch (type)
             {
                 case (int)Repository.Type.Check:
-                    var checkViewModel = new CheckTypeTestViewModel(questionId, _timer, time, _settings, index);
-                    AddPage(new CheckTypeTestPage(checkViewModel));
+                    AddPage(new CheckTypeTestPage(id, _timer, _settings, index));
                     break;
                 case (int)Repository.Type.Stack:
-                    var stackViewModel = new StackTypeTestViewModel(questionId, _timer, time, _settings, index);
-                    AddPage(new StackTypeTestPage(stackViewModel));
+                    AddPage(new StackTypeTestPage(id, _timer, _settings, index));
                     break;
                 case (int)Repository.Type.Entry:
-                    var entryViewModel = new EntryTypeTestViewModel(questionId, _timer, time, _settings, index);
-                    AddPage(new EntryTypeTestPage(entryViewModel));
+                    AddPage(new EntryTypeTestPage(id, _timer, _settings, index));
                     break;
             }
         }

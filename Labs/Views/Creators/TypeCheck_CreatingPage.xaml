@@ -4,6 +4,7 @@
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:helpers="clr-namespace:Labs.Helpers;assembly=Labs"
+             xmlns:forms="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
              mc:Ignorable="d"
              x:Class="Labs.Views.Creators.TypeCheckCreatingPage"
              Title="{helpers:Translate TypeCheckTitle}"
@@ -82,14 +83,18 @@
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
-                <ImageButton Aspect="AspectFit"
-                             WidthRequest="22"
-                             HeightRequest="22"
-                             Opacity="0.3"
-                             Source="{DynamicResource CrossButtonImage}"
-                             BackgroundColor="Transparent"
-                             Command="{Binding HideGridButtonsCommand}"
-                             Grid.Row="0" Grid.Column="0"/>
+                <forms:CachedImage Aspect="AspectFit"
+                                   WidthRequest="22"
+                                   HeightRequest="22"
+                                   Opacity="0.3"
+                                   Source="{DynamicResource CrossButtonImage}"
+                                   BackgroundColor="Transparent"
+                                   Grid.Row="0" Grid.Column="0">
+                    <forms:CachedImage.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding HideGridButtonsCommand}"/>
+                    </forms:CachedImage.GestureRecognizers>
+                </forms:CachedImage>
+
                 <Label Text="{helpers:Translate Cancel}"
                        Grid.Row="0" Grid.Column="1">
                     <Label.GestureRecognizers>
@@ -106,14 +111,19 @@
                         <TapGestureRecognizer Command="{Binding AcceptGridButtonCommand}"/>
                     </Label.GestureRecognizers>
                 </Label>
-                <ImageButton x:Name="ImageButtonAccept"
-                             Aspect="AspectFit"
-                             WidthRequest="22"
-                             HeightRequest="22"
-                             BackgroundColor="Transparent"
-                             Command="{Binding AcceptGridButtonCommand}"
-                             Grid.Row="0" Grid.Column="4"/>
+            
+                <forms:CachedImage x:Name="ImageButtonAccept"
+                                   Aspect="AspectFit"
+                                   WidthRequest="22"
+                                   HeightRequest="22"
+                                   BackgroundColor="Transparent"
+                                   Grid.Row="0" Grid.Column="4">
+                    <forms:CachedImage.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding AcceptGridButtonCommand}"/>
+                    </forms:CachedImage.GestureRecognizers>
+                </forms:CachedImage>
             </Grid>
+
             <ListView CachingStrategy="RecycleElement"
                       SeparatorVisibility="None"
                       VerticalScrollBarVisibility="Never"

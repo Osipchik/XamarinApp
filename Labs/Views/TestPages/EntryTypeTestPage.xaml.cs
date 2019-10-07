@@ -1,5 +1,5 @@
-﻿using Labs.Helpers;
-using Labs.Models;
+﻿using System.Threading.Tasks;
+using Labs.Interfaces;
 using Labs.ViewModels.Tests;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -9,17 +9,24 @@ namespace Labs.Views.TestPages
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class EntryTypeTestPage : ContentPage
     {
-        private readonly EntryTypeTestViewModel _viewModel;
-        private readonly TimerViewModel _timerViewModel;
-       
-        public EntryTypeTestPage(EntryTypeTestViewModel viewModel)
+        private EntryTypeTestViewModel _viewModel;
+
+        public EntryTypeTestPage(string questionId, TimerViewModel testTimeViewModel, ISettings settings, int index)
         {
             InitializeComponent();
 
-            _viewModel = viewModel;
-            Subscribe(viewModel.Index);
-            BindingContext = _viewModel;
-            Title = _viewModel.Index.ToString();
+            InitializeAsync(questionId, testTimeViewModel, settings, index);
+            Title = index.ToString();
+        }
+
+        private async void InitializeAsync(string id, TimerViewModel testTimeViewModel, ISettings settings, int index)
+        {
+            await Task.Run(() =>
+            {
+                _viewModel = new EntryTypeTestViewModel(id, testTimeViewModel, settings, index);
+                Subscribe(index);
+                Device.BeginInvokeOnMainThread(() => { BindingContext = _viewModel; });
+            });
         }
 
         private void ListView_OnItemSelected(object sender, SelectedItemChangedEventArgs e) =>
@@ -40,8 +47,8 @@ namespace Labs.Views.TestPages
                 MessagingCenter.Subscribe<Page>(this, TestViewModel.RunFirstTimer,
                     (sender) => { OnAppearing(); });
             }
-            //MessagingCenter.Subscribe<Page>(this, Constants.Check,
-            //    (sender) => { _checkViewModel.CheckPageAsync(_testModel); });
+            MessagingCenter.Subscribe<Page>(this, ResultPage.Check,
+                (sender) => { _viewModel.CheckPageAsync(); });
         }
     }
 }
