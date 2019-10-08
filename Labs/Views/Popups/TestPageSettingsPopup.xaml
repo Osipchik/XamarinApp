@@ -5,8 +5,9 @@
                  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                  xmlns:pages="clr-namespace:Rg.Plugins.Popup.Pages;assembly=Rg.Plugins.Popup"
                  xmlns:animations="clr-namespace:Rg.Plugins.Popup.Animations;assembly=Rg.Plugins.Popup"
+                 xmlns:helpers="clr-namespace:Labs.Helpers;assembly=Labs"
                  mc:Ignorable="d"
-                 x:Class="Labs.Views.Popups.WarningPopup">
+                 x:Class="Labs.Views.Popups.TestPageSettingsPopup">
 
     <pages:PopupPage.Animation>
         <animations:ScaleAnimation DurationIn="400"
@@ -20,8 +21,8 @@
                                    ScaleOut="0.8" />
     </pages:PopupPage.Animation>
 
-    <StackLayout Padding="30"
-                 Margin="12"
+    <StackLayout Padding="18"
+                 Margin="6"
                  HorizontalOptions="Fill"
                  VerticalOptions="Center"
                  Spacing="0">
@@ -40,13 +41,49 @@
                         <BoxView Style="{StaticResource BoxViewStyle}"/>
                     </StackLayout>
 
-                    <Label x:Name="LabelText"
-                           Opacity="0.6"
-                           HorizontalOptions="Center"
-                           FontSize="Body"/>
+                    <ScrollView>
+                        <StackLayout x:Name="SettingsLayout">
+                            <StackLayout Orientation="Horizontal"
+                                         HorizontalOptions="FillAndExpand"
+                                         Margin="0">
+                                <Label Text="{helpers:Translate TestSettingsTime}"
+                                       VerticalOptions="Center"
+                                       Margin="6,0,0,0"/>
+                                <TimePicker Time="{Binding TimeSpan}"
+                                            Format="HH:mm"
+                                            Margin="0"/>
+                                <Label Text=":"
+                                       VerticalOptions="Center"
+                                       Margin="0"/>
+                                <Entry Text="{Binding Seconds}" 
+                                       WidthRequest="27"
+                                       Margin="0"
+                                       Keyboard="Numeric"/>
+                                <Label Text="{helpers:Translate Price}"
+                                       HorizontalOptions="EndAndExpand"
+                                       HorizontalTextAlignment="End"
+                                       FontSize="16"
+                                       Margin="0"
+                                       VerticalOptions="Center"/>
+                                <Entry Text="{Binding Price}"
+                                       WidthRequest="27"
+                                       Margin="0,0,6,0"
+                                       Keyboard="Numeric"/>
+                            </StackLayout>
+                            <BoxView Margin="12,0,12,0"
+                                     HeightRequest="1"
+                                     Color="#BDBDBD"/>
+                            <Editor Margin="0"
+                                    Text="{Binding Question}"
+                                    AutoSize="TextChanges"
+                                    HorizontalOptions="Center"
+                                    Placeholder="{helpers:Translate Question}"/>
+                        </StackLayout>
+                    </ScrollView>
+
 
                     <BoxView Style="{StaticResource BoxViewStyle}"/>
-                    <Label x:Name="LabelCancel"
+                    <Label x:Name="LabelOk"
                            Margin="6,0,6,6"
                            Style="{StaticResource LabelStyle}"
                            TextColor="{DynamicResource ButtonTextColor}">

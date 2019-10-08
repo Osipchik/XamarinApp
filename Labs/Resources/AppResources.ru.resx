@@ -297,4 +297,10 @@
   <data name="Done" xml:space="preserve">
     <value>Готово</value>
   </data>
+  <data name="Loading" xml:space="preserve">
+    <value>Загрузка...</value>
+  </data>
+  <data name="Settings" xml:space="preserve">
+    <value>Настройки</value>
+  </data>
 </root>

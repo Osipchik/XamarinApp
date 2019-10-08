@@ -17,7 +17,7 @@ namespace Labs.Views.TestPages
             InitializeComponent();
 
             InitializeAsync(questionId, testTimeViewModel, settings, index);
-            Title = index.ToString();
+            Title = (1 + index).ToString();
         }
 
         private async void InitializeAsync(string id, TimerViewModel testTimeViewModel, ISettings settings, int index)

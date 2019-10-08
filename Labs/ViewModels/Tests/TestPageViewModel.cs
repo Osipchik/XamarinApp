@@ -49,7 +49,10 @@ namespace Labs.ViewModels.Tests
         public void OnAppearing(Page page)
         {
             MessagingCenter.Send<Page>(page, TimerViewModel.StopAllTimers);
-            Timer?.TimerRunAsync();
+
+            if (Timer != null) {
+                if (!Timer.TimerIsAlive) Timer.TimerRunAsync();
+            }
         }
 
         public async void TapEvent(int index)
@@ -67,7 +70,7 @@ namespace Labs.ViewModels.Tests
                 {
                     var a = int.Parse(_settings.Price) + int.Parse(GetSettingsModel.Price);
                     _settings.Price = a.ToString();
-                    GetSettingsModel.TotalCount += "1";
+                    _settings.TotalCount = (int.Parse(_settings.TotalCount) + 1).ToString();
                 }
             });
             IsChickAble = false;

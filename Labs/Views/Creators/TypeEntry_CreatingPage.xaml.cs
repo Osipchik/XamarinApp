@@ -30,13 +30,6 @@ namespace Labs.Views.Creators
             });
         }
 
-        private void HideOrShowAsync_OnClicked(object sender, EventArgs e)
-        {
-            _settingsIsVisible = !_settingsIsVisible;
-            if (_heightMax == 0) _heightMax = (uint)SettingsLayout.Height;
-            FrameAnimation.RunShowOrHideAnimation(SettingsLayout, _heightMax, 0, _settingsIsVisible);
-        }
-
         private void ListView_OnItemSelected(object sender, SelectedItemChangedEventArgs e) =>
             ((ListView)sender).SelectedItem = null;
     }

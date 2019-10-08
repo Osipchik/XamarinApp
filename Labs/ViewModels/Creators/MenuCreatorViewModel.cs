@@ -110,7 +110,8 @@ namespace Labs.ViewModels.Creators
 
         private async void Save()
         {
-            if (PageIsValid()) {
+            if (PageIsValid())
+            {
                 await Task.Run(() => {
                     using (var realm = Realm.GetInstance())
                     {
@@ -125,6 +126,7 @@ namespace Labs.ViewModels.Creators
                     }
                     InitializeAsync(TestId);
                 });
+                await PopupNavigation.Instance.PushAsync(new SavePopup());
                 await PushBackAsync();
             }
         }

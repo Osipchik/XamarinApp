@@ -189,6 +189,9 @@
   <data name="Labguage" xml:space="preserve">
     <value>Language:</value>
   </data>
+  <data name="Loading" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
   <data name="Mark" xml:space="preserve">
     <value>Mark</value>
   </data>
@@ -197,6 +200,9 @@
   </data>
   <data name="No" xml:space="preserve">
     <value>No</value>
+  </data>
+  <data name="Ok" xml:space="preserve">
+    <value>OK</value>
   </data>
   <data name="Price" xml:space="preserve">
     <value>Mark:</value>
@@ -224,6 +230,9 @@
   </data>
   <data name="SearchSubject" xml:space="preserve">
     <value>Subject</value>
+  </data>
+  <data name="Settings" xml:space="preserve">
+    <value>Settings</value>
   </data>
   <data name="SettingsButton" xml:space="preserve">
     <value>Settings</value>

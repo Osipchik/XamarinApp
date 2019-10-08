@@ -1,20 +1,19 @@
 ﻿using System;
-using Rg.Plugins.Popup.Pages;
+using Labs.Resources;
 using Rg.Plugins.Popup.Services;
 using Xamarin.Forms.Xaml;
-
 
 namespace Labs.Views.Popups
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class WarningPopup
+    public partial class SavePopup
     {
-        public WarningPopup(string title, string text, string cancelButton)
+        public SavePopup()
         {
             InitializeComponent();
-            LabelTitle.Text = title.ToUpper();
-            LabelText.Text = text;
-            LabelCancel.Text = cancelButton.ToUpper();
+            LabelTitle.Text = AppResources.Save.ToUpper();
+            LabelCancel.Text = AppResources.Cancel.ToUpper();
+            animationView.OnFinish += TapGestureRecognizer_OnTapped;
         }
 
         private async void TapGestureRecognizer_OnTapped(object sender, EventArgs e)

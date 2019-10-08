@@ -29,7 +29,7 @@
                        Grid.Row="0" Grid.Column="2"/>
                 <Label Text="{helpers:Translate Rights}"
                        Grid.Row="1" Grid.Column="0"/>
-                <Label Text="{Binding RightAnswers}"
+                <Label Text="{Binding TotalCount}"
                        Grid.Row="1" Grid.Column="1"/>
                 <Label x:Name="LabelCount"
                        Grid.Row="1" Grid.Column="2"/>

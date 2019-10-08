@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -45,11 +46,17 @@ namespace Labs.ViewModels.Creators
         public ICommand DeleteCurrentFileCommand => new Command(DeleteQuestion);
         public ICommand HideGridButtonsCommand => new Command(HideGridButtons);
         public ICommand AcceptGridButtonCommand => new Command(AcceptGridButton);
+        public ICommand Settings => new Command(SettingsPopup);
 
         private void InitializeNew()
         {
             _settingsViewModel.SetEmptyModel();
             FrameViewModel.AddEmptyModel();
+        }
+
+        private async void SettingsPopup()
+        {
+            await PopupNavigation.Instance.PushAsync(new TestPageSettingsPopup(GetSettingsModel));
         }
 
         private async void InitializeExisting(string questionId)
@@ -85,12 +92,13 @@ namespace Labs.ViewModels.Creators
         {
             await Task.Run(() => {
                 if (PageIsValid().Result) {
+                    
                     using (var realm = Realm.GetInstance())
                     {
                         var question = realm.Find<Question>(_questionId);
                         var owner = realm.Find<TestModel>(_testId);
-                        question = Repository.SetQuestionContent(realm, owner, question, _questionType,
-                            _settingsViewModel.SettingsModel);
+                        question = Repository.SetQuestionContent(realm, owner, question, _questionType, 
+                            _settingsViewModel.GetSettingsToSave());
                         SaveContent(realm, question, Page.Navigation, FrameViewModel);
                     }
                 }
@@ -101,7 +109,11 @@ namespace Labs.ViewModels.Creators
         {
             SaveFrameContent(realm, question, viewModel.Models);
             Repository.RemoveQuestionContent(realm, question, viewModel.GetContentsToDelete);
-            Device.BeginInvokeOnMainThread(async () => { await navigation.PopAsync(true); });
+            Device.BeginInvokeOnMainThread(async () =>
+            {
+                await PopupNavigation.Instance.PushAsync(new SavePopup());
+                await navigation.PopAsync(true);
+            });
         }
 
         private void SaveFrameContent(Realm realm, Question question, IEnumerable<FrameModel> model)

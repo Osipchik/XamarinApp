@@ -29,6 +29,7 @@ namespace Labs.ViewModels.Tests
                 using (var realm = Realm.GetInstance())
                 {
                     var question = realm.Find<Question>(questionId);
+                    
                     SettingsViewModel.SetSettingsModel(question.QuestionText, question.Price, question.Time);
                     Timer = testTimeViewModel ?? new TimerViewModel(TimeSpan.Parse(question.Time), Index);
                    

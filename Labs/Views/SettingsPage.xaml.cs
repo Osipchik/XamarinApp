@@ -24,6 +24,7 @@ namespace Labs.Views
             BindingContext = this;
             SetButton();
             SetIndex();
+            
         }
 
         private void PickerLanguages_OnSelectedIndexChanged(object sender, EventArgs e)
@@ -33,6 +34,8 @@ namespace Labs.Views
             CrossMultilingual.Current.CurrentCultureInfo = culture;
             CrossSettings.Current.AddOrUpdateValue(Language.CultureSetting, culture.ToString());
             MessagingCenter.Send<Page>(this, MainPage.UploadMainPage);
+            LabelLanguage.Text = AppResources.Labguage;
+            LabelTheme.Text = AppResources.Theme;
         }
 
         private void SetIndex()

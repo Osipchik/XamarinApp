@@ -3,7 +3,9 @@ using System.ComponentModel;
 using System.Threading.Tasks;
 using Labs.ViewModels;
 using Labs.Views.Creators;
+using Labs.Views.Popups;
 using Labs.Views.TestPages;
+using Rg.Plugins.Popup.Services;
 using Xamarin.Forms;
 
 namespace Labs.Views
@@ -46,6 +48,7 @@ namespace Labs.Views
                     ShowHomePage();
                     break;
                 case (int)PageIndex.Creator:
+                    await PopupNavigation.Instance.PushAsync(new LoadingPopup());
                     await Device.InvokeOnMainThreadAsync(() => { Detail = new NavigationPage(new CreatorMenuPage()); });
                     IsPresented = false;
                     break;

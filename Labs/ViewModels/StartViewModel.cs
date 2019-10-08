@@ -10,8 +10,11 @@ using Labs.Interfaces;
 using Labs.Models;
 using Labs.ViewModels.Creators;
 using Labs.Views.Creators;
+using Labs.Views.Popups;
 using Labs.Views.TestPages;
 using Realms;
+using Rg.Plugins.Popup.Events;
+using Rg.Plugins.Popup.Services;
 using Xamarin.Forms;
 
 namespace Labs.ViewModels
@@ -19,15 +22,13 @@ namespace Labs.ViewModels
     public class StartViewModel : INotifyPropertyChanged
     {
         private bool _buttonsIsClickAble;
+        private static bool isFirst = true;
         public INavigation Navigation { get; set; }
         public Button ChangeButton { get; set; }
         public Button StartButton { get; set; }
         public ISettings Settings { get; private set; }
 
         private readonly string _testId;
-
-        private Page _testPage;
-        private Page _creatorPage;
 
         public StartViewModel(string testId)
         {
@@ -57,9 +58,6 @@ namespace Labs.ViewModels
                     };
                     OnPropertyChanged(nameof(Settings));
                 }
-
-                _testPage = new TestPage(_testId, Settings);
-                _creatorPage = new CreatorMenuPage(_testId);
             });
         }
 
@@ -68,9 +66,9 @@ namespace Labs.ViewModels
             ChangeButtonCommand = new Command(async () =>
             {
                 if (_buttonsIsClickAble && ChangeButton != null && Navigation != null) {
+                    Loading();
                     ChangeButtonStyle_OnClickAsync(ChangeButton);
-                    //await Navigation.PushAsync(new CreatorMenuPage(_testId));
-                    await Navigation.PushAsync(_creatorPage);
+                    await Navigation.PushAsync(new CreatorMenuPage(_testId));
                 }
             });
 
@@ -78,10 +76,19 @@ namespace Labs.ViewModels
             {
                 if (_buttonsIsClickAble && StartButton != null && Navigation != null) {
                     ChangeButtonStyle_OnClickAsync(StartButton);
-                    //await Navigation.PushModalAsync(new TestPage(_testId, Settings));
-                    await Navigation.PushModalAsync(_testPage);
+                    Loading();
+                    await Navigation.PushModalAsync(new TestPage(_testId, Settings));
                 }
             });
+        }
+
+        private async void Loading()
+        {
+            if (isFirst)
+            {
+                await PopupNavigation.Instance.PushAsync(new LoadingPopup());
+                isFirst = false;
+            }
         }
 
         public void StartPageCallBack()
@@ -92,15 +99,14 @@ namespace Labs.ViewModels
             ChangeButtonStyle_OnCallBack(StartButton);
         }
 
-        private async void ChangeButtonStyle_OnClickAsync(Button button)
+        private void ChangeButtonStyle_OnClickAsync(Button button)
         {
-            await Device.InvokeOnMainThreadAsync(() => {
-                _buttonsIsClickAble = false;
-                if (button != null) {
-                    button.BackgroundColor = (Color) Application.Current.Resources["ButtonTextColor"];
-                    button.TextColor = (Color) Application.Current.Resources["ButtonBackGroundColor"];
-                }
-            });
+            _buttonsIsClickAble = false;
+            if (button != null)
+            {
+                button.BackgroundColor = (Color)Application.Current.Resources["ButtonTextColor"];
+                button.TextColor = (Color)Application.Current.Resources["ButtonBackGroundColor"];
+            }
         }
 
         private async void ChangeButtonStyle_OnCallBack(Button button)

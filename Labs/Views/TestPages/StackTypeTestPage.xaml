@@ -9,28 +9,17 @@
 
     <ContentPage.Content>
         <StackLayout>
-            <Grid BindingContext="{Binding GetTimerModel}"
-                  HorizontalOptions="FillAndExpand"
-                  ColumnSpacing="0"
-                  RowSpacing="0">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
-                </Grid.ColumnDefinitions>
-                <ProgressBar Progress="{Binding Progress}"
-                             HorizontalOptions="FillAndExpand"
-                             Margin="0"
-                             IsVisible="{Binding TimerIsVisible}"
-                             Grid.Row="0" Grid.Column="0"/>
-                <Label Text="{Binding Time}"
-                       HorizontalOptions="Center"
-                       Margin="0"
-                       IsVisible="{Binding TimerIsVisible}"
-                       Grid.Row="1" Grid.Column="0"/>
-            </Grid>
+            <ProgressBar BindingContext="{Binding GetTimerModel}"
+                         Progress="{Binding Progress}"
+                         HorizontalOptions="FillAndExpand"
+                         Margin="0"
+                         IsVisible="{Binding TimerIsVisible}"/>
+            <Label BindingContext="{Binding GetTimerModel}"
+                   Text="{Binding Time}"
+                   HorizontalOptions="Center"
+                   Margin="0"
+                   IsVisible="{Binding TimerIsVisible}"/>
+
             <Label Margin="0"
                    BindingContext="{Binding GetSettingsModel}"
                    Text="{Binding Question}"

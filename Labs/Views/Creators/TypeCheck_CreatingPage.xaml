@@ -30,46 +30,14 @@
 
     <ContentPage.Content>
         <StackLayout Margin="12, 0, 12, 0">
-            <ContentView Padding="5">
-                <Frame Padding="10,5,10,5"
-                       BorderColor="#03A9F4"
-                       CornerRadius="10">
-                    <Frame.GestureRecognizers>
-                        <TapGestureRecognizer Tapped="HideOrShowAsync_OnClicked"/>
-                    </Frame.GestureRecognizers>
-                    <StackLayout x:Name="SettingsLayout"
-                                 BindingContext="{Binding GetSettingsModel}">
-                        <StackLayout Orientation="Horizontal"
-                                     HorizontalOptions="FillAndExpand"
-                                     Margin="0">
-                            <Label Text="{helpers:Translate TestSettingsTime}"
-                                   VerticalOptions="Center"
-                                   Margin="0"/>
-                            <TimePicker Time="{Binding TimeSpan}"
-                                        Format="HH:mm"
-                                        Margin="0"/>
-                            <Label Text="{helpers:Translate Price}"
-                                   HorizontalOptions="EndAndExpand"
-                                   HorizontalTextAlignment="End"
-                                   FontSize="16"
-                                   Margin="0"
-                                   VerticalOptions="Center"/>
-                            <Entry Text="{Binding Price}"
-                                   WidthRequest="23"
-                                   Margin="0"
-                                   Keyboard="Numeric"/>
-                        </StackLayout>
-                        <BoxView Margin="12,0,12,0"
-                                 HeightRequest="1"
-                                 Color="#BDBDBD"/>
-                        <Editor Margin="0"
-                                Text="{Binding Question}"
-                                AutoSize="TextChanges"
-                                HorizontalOptions="Center"
-                                Placeholder="{helpers:Translate Question}"/>
-                    </StackLayout>
-                </Frame>
-            </ContentView>
+            <Label Text="{helpers:Translate Settings}"
+                   TextColor="{DynamicResource ColorMaterialBlue}"
+                   HorizontalOptions="Center">
+                <Label.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding Settings}"/>
+                </Label.GestureRecognizers>
+            </Label>
+
             <Grid x:Name="GridButtons"
                   HorizontalOptions="Center"
                   IsVisible="False">

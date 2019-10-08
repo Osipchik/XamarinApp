@@ -20,6 +20,21 @@ namespace Labs.Models
             }
         }
 
+        private string _seconds;
+        public string Seconds
+        {
+            get => _seconds;
+            set
+            {
+                _seconds = value;
+                if (_seconds.Length > 2)
+                {
+                    _seconds = _seconds.Remove(1);
+                }
+                OnPropertyChanged();
+            }
+        }
+
         private string _totalCount;
         public string TotalCount
         {

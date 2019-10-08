@@ -28,7 +28,6 @@ namespace Labs.Views.TestPages
             {
                 _model.Price = "0";
                 _model.TotalCount = "0";
-                MessagingCenter.Send<Page>(this, Check);
                 MessagingCenter.Send<object>(this, TestPage.ReturnPages);
                 _isClickAble = false;
             }

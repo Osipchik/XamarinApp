@@ -1,11 +1,9 @@
-﻿using System;
-using Android.App;
+﻿using Android.App;
 using Android.Content.PM;
 using Android.Runtime;
 using Android.OS;
-using FFImageLoading;
 using FFImageLoading.Forms.Platform;
-using Lottie.Forms.Droid;
+
 using Xamarin.Forms;
 
 namespace Labs.Droid
@@ -24,9 +22,8 @@ namespace Labs.Droid
 
             Xamarin.Essentials.Platform.Init(this, savedInstanceState);
             global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
-            AnimationViewRenderer.Init();
             CachedImageRenderer.InitImageViewHandler();
-            
+
             LoadApplication(new App());
             MessagingCenter.Subscribe<object>(this, "SetStatusBarColor", SetStatusBarColor);
         }

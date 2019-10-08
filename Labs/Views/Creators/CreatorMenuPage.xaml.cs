@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Labs.Helpers;
 using Labs.ViewModels.Creators;
+using Labs.Views.Popups;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -10,25 +11,19 @@ namespace Labs.Views.Creators
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class CreatorMenuPage
     {
+        private readonly MenuCreatorViewModel _viewModel;
         private bool _tableVisible = true;
         private uint _heightMax;
-        private MenuCreatorViewModel _viewModel;
         private bool _refresh;
 
         public CreatorMenuPage(string testId = null)
         {
             InitializeComponent();
-            InitializeAsync(testId);
+            _viewModel = new MenuCreatorViewModel(this, testId);
+            BindingContext = _viewModel;
         }
 
-        private async void InitializeAsync(string testId )
-        {
-            await Task.Run(() =>
-            {
-                _viewModel = new MenuCreatorViewModel(this, testId);
-                Device.BeginInvokeOnMainThread(()=>{ BindingContext = _viewModel; });
-            });
-        }
+
 
         private async void SettingsButton_OnClickedAsync(object sender, EventArgs e) => 
             await Device.InvokeOnMainThreadAsync(() => {
@@ -49,12 +44,14 @@ namespace Labs.Views.Creators
         protected override void OnAppearing()
         {
             base.OnAppearing();
+
             if (_refresh) {
                 _viewModel.InitializeAsync(_viewModel.TestId);
                 BindingContext = _viewModel;
             }
             else
             {
+                MessagingCenter.Send<Page>(this, LoadingPopup.Finish);
                 _refresh = true;
             }
         }

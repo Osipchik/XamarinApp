@@ -6,6 +6,7 @@ using Labs.Data;
 using Labs.Interfaces;
 using Labs.Resources;
 using Labs.ViewModels.Tests;
+using Labs.Views.Popups;
 using Realms;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -16,6 +17,7 @@ namespace Labs.Views.TestPages
     public partial class TestPage : TabbedPage
     {
         public const string ReturnPages = "ReturnPages";
+        public const string Check = "Check";
         private readonly ISettings _settings;
         private TimerViewModel _timer;
         private int _index;
@@ -37,8 +39,12 @@ namespace Labs.Views.TestPages
                 {
                     foreach (var question in realm.Find<TestModel>(id).Questions) {
                         AddTestPage(question.Id, question.Type, question.Time);
+                        _index++;
                     }
                 }
+
+                Device.BeginInvokeOnMainThread(() => { Children.Add(new ResultPage(_settings)); });
+                MessagingCenter.Send<Page>(this, TestViewModel.RunFirstTimer);
 
                 Subscribe();
             });
@@ -48,7 +54,7 @@ namespace Labs.Views.TestPages
         {
             _timer = null;
             if (!time.Equals(TimeSpan.Zero)){
-                _timer = new TimerViewModel(time);
+                _timer = new TimerViewModel(time, -1);
             }
         }
 
@@ -66,18 +72,11 @@ namespace Labs.Views.TestPages
                     AddPage(new EntryTypeTestPage(id, _timer, time, _settings, _index));
                     break;
             }
-
-            _index++;
         }
 
         private void AddPage(Page page)
         {
             Device.BeginInvokeOnMainThread(() => { Children.Add(page); });
-            if (_pages.Count == int.Parse(_settings.TotalCount))
-            {
-                Device.BeginInvokeOnMainThread(() => { Children.Add(new ResultPage(_settings)); });
-                MessagingCenter.Send<Page>(this, TestViewModel.RunFirstTimer);
-            }
             _pages.Add(page);
         } 
 
@@ -92,6 +91,12 @@ namespace Labs.Views.TestPages
             return true;
         }
 
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
+            MessagingCenter.Send<Page>(this, LoadingPopup.Finish);
+        }
+
         private void Subscribe()
         {
             MessagingCenter.Subscribe<object>(this, TimerViewModel.TimerIsEnd, GoToNextPage);
@@ -102,16 +107,18 @@ namespace Labs.Views.TestPages
         {
             var timer = (TimerViewModel)sender;
             if (timer.Index != null) {
-                if (timer.Index < 0) {
+                if (timer.Index < 0 || Children.Count == 2) {
                     while (Children.Count != 1) {
                         Children.RemoveAt(0);
                     }
                 }
                 else {
-                    CurrentPage = GetNextPage((int)timer.Index);
-                    Children.Remove(_pages[(int)timer.Index - 1]);
+                    CurrentPage = GetNextPage((int)timer.Index + 1);
+                    Children.Remove(_pages[(int)timer.Index]);
                 }
             }
+
+            if(Children.Count == 1) MessagingCenter.Unsubscribe<object>(this, TimerViewModel.TimerIsEnd);
         }
 
         private Page GetNextPage(int index)
@@ -133,6 +140,7 @@ namespace Labs.Views.TestPages
                         Device.BeginInvokeOnMainThread(() => Children.Insert(i1, _pages[i1]));
                     }
                 }
+                MessagingCenter.Send<Page>(this, Check);
             });
         }
     }

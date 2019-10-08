@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Security.Cryptography;
 using Labs.Data;
 using Labs.Models;
 using Labs.Resources;
@@ -21,6 +22,7 @@ namespace Labs.ViewModels
             SettingsModel.Subject = string.Empty;
             SettingsModel.Name = string.Empty;
             SettingsModel.TotalPrice = "0";
+            SettingsModel.Seconds = "0";
         }
 
         public void SetSettingsModel(string question, string price, string timeSpan)
@@ -28,6 +30,13 @@ namespace Labs.ViewModels
             SettingsModel.Question = question;
             SettingsModel.Price = price;
             SettingsModel.TimeSpan = TimeSpan.Parse(timeSpan);
+            SettingsModel.Seconds = SettingsModel.TimeSpan.Seconds.ToString();
+        }
+
+        public SettingsModel GetSettingsToSave()
+        {
+            SettingsModel.TimeSpan += TimeSpan.Parse("00:00:" + SettingsModel.Seconds);
+            return SettingsModel;
         }
 
         public void SetTestSettingsModel(Realm realm, TestModel testModel)
@@ -38,13 +47,22 @@ namespace Labs.ViewModels
             SettingsModel.TotalPrice = Repository.GetTotalPrice(realm, testModel);
         }
 
-        private string CheckPrice => CheckText(SettingsModel.Price) ? AppResources.WarningPrice + " \n" : "";
+        //TODO проверить на число секунды и цену
+        private void CheckPrice()
+        {
+            var message = CheckText(SettingsModel.Price) ? AppResources.WarningPrice + " \n" : "";
+            foreach (var i in SettingsModel.Price)
+            {
+                //if()
+            }
+
+        }
 
         public string CheckPageSettings()
         {
             var message = string.Empty;
             message += CheckText(SettingsModel.Question) ? AppResources.WarningQuestion + " \n" : "";
-            message += CheckPrice;
+            CheckPrice();
 
             return message;
         }

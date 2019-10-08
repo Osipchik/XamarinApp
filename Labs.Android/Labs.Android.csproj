@@ -107,6 +107,8 @@
   <ItemGroup>
     <AndroidAsset Include="Assets\CheckLoad.json" />
     <AndroidAsset Include="Assets\sunmoon.json" />
+    <AndroidAsset Include="Assets\loadanim.json" />
+    <AndroidAsset Include="Assets\checked.json" />
     <None Include="Resources\AboutResources.txt" />
     <None Include="Assets\AboutAssets.txt" />
     <None Include="Properties\AndroidManifest.xml" />

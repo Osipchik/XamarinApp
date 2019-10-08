@@ -12,7 +12,7 @@ namespace Labs.ViewModels.Tests
 
         private double _time;
         private double _step;
-        private bool _timerIsAlive;
+        public bool TimerIsAlive { get; private set; }
         public readonly TimerModel TimerModel;
         public int? Index;
 
@@ -50,8 +50,8 @@ namespace Labs.ViewModels.Tests
         public async void TimerRunAsync()
         {
             await Task.Run(() => {
-                if (_time > 0 && _timerIsAlive == false) {
-                    _timerIsAlive = true;
+                if (_time > 0 && TimerIsAlive == false) {
+                    TimerIsAlive = true;
                     Device.InvokeOnMainThreadAsync(() =>
                         Device.StartTimer(TimeSpan.FromMilliseconds(UpdateRate), TimerOnTick));
                 }
@@ -64,7 +64,7 @@ namespace Labs.ViewModels.Tests
                 TimerModel.Progress += _step;
                 _time -= UpdateRate;
                 FormatTime();
-                return _timerIsAlive;
+                return TimerIsAlive;
             }
 
             MessagingCenter.Send<object>(this, TimerIsEnd);
@@ -85,7 +85,7 @@ namespace Labs.ViewModels.Tests
             }
         }
 
-        public void TimerStop() => _timerIsAlive = false;
+        public void TimerStop() => TimerIsAlive = false;
 
         private void Subscribe() => 
             MessagingCenter.Subscribe<Page>(this, StopAllTimers, (sender) => { TimerStop(); });

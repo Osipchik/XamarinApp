@@ -1,0 +1,61 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<pages:PopupPage xmlns="http://xamarin.com/schemas/2014/forms"
+                 xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                 xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+                 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                 xmlns:pages="clr-namespace:Rg.Plugins.Popup.Pages;assembly=Rg.Plugins.Popup"
+                 xmlns:animations="clr-namespace:Rg.Plugins.Popup.Animations;assembly=Rg.Plugins.Popup"
+                 xmlns:forms="clr-namespace:Lottie.Forms;assembly=Lottie.Forms"
+                 xmlns:helpers="clr-namespace:Labs.Helpers;assembly=Labs"
+                 mc:Ignorable="d"
+                 x:Class="Labs.Views.Popups.LoadingPopup">
+
+    <pages:PopupPage.Animation>
+        <animations:ScaleAnimation DurationIn="400"
+                                   DurationOut="300"
+                                   EasingIn="SinOut"
+                                   EasingOut="SinIn"
+                                   HasBackgroundAnimation="True"
+                                   PositionIn="Center"
+                                   PositionOut="Center"
+                                   ScaleIn="1.2"
+                                   ScaleOut="0.8" />
+    </pages:PopupPage.Animation>
+
+    <pages:PopupPage.Resources>
+        <ResourceDictionary>
+            <Style x:Key="BoxViewStyle" TargetType="BoxView">
+                <Setter Property="BackgroundColor" Value="#BDBDBD"/>
+                <Setter Property="HorizontalOptions" Value="Fill"/>
+                <Setter Property="HeightRequest" Value="1"/>
+                <Setter Property="Margin" Value="0"/>
+            </Style>
+            <Style x:Key="LabelStyle" TargetType="Label">
+                <Setter Property="HorizontalOptions" Value="Fill"/>
+                <Setter Property="HorizontalTextAlignment" Value="Center"/>
+                <Setter Property="FontSize" Value="15"/>
+                <Setter Property="FontAttributes" Value="Bold"/>
+                <Setter Property="BackgroundColor" Value="Transparent"/>
+            </Style>
+        </ResourceDictionary>
+    </pages:PopupPage.Resources>
+
+    <StackLayout Padding="30"
+                 Margin="12"
+                 HorizontalOptions="Fill"
+                 VerticalOptions="Center"
+                 BackgroundColor="Transparent"
+                 Spacing="0">
+        <forms:AnimationView x:Name="animationView"
+                             Animation="loadanim.json"
+                             Loop="True"
+                             BackgroundColor="Transparent"
+                             HeightRequest="130"
+                             WidthRequest="130"
+                             AutoPlay="True"/>
+        <Label Text="{helpers:Translate Loading}"
+               Margin="6,6,6,0"
+               Style="{StaticResource LabelStyle}"/>
+    </StackLayout>
+
+</pages:PopupPage>

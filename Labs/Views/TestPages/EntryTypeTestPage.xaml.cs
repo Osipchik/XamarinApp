@@ -15,7 +15,7 @@ namespace Labs.Views.TestPages
         {
             _viewModelTest = new TestPageViewModel(questionId, testTimeViewModel, time, settings, index);
             InitializeComponent();
-            Title = index.ToString();
+            Title = (1 + index).ToString();
             BindingContext = _viewModelTest;
             Subscribe(index);
         }

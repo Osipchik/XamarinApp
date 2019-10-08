@@ -18,16 +18,17 @@
                         <ViewCell>
                             <StackLayout Orientation="Horizontal"
                                      Margin="24,0,24,0">
-                                <Label Text="{helpers:Translate Labguage}"
-                                   TextColor="{DynamicResource LabelTextColor}"
-                                   FontSize="Medium"
-                                   VerticalOptions="Center"/>
+                                <Label x:Name="LabelLanguage"
+                                       Text="{helpers:Translate Labguage}"
+                                       TextColor="{DynamicResource LabelTextColor}"
+                                       FontSize="Medium"
+                                       VerticalOptions="Center"/>
                                 <Picker x:Name="PickerLanguages"
-                                    TextColor="{DynamicResource MasterDetailTextColor}"
-                                    HorizontalOptions="EndAndExpand"
-                                    ItemsSource="{Binding Languages}"
-                                    ItemDisplayBinding="{Binding DisplayName}"
-                                    SelectedIndexChanged="PickerLanguages_OnSelectedIndexChanged"/>
+                                        TextColor="{DynamicResource MasterDetailTextColor}"
+                                        HorizontalOptions="EndAndExpand"
+                                        ItemsSource="{Binding Languages}"
+                                        ItemDisplayBinding="{Binding DisplayName}"
+                                        SelectedIndexChanged="PickerLanguages_OnSelectedIndexChanged"/>
                             </StackLayout>
                         </ViewCell>
                     </TableSection>
@@ -35,11 +36,12 @@
                         <ViewCell>
                             <StackLayout Orientation="Horizontal"
                                      Margin="24,0,24,0">
-                                <Label Text="{helpers:Translate Theme}"
-                                   TextColor="{DynamicResource LabelTextColor}"
-                                   FontSize="Medium"
-                                   VerticalOptions="Center"
-                                   HorizontalOptions="FillAndExpand"/>
+                                <Label x:Name="LabelTheme"
+                                       Text="{helpers:Translate Theme}"
+                                       TextColor="{DynamicResource LabelTextColor}"
+                                       FontSize="Medium"
+                                       VerticalOptions="Center"
+                                       HorizontalOptions="FillAndExpand"/>
                                 <Button x:Name="ButtonLight"
                                     Text="Light"
                                     Clicked="ButtonLight_OnClicked"/>
@@ -51,10 +53,6 @@
                     </TableSection>
                 </TableView.Root>
             </TableView>
-            <StackLayout>
-                <forms:AnimationView x:Name="AnimationView" Animation="sumnoon.json" AutoPlay="True"  
-                                 Loop="True" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" />
-            </StackLayout>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>
