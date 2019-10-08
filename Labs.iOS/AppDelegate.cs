@@ -1,6 +1,7 @@
 ﻿using System;
 using FFImageLoading.Forms.Platform;
 using Foundation;
+using Lottie.Forms.iOS.Renderers;
 using UIKit;
 
 namespace Labs.iOS
@@ -26,6 +27,7 @@ namespace Labs.iOS
             global::Xamarin.Forms.Forms.Init();
             CachedImageRenderer.InitImageSourceHandler();
             LoadApplication(new App());
+            AnimationViewRenderer.Init();
 
             return base.FinishedLaunching(app, options);
         }

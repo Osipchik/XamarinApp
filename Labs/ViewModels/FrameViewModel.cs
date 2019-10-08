@@ -8,8 +8,6 @@ using Labs.Models;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Labs.Data;
-using Labs.Helpers;
-using Realms;
 using Xamarin.Forms;
 
 namespace Labs.ViewModels
@@ -23,22 +21,13 @@ namespace Labs.ViewModels
             ItemRight
         }
 
-        private ObservableCollection<FrameModel> _models = new ObservableCollection<FrameModel>();
-        public ObservableCollection<FrameModel> Models
-        {
-            get => _models;
-            set
-            {
-                _models = value;
-                OnPropertyChanged();
-            }
-        }
-
+        public ObservableCollection<FrameModel> Models { get; }
         private int _itemIndex = -1;
         private readonly List<int> _itemIndexToDeleteList;
 
         public FrameViewModel()
         {
+            Models = new ObservableCollection<FrameModel>();
             _itemIndexToDeleteList = new List<int>();
             GetContentsToDelete = new List<QuestionContent>();
         }
@@ -88,25 +77,20 @@ namespace Labs.ViewModels
             });
         }
 
-        public async void FillCreatorFramesAsync(string questionId, bool withColor = false)
+        public void FillCreatorFrames(IEnumerable<QuestionContent> contents, bool withColor = false)
         {
-            await Task.Run(() => {
-                using (var realm = Realm.GetInstance())
+            foreach (var content in contents)
+            {
+                Models.Add(new FrameModel
                 {
-                    var question = realm.Find<Question>(questionId);
-                    foreach (var content in question.Contents){
-                        Models.Add(new FrameModel
-                        {
-                            Id = content.Id,
-                            Content = content,
-                            MainText = content.MainText,
-                            Text = content.Text,
-                            IsRight = content.IsRight,
-                            BorderColor = GetColor(withColor && content.IsRight)
-                        });
-                    }
-                }
-            });
+                    Id = content.Id,
+                    Content = content,
+                    MainText = content.MainText,
+                    Text = content.Text,
+                    IsRight = content.IsRight,
+                    BorderColor = GetColor(withColor && content.IsRight)
+                });
+            }
         }
 
         public void FillTestFrames(IEnumerable<QuestionContent> contents, out IList<string> textList)
@@ -124,28 +108,6 @@ namespace Labs.ViewModels
                 });
                 textList.Add(content.Text);
             }
-        }
-
-        public async void FillTestFramesAsync(string questionId)
-        {
-            await Task.Run(() => {
-                using (var realm = Realm.GetInstance())
-                {
-                    var question = realm.Find<Question>(questionId);
-                    foreach (var content in question.Contents) {
-                        Models.Add(new FrameModel
-                        {
-                            Id = content.Id,
-                            Text = content.Text,
-                            TextUnderMain = content.Text,
-                            MainText = content.MainText,
-                            IsRight = content.IsRight,
-                            BorderColor = GetColor(false)
-                        });
-                    }
-                }
-                Models.ShuffleAsync();
-            });
         }
 
         public async void DisableAllAsync()

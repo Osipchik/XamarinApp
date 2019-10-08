@@ -1,7 +1,9 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Threading.Tasks;
 using Labs.ViewModels;
 using Labs.Views.Creators;
+using Labs.Views.TestPages;
 using Xamarin.Forms;
 
 namespace Labs.Views
@@ -9,6 +11,13 @@ namespace Labs.Views
     [DesignTimeVisible(false)]
     public partial class MainPage
     {
+        private enum PageIndex
+        {
+            Home,
+            Creator,
+            Settings
+        }
+
         public const string UploadMainPage = "UploadTitles";
 
         public MainPage()
@@ -18,10 +27,8 @@ namespace Labs.Views
             ShowHomePage();
             BindingContext = this;
             ListViewDetail.ItemsSource = MasterDetailViewModel.GetDetailItems();
-            Subscribe();
+            MessagingCenter.Subscribe<Page>(this, UploadMainPage, UploadTitles);
         }
-
-        private void Subscribe() => MessagingCenter.Subscribe<Page>(this, UploadMainPage, UploadTitles);
 
         private void UploadTitles(object obj) => ListViewDetail.ItemsSource = MasterDetailViewModel.GetDetailItems();
 
@@ -31,19 +38,18 @@ namespace Labs.Views
             IsPresented = false;
         }
 
-        [Obsolete]
         private async void ListViewDetail_OnItemTapped(object sender, ItemTappedEventArgs e)
         {
             switch (e.ItemIndex)
             {
-                case 0:
+                case (int)PageIndex.Home:
                     ShowHomePage();
                     break;
-                case 1:
+                case (int)PageIndex.Creator:
                     await Device.InvokeOnMainThreadAsync(() => { Detail = new NavigationPage(new CreatorMenuPage()); });
                     IsPresented = false;
                     break;
-                case 2:
+                case (int)PageIndex.Settings:
                     await Device.InvokeOnMainThreadAsync(() => { Detail = new NavigationPage(new SettingsPage()); });
                     IsPresented = false;
                     break;

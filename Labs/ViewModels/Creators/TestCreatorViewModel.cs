@@ -54,12 +54,12 @@ namespace Labs.ViewModels.Creators
 
         private async void InitializeExisting(string questionId)
         {
-            FrameViewModel.FillCreatorFramesAsync(questionId, _questionType == Repository.Type.Check);
             await Task.Run(() =>
             {
                 using (var realm = Realm.GetInstance())
                 {
                     var question = realm.Find<Question>(questionId);
+                    FrameViewModel.FillCreatorFrames(question.Contents, _questionType == Repository.Type.Check);
                     _settingsViewModel.SetSettingsModel(question.QuestionText, question.Price, question.Time);
                 }
             });

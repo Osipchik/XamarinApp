@@ -18,12 +18,13 @@ namespace Labs.Views.TestPages
         public const string ReturnPages = "ReturnPages";
         private readonly ISettings _settings;
         private TimerViewModel _timer;
-
+        private int _index;
         private readonly List<Page> _pages = new List<Page>();
 
         public TestPage(string testId, ISettings settings)
         {
             InitializeComponent();
+
             _settings = settings;
             InitializeAsync(testId);
         }
@@ -35,7 +36,7 @@ namespace Labs.Views.TestPages
                 using (var realm = Realm.GetInstance())
                 {
                     foreach (var question in realm.Find<TestModel>(id).Questions) {
-                        AddTestPage(question.Id, question.Type);
+                        AddTestPage(question.Id, question.Type, question.Time);
                     }
                 }
 
@@ -51,32 +52,34 @@ namespace Labs.Views.TestPages
             }
         }
 
-        private void AddTestPage(string id, int type)
+        private void AddTestPage(string id, int type, string time)
         {
-            var index = _pages.Count;
             switch (type)
             {
                 case (int)Repository.Type.Check:
-                    AddPage(new CheckTypeTestPage(id, _timer, _settings, index));
+                    AddPage(new CheckTypeTestPage(id, _timer, time, _settings, _index));
                     break;
                 case (int)Repository.Type.Stack:
-                    AddPage(new StackTypeTestPage(id, _timer, _settings, index));
+                    AddPage(new StackTypeTestPage(id, _timer, _settings, _index));
                     break;
                 case (int)Repository.Type.Entry:
-                    AddPage(new EntryTypeTestPage(id, _timer, _settings, index));
+                    AddPage(new EntryTypeTestPage(id, _timer, time, _settings, _index));
                     break;
             }
+
+            _index++;
         }
 
         private void AddPage(Page page)
         {
-            Device.BeginInvokeOnMainThread(() => Children.Add(page));
-            _pages.Add(page);
-            if (_pages.Count == int.Parse(_settings.TotalCount)) {
-                Device.BeginInvokeOnMainThread(() => Children.Add(new ResultPage(_settings)));
+            Device.BeginInvokeOnMainThread(() => { Children.Add(page); });
+            if (_pages.Count == int.Parse(_settings.TotalCount))
+            {
+                Device.BeginInvokeOnMainThread(() => { Children.Add(new ResultPage(_settings)); });
                 MessagingCenter.Send<Page>(this, TestViewModel.RunFirstTimer);
             }
-        }
+            _pages.Add(page);
+        } 
 
         protected override bool OnBackButtonPressed()
         {

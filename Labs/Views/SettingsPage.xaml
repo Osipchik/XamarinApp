@@ -5,49 +5,56 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:helpers="clr-namespace:Labs.Helpers;assembly=Labs"
              mc:Ignorable="d"
-             xmlns:views="clr-namespace:Labs.Views"
+             xmlns:views="clr-namespace:Labs.Views" 
+             xmlns:forms="clr-namespace:Lottie.Forms;assembly=Lottie.Forms"
              x:Class="Labs.Views.SettingsPage"
              BackgroundColor="{DynamicResource PageBackGroundColor}">
 
     <ContentPage.Content>
-        <TableView Margin="12">
-            <TableView.Root>
-                <TableSection>
-                    <ViewCell>
-                        <StackLayout Orientation="Horizontal"
+        <StackLayout>
+            <TableView Margin="12">
+                <TableView.Root>
+                    <TableSection>
+                        <ViewCell>
+                            <StackLayout Orientation="Horizontal"
                                      Margin="24,0,24,0">
-                            <Label Text="{helpers:Translate Labguage}"
+                                <Label Text="{helpers:Translate Labguage}"
                                    TextColor="{DynamicResource LabelTextColor}"
                                    FontSize="Medium"
                                    VerticalOptions="Center"/>
-                            <Picker x:Name="PickerLanguages"
+                                <Picker x:Name="PickerLanguages"
                                     TextColor="{DynamicResource MasterDetailTextColor}"
                                     HorizontalOptions="EndAndExpand"
                                     ItemsSource="{Binding Languages}"
                                     ItemDisplayBinding="{Binding DisplayName}"
                                     SelectedIndexChanged="PickerLanguages_OnSelectedIndexChanged"/>
-                        </StackLayout>
-                    </ViewCell>
-                </TableSection>
-                <TableSection>
-                    <ViewCell>
-                        <StackLayout Orientation="Horizontal"
+                            </StackLayout>
+                        </ViewCell>
+                    </TableSection>
+                    <TableSection>
+                        <ViewCell>
+                            <StackLayout Orientation="Horizontal"
                                      Margin="24,0,24,0">
-                            <Label Text="{helpers:Translate Theme}"
+                                <Label Text="{helpers:Translate Theme}"
                                    TextColor="{DynamicResource LabelTextColor}"
                                    FontSize="Medium"
                                    VerticalOptions="Center"
                                    HorizontalOptions="FillAndExpand"/>
-                            <Button x:Name="ButtonLight"
+                                <Button x:Name="ButtonLight"
                                     Text="Light"
                                     Clicked="ButtonLight_OnClicked"/>
-                            <Button x:Name="ButtonDark"
+                                <Button x:Name="ButtonDark"
                                     Text="Dark"
                                     Clicked="ButtonDark_OnClicked"/>
-                        </StackLayout>
-                    </ViewCell>
-                </TableSection>
-            </TableView.Root>
-        </TableView>
+                            </StackLayout>
+                        </ViewCell>
+                    </TableSection>
+                </TableView.Root>
+            </TableView>
+            <StackLayout>
+                <forms:AnimationView x:Name="AnimationView" Animation="sumnoon.json" AutoPlay="True"  
+                                 Loop="True" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" />
+            </StackLayout>
+        </StackLayout>
     </ContentPage.Content>
 </ContentPage>

@@ -4,7 +4,6 @@ using System.Globalization;
 using Labs.Helpers;
 using Labs.Models;
 using Labs.Resources;
-using Labs.ViewModels;
 using Plugin.Multilingual;
 using Plugin.Settings;
 using Xamarin.Forms;
@@ -16,6 +15,7 @@ namespace Labs.Views
     public partial class SettingsPage : ContentPage
     {
         public ObservableCollection<Language> Languages { get; }
+
         public SettingsPage()
         {
             InitializeComponent();

@@ -1,7 +1,10 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Labs.Annotations;
 using Labs.Data;
 using Labs.Interfaces;
 using Labs.Models;
@@ -13,7 +16,7 @@ using Xamarin.Forms;
 
 namespace Labs.ViewModels
 {
-    public class StartViewModel
+    public class StartViewModel : INotifyPropertyChanged
     {
         private bool _buttonsIsClickAble;
         public INavigation Navigation { get; set; }
@@ -22,6 +25,9 @@ namespace Labs.ViewModels
         public ISettings Settings { get; private set; }
 
         private readonly string _testId;
+
+        private Page _testPage;
+        private Page _creatorPage;
 
         public StartViewModel(string testId)
         {
@@ -49,7 +55,11 @@ namespace Labs.ViewModels
                         TotalCount = model.Questions.Count.ToString(),
                         TotalPrice = model.Questions.Sum(item => int.Parse(item.Price)).ToString()
                     };
+                    OnPropertyChanged(nameof(Settings));
                 }
+
+                _testPage = new TestPage(_testId, Settings);
+                _creatorPage = new CreatorMenuPage(_testId);
             });
         }
 
@@ -59,7 +69,8 @@ namespace Labs.ViewModels
             {
                 if (_buttonsIsClickAble && ChangeButton != null && Navigation != null) {
                     ChangeButtonStyle_OnClickAsync(ChangeButton);
-                    await Navigation.PushAsync(new CreatorMenuPage(_testId));
+                    //await Navigation.PushAsync(new CreatorMenuPage(_testId));
+                    await Navigation.PushAsync(_creatorPage);
                 }
             });
 
@@ -67,7 +78,8 @@ namespace Labs.ViewModels
             {
                 if (_buttonsIsClickAble && StartButton != null && Navigation != null) {
                     ChangeButtonStyle_OnClickAsync(StartButton);
-                    await Navigation.PushModalAsync(new TestPage(_testId, Settings));
+                    //await Navigation.PushModalAsync(new TestPage(_testId, Settings));
+                    await Navigation.PushModalAsync(_testPage);
                 }
             });
         }
@@ -99,5 +111,12 @@ namespace Labs.ViewModels
                 button.TextColor = (Color) Application.Current.Resources["ButtonTextColor"];
             });
         }
+
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        [NotifyPropertyChangedInvocator]
+        private void OnPropertyChanged([CallerMemberName] string propertyName = null) =>
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
 }
