@@ -1,3 +1,1 @@
-APK
 
-https://onedrive.live.com/?id=AFE91B71D418470E%2125784&cid=AFE91B71D418470E
